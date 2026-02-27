@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import { stores } from '@/lib/data';
 import clsx from 'clsx';
+import HoyrLogo from '@/components/ui/hoyr-logo';
 
 const navItems = [
     { href: '/dashboard', label: 'Bosh panel', icon: LayoutDashboard },
@@ -33,10 +34,8 @@ export default function Sidebar() {
     return (
         <aside className="flex h-screen w-[220px] flex-col border-r border-neutral-800 bg-black">
             {/* Logo */}
-            <div className="flex h-16 items-center border-b border-neutral-800 px-5">
-                <span className="text-lg font-bold tracking-widest text-white uppercase">
-                    &#123;HOYR&#125;
-                </span>
+            <div className="flex h-16 items-center border-b border-neutral-800 px-4">
+                <HoyrLogo size="sm" />
             </div>
 
             {/* Do'kon tanlash */}

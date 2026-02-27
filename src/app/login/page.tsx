@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ShoppingBag } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+import HoyrLogo from '@/components/ui/hoyr-logo';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -34,11 +35,10 @@ export default function LoginPage() {
             <div className="relative w-full max-w-sm animate-fade-in">
                 {/* Logo */}
                 <div className="mb-8 flex flex-col items-center">
-                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900">
-                        <ShoppingBag className="h-7 w-7 text-white" />
+                    <div className="mb-3">
+                        <HoyrLogo size="lg" />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-widest text-white uppercase">&#123;HOYR&#125;</h1>
-                    <p className="mt-1 text-sm text-neutral-500">Kiyim do'koni boshqaruv tizimi</p>
+                    <p className="text-sm text-neutral-500">Kiyim do'koni boshqaruv tizimi</p>
                 </div>
 
                 {/* Form */}
@@ -104,7 +104,7 @@ export default function LoginPage() {
                 </div>
 
                 <p className="mt-4 text-center text-xs text-neutral-700">
-                    © 2026 &#123;HOYR&#125;. Barcha huquqlar himoyalangan.
+                    © 2026 HOYR. Barcha huquqlar himoyalangan.
                 </p>
             </div>
         </div>

@@ -105,3 +105,27 @@ a {
   color: #737373;
   border: 1px solid rgba(115, 115, 115, 0.2);
 }
+
+/* HOYR Logo styles */
+.hoyr-text {
+  background: linear-gradient(135deg, #D4A843 0%, #E8C66A 50%, #C49A38 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.hoyr-circle {
+  stroke: #D4A843;
+  transition: stroke 0.3s ease;
+}
+
+.hoyr-logo:hover .hoyr-text {
+  background: linear-gradient(135deg, #4ade80 0%, #86efac 50%, #22c55e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hoyr-logo:hover .hoyr-circle {
+  stroke: #4ade80;
+}
