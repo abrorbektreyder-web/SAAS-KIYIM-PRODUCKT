@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: 'demo.vercel.store',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
   },
 };

@@ -103,7 +103,7 @@ export default function Sidebar() {
                     <p className="text-xs text-neutral-500">admin@hoyr.uz</p>
                 </div>
                 <Link
-                    href="/login"
+                    href="/login/admin"
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-900 hover:text-red-400 transition-colors"
                 >
                     <LogOut className="h-4 w-4" />
