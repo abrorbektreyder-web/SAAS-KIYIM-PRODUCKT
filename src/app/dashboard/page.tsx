@@ -1,36 +1,59 @@
-import { stores, orders, products, salesData, formatPrice } from '@/lib/data';
-import { TrendingUp, ShoppingCart, Package, Users, Store, ArrowUpRight } from 'lucide-react';
-
-const totalRevenue = stores.reduce((s, x) => s + x.totalRevenue, 0);
-const totalOrders = stores.reduce((s, x) => s + x.totalOrders, 0);
-const totalProducts = stores.reduce((s, x) => s + x.totalProducts, 0);
-
-const kpis = [
-    { label: 'Jami daromad', value: formatPrice(totalRevenue) + ' so\'m', icon: TrendingUp, change: '+12.4%', up: true },
-    { label: 'Jami buyurtmalar', value: totalOrders.toLocaleString(), icon: ShoppingCart, change: '+8.1%', up: true },
-    { label: 'Mahsulotlar', value: totalProducts.toLocaleString(), icon: Package, change: '+5.3%', up: true },
-    { label: 'Faol do\'konlar', value: stores.filter(s => s.status === 'faol').length.toString(), icon: Store, change: '0%', up: false },
-];
+import { getStores, getOrders, getProducts, getOrgProfile, formatPrice, formatDate } from '@/lib/data';
+import { TrendingUp, ShoppingCart, Package, Store, ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 const statusColor: Record<string, string> = {
-    yangi: 'badge-warning',
-    tayyorlanmoqda: 'badge-neutral',
-    yetkazildi: 'badge-success',
-    'bekor qilindi': 'badge-danger',
+    new: 'bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20',
+    preparing: 'bg-neutral-500/10 text-neutral-400 ring-1 ring-neutral-500/20',
+    delivered: 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20',
+    cancelled: 'bg-red-500/10 text-red-400 ring-1 ring-red-500/20',
 };
 
-export default function DashboardPage() {
+const statusLabel: Record<string, string> = {
+    new: 'Yangi', preparing: 'Tayyorlanmoqda', delivered: 'Topshirildi', cancelled: 'Bekor'
+};
+
+export default async function DashboardPage() {
+    const profile = await getOrgProfile();
+
+    if (!profile || !profile.organization_id) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="text-center p-8 rounded-2xl border border-neutral-800 bg-neutral-900/50 max-w-md">
+                    <p className="text-neutral-400 text-sm">Tashkilotga biriktirilmagan admin.</p>
+                    <p className="text-neutral-500 text-xs mt-2">Iltimos Super Admin bilan bog'laning.</p>
+                </div>
+            </div>
+        );
+    }
+
+    const orgId = profile.organization_id;
+    const [stores, orders, products] = await Promise.all([
+        getStores(orgId),
+        getOrders(orgId),
+        getProducts(orgId)
+    ]);
+
+    const totalRevenue = orders
+        .filter((o: any) => o.status !== 'cancelled')
+        .reduce((s: number, x: any) => s + Number(x.total || 0), 0);
+
+    const kpis = [
+        { label: 'Jami daromad', value: formatPrice(totalRevenue) + ' so\'m', icon: TrendingUp, change: '+12.4%', up: true },
+        { label: 'Jami buyurtmalar', value: orders.length.toLocaleString(), icon: ShoppingCart, change: '+8.1%', up: true },
+        { label: 'Mahsulotlar', value: products.length.toLocaleString(), icon: Package, change: '+5.3%', up: true },
+        { label: 'Filiallar', value: stores.length.toString(), icon: Store, change: '0%', up: false },
+    ];
+
     const latestOrders = orders.slice(0, 5);
 
     return (
         <div className="space-y-6 animate-fade-in">
-            {/* Sarlavha */}
             <div>
                 <h1 className="text-2xl font-bold text-white">Bosh panel</h1>
-                <p className="text-sm text-neutral-500">Barcha do'konlar bo'yicha umumiy ma'lumot</p>
+                <p className="text-sm text-neutral-500">Tashkilotingiz bo'yicha umumiy ma'lumot</p>
             </div>
 
-            {/* KPI kartalar */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {kpis.map((kpi) => {
                     const Icon = kpi.icon;
@@ -40,7 +63,7 @@ export default function DashboardPage() {
                                 <div className="rounded-lg border border-neutral-800 bg-neutral-800/50 p-2">
                                     <Icon className="h-5 w-5 text-neutral-400" />
                                 </div>
-                                <span className={`flex items-center gap-0.5 text-xs font-medium ${kpi.up ? 'text-green-400' : 'text-neutral-500'}`}>
+                                <span className={`flex items-center gap-0.5 text-xs font-medium ${kpi.up ? 'text-emerald-400' : 'text-neutral-500'}`}>
                                     {kpi.up && <ArrowUpRight className="h-3 w-3" />}{kpi.change}
                                 </span>
                             </div>
@@ -54,78 +77,61 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                {/* Sotuv grafigi (sodda bar) */}
                 <div className="lg:col-span-2 rounded-xl border border-neutral-800 bg-neutral-900 p-5">
                     <h2 className="mb-4 text-base font-semibold text-white">Oylik sotuv</h2>
-                    <div className="flex items-end gap-2 h-40">
-                        {salesData.map((d) => {
-                            const maxSale = Math.max(...salesData.map(x => x.sotuv));
-                            const height = (d.sotuv / maxSale) * 100;
-                            return (
-                                <div key={d.oy} className="flex flex-1 flex-col items-center gap-1">
-                                    <div className="w-full group relative flex justify-center">
-                                        <div
-                                            className="w-full cursor-pointer rounded-t-sm bg-neutral-700 group-hover:bg-white transition-colors"
-                                            style={{ height: `${height * 1.4}px` }}
-                                        />
-                                        <div className="absolute bottom-full mb-1 hidden group-hover:block bg-white text-black text-xs px-2 py-1 rounded whitespace-nowrap">
-                                            {formatPrice(d.sotuv)} so'm
-                                        </div>
-                                    </div>
-                                    <span className="text-xs text-neutral-600">{d.oy}</span>
-                                </div>
-                            );
-                        })}
+                    <div className="flex items-center justify-center h-40 bg-neutral-800/20 rounded-lg">
+                        <p className="text-sm text-neutral-500">Analitika sahifasida to'liq grafik mavjud →</p>
                     </div>
                 </div>
 
-                {/* Do'konlar holati */}
                 <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-                    <h2 className="mb-4 text-base font-semibold text-white">Do'konlar</h2>
+                    <h2 className="mb-4 text-base font-semibold text-white">Filiallar</h2>
                     <div className="space-y-3">
-                        {stores.map((store) => (
+                        {stores.length === 0 ? (
+                            <p className="text-xs text-neutral-500 mt-4 border border-dashed border-neutral-800 p-4 text-center rounded-lg">Hali filiallar yo'q.</p>
+                        ) : stores.map((store: any) => (
                             <div key={store.id} className="flex items-center gap-3">
-                                <div className={`h-2 w-2 rounded-full flex-shrink-0 ${store.status === 'faol' ? 'bg-green-400' : 'bg-neutral-600'}`} />
+                                <div className={`h-2 w-2 rounded-full flex-shrink-0 ${store.is_active ? 'bg-emerald-400' : 'bg-neutral-600'}`} />
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm text-white truncate">{store.name}</p>
-                                    <p className="text-xs text-neutral-500">{store.totalOrders} buyurtma</p>
+                                    <p className="text-xs text-neutral-500">{store.address || store.city || 'Manzil belgilanmagan'}</p>
                                 </div>
-                                <span className="text-xs text-neutral-400 font-mono">{formatPrice(store.totalRevenue)}</span>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* Oxirgi buyurtmalar */}
             <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
                 <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-base font-semibold text-white">Oxirgi buyurtmalar</h2>
-                    <a href="/orders" className="text-xs text-neutral-400 hover:text-white transition-colors">
+                    <Link href="/dashboard/orders" className="text-xs text-neutral-400 hover:text-white transition-colors">
                         Hammasini ko'rish →
-                    </a>
+                    </Link>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-neutral-800 text-left text-xs text-neutral-500">
-                                <th className="pb-3 font-medium">ID</th>
-                                <th className="pb-3 font-medium">Mijoz</th>
-                                <th className="pb-3 font-medium">Telefon</th>
+                                <th className="pb-3 font-medium">Raqami</th>
+                                <th className="pb-3 font-medium">To'lov</th>
                                 <th className="pb-3 font-medium">Summa</th>
+                                <th className="pb-3 font-medium">Sana</th>
                                 <th className="pb-3 font-medium">Holat</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-800">
-                            {latestOrders.map((order) => (
+                            {latestOrders.length === 0 ? (
+                                <tr><td colSpan={5} className="py-4 text-center text-xs text-neutral-500">Buyurtmalar hali mavjud emas.</td></tr>
+                            ) : latestOrders.map((order: any) => (
                                 <tr key={order.id} className="hover:bg-neutral-800/50 transition-colors">
-                                    <td className="py-3 font-mono text-xs text-neutral-400">{order.id}</td>
-                                    <td className="py-3 text-white">{order.customerName}</td>
-                                    <td className="py-3 text-neutral-400">{order.customerPhone}</td>
+                                    <td className="py-3 font-mono text-xs text-neutral-400">{order.order_number}</td>
+                                    <td className="py-3 text-neutral-300 capitalize">{order.payment_method}</td>
                                     <td className="py-3 font-medium text-white">{formatPrice(order.total)} so'm</td>
+                                    <td className="py-3 text-neutral-400">{formatDate(order.created_at)}</td>
                                     <td className="py-3">
-                                        <span className={`rounded-full px-2 py-0.5 text-xs capitalize ${statusColor[order.status]}`}>
-                                            {order.status}
+                                        <span className={`rounded-full px-2 py-0.5 text-xs ${statusColor[order.status] || ''}`}>
+                                            {statusLabel[order.status] || order.status}
                                         </span>
                                     </td>
                                 </tr>

@@ -1,0 +1,979 @@
+﻿тЦ▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+node.exe : тЪа The "middlewar
+e" file convention is depreca
+ted. Please use "proxy" inste
+ad. Learn more: https://nextj
+s.org/docs/messages/middlewar
+e-to-proxy
+строка:1 знак:1
++ & "C:\Program Files\nodejs/
+node.exe" "C:\Program Files\n
+odejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (тЪа The  
+   "middle...leware-to-pro   
+ xy:String) [], RemoteExc    
+eption
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed
+ with 9 errors:
+./src/lib/supabase/server.ts:
+2:1
+Ecmascript file had an error
+[0m [90m 1 |[39m [36mimpo
+rt[39m { createServerClient 
+} [36mfrom[39m [32m'@supab
+ase/ssr'[39m
+[31m[1m>[22m[39m[90m 2 |
+[39m [36mimport[39m { cook
+ies } [36mfrom[39m [32m'ne
+xt/headers'[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mexport[
+39m [36masync[39m [36mfunc
+tion[39m createServerSupabas
+eClient() {
+ [90m 5 |[39m     [36mcons
+t[39m cookieStore [33m=[39
+m [36mawait[39m cookies()[
+0m
+
+You're importing a component 
+that needs "next/headers". Th
+at only works in a Server Com
+ponent which is not supported
+ in the pages/ directory. Rea
+d more: https://nextjs.org/do
+cs/app/building-your-applicat
+ion/rendering/server-componen
+ts
+
+
+
+Import traces:
+  Server Component:
+    ./src/lib/supabase/server
+.ts
+    ./src/lib/data.ts
+    ./src/app/dashboard/page.
+tsx
+
+  Client Component Browser:
+    ./src/lib/supabase/server
+.ts [Client Component Browser
+]
+    ./src/lib/data.ts [Client
+ Component Browser]
+    ./src/app/customers/page.
+tsx [Client Component Browser
+]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+  Client Component SSR:
+    ./src/lib/supabase/server
+.ts [Client Component SSR]
+    ./src/lib/data.ts [Client
+ Component SSR]
+    ./src/app/customers/page.
+tsx [Client Component SSR]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+
+./src/app/customers/page.tsx:
+4:1
+Export customers doesn't exis
+t in target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { cust
+omers [36mas[39m initialCus
+tomers[33m,[39m formatPrice
+[33m,[39m type [33mCustome
+r[39m } [36mfrom[39m [32m
+'@/lib/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mSearch[39m[33m,
+[39m [33mPlus[39m } [36mfr
+om[39m [32m'lucide-react'[
+39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormButton[39m } 
+[36mfrom[39m [32m'@/compon
+ents/ui/modal'[39m[33m;[39
+m
+ [90m 7 |[39m[0m
+
+The export customers was not 
+found in module [project]/src
+/lib/data.ts [app-client] (ec
+mascript).
+Did you mean to import getCus
+tomers?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/customers/page.
+tsx [Client Component Browser
+]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/customers/page.
+tsx [Client Component SSR]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+
+./src/app/customers/page.tsx:
+4:1
+Export customers doesn't exis
+t in target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { cust
+omers [36mas[39m initialCus
+tomers[33m,[39m formatPrice
+[33m,[39m type [33mCustome
+r[39m } [36mfrom[39m [32m
+'@/lib/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mSearch[39m[33m,
+[39m [33mPlus[39m } [36mfr
+om[39m [32m'lucide-react'[
+39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormButton[39m } 
+[36mfrom[39m [32m'@/compon
+ents/ui/modal'[39m[33m;[39
+m
+ [90m 7 |[39m[0m
+
+The export customers was not 
+found in module [project]/src
+/lib/data.ts [app-ssr] (ecmas
+cript).
+Did you mean to import getCus
+tomers?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/customers/page.
+tsx [Client Component Browser
+]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/customers/page.
+tsx [Client Component SSR]
+    ./src/app/customers/page.
+tsx [Server Component]
+
+
+./src/app/orders/page.tsx:1:1
+Export orders doesn't exist i
+n target module
+[0m[31m[1m>[22m[39m[90m
+ 1 |[39m [36mimport[39m { 
+orders[33m,[39m formatPrice
+ } [36mfrom[39m [32m'@/lib
+/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m
+ [90m 2 |[39m [36mimport[
+39m { [33mSearch[39m } [36
+mfrom[39m [32m'lucide-react
+'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mconst[3
+9m statusColor[33m:[39m [3
+3mRecord[39m[33m<[39m[33m
+string[39m[33m,[39m string
+[33m>[39m [33m=[39m {[0m
+
+The export orders was not fou
+nd in module [project]/src/li
+b/data.ts [app-rsc] (ecmascri
+pt).
+Did you mean to import getOrd
+ers?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+
+./src/app/inventory/page.tsx:
+1:1
+Export products doesn't exist
+ in target module
+[0m[31m[1m>[22m[39m[90m
+ 1 |[39m [36mimport[39m { 
+products[33m,[39m formatPri
+ce } [36mfrom[39m [32m'@/l
+ib/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m
+ [90m 2 |[39m [36mimport[
+39m { [33mAlertTriangle[39m
+[33m,[39m [33mPackage[39m
+ } [36mfrom[39m [32m'lucid
+e-react'[39m[33m;[39m
+ [90m 3 |[39m
+ [90m 4 |[39m [36mexport[
+39m [36mdefault[39m [36mfu
+nction[39m [33mInventoryPag
+e[39m() {[0m
+
+The export products was not f
+ound in module [project]/src/
+lib/data.ts [app-rsc] (ecmasc
+ript).
+Did you mean to import getPro
+ducts?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+
+./src/app/products/page.tsx:4
+:1
+Export products doesn't exist
+ in target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { prod
+ucts [36mas[39m initialProd
+ucts[33m,[39m formatPrice[
+33m,[39m type [33mProduct[
+39m } [36mfrom[39m [32m'@/
+lib/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mPlus[39m[33m,[3
+9m [33mSearch[39m } [36mfr
+om[39m [32m'lucide-react'[
+39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormSelect[39m[3
+3m,[39m [33mFormButton[39m
+ } [36mfrom[39m [32m'@/com
+ponents/ui/modal'[39m[33m;
+[39m
+ [90m 7 |[39m[0m
+
+The export products was not f
+ound in module [project]/src/
+lib/data.ts [app-client] (ecm
+ascript).
+Did you mean to import getPro
+ducts?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/products/page.t
+sx [Client Component Browser]
+    ./src/app/products/page.t
+sx [Server Component]
+
+  Client Component SSR:
+    ./src/app/products/page.t
+sx [Client Component SSR]
+    ./src/app/products/page.t
+sx [Server Component]
+
+
+./src/app/products/page.tsx:4
+:1
+Export products doesn't exist
+ in target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { prod
+ucts [36mas[39m initialProd
+ucts[33m,[39m formatPrice[
+33m,[39m type [33mProduct[
+39m } [36mfrom[39m [32m'@/
+lib/data'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mPlus[39m[33m,[3
+9m [33mSearch[39m } [36mfr
+om[39m [32m'lucide-react'[
+39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormSelect[39m[3
+3m,[39m [33mFormButton[39m
+ } [36mfrom[39m [32m'@/com
+ponents/ui/modal'[39m[33m;
+[39m
+ [90m 7 |[39m[0m
+
+The export products was not f
+ound in module [project]/src/
+lib/data.ts [app-ssr] (ecmasc
+ript).
+Did you mean to import getPro
+ducts?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/products/page.t
+sx [Client Component Browser]
+    ./src/app/products/page.t
+sx [Server Component]
+
+  Client Component SSR:
+    ./src/app/products/page.t
+sx [Client Component SSR]
+    ./src/app/products/page.t
+sx [Server Component]
+
+
+./src/app/stores/page.tsx:4:1
+Export stores doesn't exist i
+n target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { stor
+es [36mas[39m initialStores
+[33m,[39m formatPrice[33m,
+[39m type [33mStore[39m } 
+[36mfrom[39m [32m'@/lib/da
+ta'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mPlus[39m[33m,[3
+9m [33mMapPin[39m[33m,[39
+m [33mTrendingUp[39m[33m,
+[39m [33mShoppingCart[39m[
+33m,[39m [33mPackage[39m }
+ [36mfrom[39m [32m'lucide-
+react'[39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormSelect[39m[3
+3m,[39m [33mFormButton[39m
+ } [36mfrom[39m [32m'@/com
+ponents/ui/modal'[39m[33m;
+[39m
+ [90m 7 |[39m[0m
+
+The export stores was not fou
+nd in module [project]/src/li
+b/data.ts [app-client] (ecmas
+cript).
+Did you mean to import getSto
+res?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/stores/page.tsx
+ [Client Component Browser]
+    ./src/app/stores/page.tsx
+ [Server Component]
+
+  Client Component SSR:
+    ./src/app/stores/page.tsx
+ [Client Component SSR]
+    ./src/app/stores/page.tsx
+ [Server Component]
+
+
+./src/app/stores/page.tsx:4:1
+Export stores doesn't exist i
+n target module
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[
+39m { useState } [36mfrom[3
+9m [32m'react'[39m[33m;[3
+9m
+[31m[1m>[22m[39m[90m 4 |
+[39m [36mimport[39m { stor
+es [36mas[39m initialStores
+[33m,[39m formatPrice[33m,
+[39m type [33mStore[39m } 
+[36mfrom[39m [32m'@/lib/da
+ta'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m
+ [90m 5 |[39m [36mimport[
+39m { [33mPlus[39m[33m,[3
+9m [33mMapPin[39m[33m,[39
+m [33mTrendingUp[39m[33m,
+[39m [33mShoppingCart[39m[
+33m,[39m [33mPackage[39m }
+ [36mfrom[39m [32m'lucide-
+react'[39m[33m;[39m
+ [90m 6 |[39m [36mimport[
+39m [33mModal[39m[33m,[39
+m { [33mFormInput[39m[33m,
+[39m [33mFormSelect[39m[3
+3m,[39m [33mFormButton[39m
+ } [36mfrom[39m [32m'@/com
+ponents/ui/modal'[39m[33m;
+[39m
+ [90m 7 |[39m[0m
+
+The export stores was not fou
+nd in module [project]/src/li
+b/data.ts [app-ssr] (ecmascri
+pt).
+Did you mean to import getSto
+res?
+All exports of the module are
+ statically known (It doesn't
+ have dynamic exports). So it
+'s known statically that the 
+requested export doesn't exis
+t.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/stores/page.tsx
+ [Client Component Browser]
+    ./src/app/stores/page.tsx
+ [Server Component]
+
+  Client Component SSR:
+    ./src/app/stores/page.tsx
+ [Client Component SSR]
+    ./src/app/stores/page.tsx
+ [Server Component]
+
+
+    at <unknown> (./src/lib/s
+upabase/server.ts:2:1)
+    at <unknown> (./src/app/c
+ustomers/page.tsx:4:1)
+    at <unknown> (./src/app/c
+ustomers/page.tsx:4:1)
+    at <unknown> (./src/app/o
+rders/page.tsx:1:1)
+    at <unknown> (./src/app/i
+nventory/page.tsx:1:1)
+    at <unknown> (./src/app/p
+roducts/page.tsx:4:1)
+    at <unknown> (./src/app/p
+roducts/page.tsx:4:1)
+    at <unknown> (./src/app/s
+tores/page.tsx:4:1)
+    at <unknown> (./src/app/s
+tores/page.tsx:4:1)
+
