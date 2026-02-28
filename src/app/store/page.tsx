@@ -29,12 +29,12 @@ function ProductCard({ product }: { product: StoreProduct }) {
                         {product.label}
                     </span>
                 )}
-                {/* Savatga qo'shish tugmasi — hover da ko'rinadi */}
+                {/* Savatga qo'shish tugmasi */}
                 <button
                     onClick={handleAdd}
                     className={`absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold shadow-lg transition-all duration-300 ${added
                         ? 'bg-green-500 text-white scale-105'
-                        : 'bg-black/80 text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-black'
+                        : 'bg-black text-white hover:bg-neutral-800 hover:scale-105'
                         }`}
                 >
                     {added ? <Check className="h-3.5 w-3.5" /> : <ShoppingCart className="h-3.5 w-3.5" />}

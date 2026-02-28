@@ -9,10 +9,7 @@ export async function GET(req: Request) {
 
     const { data: orgs, error, count } = await supabaseAdmin
         .from('organizations')
-        .select(`
-            *,
-            profiles!organizations_owner_id_fkey ( full_name, phone )
-        `, { count: 'exact' })
+        .select(`*`, { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);
 
@@ -51,12 +48,10 @@ export async function POST(req: Request) {
             .insert({
                 name,
                 slug,
-                owner_id: userAuth.user.id,
                 plan,
                 max_stores: Number(max_stores) || 1,
                 max_cashiers: Number(max_cashiers) || 2,
-                email,
-                subscription_status: 'trial'
+                subscription_status: 'trialing'
             }).select().single();
 
         if (orgError) return NextResponse.json({ error: orgError.message }, { status: 400 });

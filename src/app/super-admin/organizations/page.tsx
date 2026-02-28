@@ -54,10 +54,11 @@ export default function SuperAdminOrganizations() {
                 setIsAddModalOpen(false);
                 fetchOrgs();
             } else {
-                alert('Xatolik yuz berdi yaratishda');
+                const err = await res.json();
+                alert('Xatolik yuz berdi yaratishda: ' + (err.error || 'Noma\'lum xato'));
             }
-        } catch (e) {
-            alert('Server xatosi');
+        } catch (e: any) {
+            alert('Server xatosi: ' + e.message);
         }
     };
 
@@ -133,8 +134,8 @@ export default function SuperAdminOrganizations() {
                                     <td className="px-6 py-4 uppercase text-xs">{org.plan}</td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${org.subscription_status === 'blocked' ? 'bg-red-500/10 text-red-400 ring-red-500/20'
-                                                : org.subscription_status === 'active' ? 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20'
-                                                    : 'bg-amber-500/10 text-amber-400 ring-amber-500/20'
+                                            : org.subscription_status === 'active' ? 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20'
+                                                : 'bg-amber-500/10 text-amber-400 ring-amber-500/20'
                                             }`}>
                                             {org.subscription_status}
                                         </span>
