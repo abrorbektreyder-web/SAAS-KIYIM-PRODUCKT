@@ -28,33 +28,62 @@ export async function middleware(request: NextRequest) {
         }
     )
 
+    // MUHIM: getUser() chaqirish tokenni yangilaydi
     const {
         data: { user },
     } = await supabase.auth.getUser()
 
-    let role = null;
-    if (user) {
+    const path = request.nextUrl.pathname;
+
+    // Login va API sahifalarini himoya qilmaslik
+    if (
+        path.startsWith('/login') ||
+        path.startsWith('/api') ||
+        path === '/' ||
+        path.startsWith('/_next')
+    ) {
+        return supabaseResponse
+    }
+
+    // Foydalanuvchi umuman kimaganmi?
+    if (!user) {
+        if (path.startsWith('/dashboard')) {
+            return NextResponse.redirect(new URL('/login/admin', request.url))
+        }
+        if (path.startsWith('/store')) {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+        if (path.startsWith('/super-admin')) {
+            return NextResponse.redirect(new URL('/login/super', request.url))
+        }
+        return supabaseResponse
+    }
+
+    // Foydalanuvchi bor, rolini tekshirish
+    let role: string | null = null;
+    try {
         const { data: profile } = await supabase
             .from('profiles')
             .select('role')
             .eq('id', user.id)
             .single()
-        role = profile?.role;
+        role = profile?.role || null;
+    } catch {
+        role = null;
     }
 
-    const path = request.nextUrl.pathname;
-
-    if (path.startsWith('/dashboard') && (!role || (role !== 'store_admin' && role !== 'super_admin'))) {
+    // Dashboard qismi — faqat store_admin va super_admin
+    if (path.startsWith('/dashboard') && role !== 'store_admin' && role !== 'super_admin') {
         return NextResponse.redirect(new URL('/login/admin', request.url))
     }
 
-    if (path.startsWith('/store') && (!role || role !== 'cashier')) {
+    // Store (POS/kassir) qismi — faqat cashier
+    if (path.startsWith('/store') && role !== 'cashier') {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    if (path.startsWith('/super-admin') && (!role || role !== 'super_admin')) {
-        // If we don't have super admin login yet, redirect to home or somewhere safe 
-        // Usually super admin falls back to /login/super
+    // Super Admin qismi — faqat super_admin
+    if (path.startsWith('/super-admin') && role !== 'super_admin') {
         return NextResponse.redirect(new URL('/login/super', request.url))
     }
 

@@ -23,7 +23,8 @@ export default function SuperAdminLoginPage() {
         try {
             const { profile } = await signIn(email, password);
             if (profile?.role === 'super_admin') {
-                router.push('/super-admin');
+                router.refresh();
+                window.location.href = '/super-admin';
             } else {
                 setError("Sizda Super Admin huquqi yo'q.");
                 setLoading(false);

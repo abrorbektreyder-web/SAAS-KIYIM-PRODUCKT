@@ -8,23 +8,45 @@ import Image from 'next/image';
 
 type PaymentMethod = 'naqd' | 'karta' | null;
 
-export default function CartModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function CartModal({ open, onClose, orgId, storeId }: { open: boolean; onClose: () => void; orgId: string; storeId: string }) {
     const { items, updateQuantity, removeItem, clearCart, totalPrice, totalItems } = useCart();
     const [payMethod, setPayMethod] = useState<PaymentMethod>(null);
     const [paid, setPaid] = useState(false);
     const [printing, setPrinting] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     if (!open) return null;
 
     const handlePay = async () => {
         if (!payMethod) return;
-        setPaid(true);
-        // Kelajakda: printer ga chek yuborish
-        // Kelajakda: scanner bilan tovar qoldig'ini kamaytirish
-        // Hozir: demo rejimda 2 soniya kutiladi
-        setPrinting(true);
-        await new Promise((r) => setTimeout(r, 2000));
-        setPrinting(false);
+        setLoading(true);
+
+        try {
+            const res = await fetch('/api/store/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    organization_id: orgId,
+                    store_id: storeId,
+                    items,
+                    payment_method: payMethod,
+                    total_amount: totalPrice
+                })
+            });
+
+            if (res.ok) {
+                setPaid(true);
+                setPrinting(true);
+                // Demo printer simulyatsiya
+                setTimeout(() => setPrinting(false), 2000);
+            } else {
+                const data = await res.json();
+                alert(data.error || "Xatolik yuz berdi");
+            }
+        } catch (e) {
+            alert("Tarmoq xatosi");
+        }
+        setLoading(false);
     };
 
     const handleNewSale = () => {
@@ -32,6 +54,7 @@ export default function CartModal({ open, onClose }: { open: boolean; onClose: (
         setPaid(false);
         setPayMethod(null);
         onClose();
+        window.location.reload(); // Mahsulot qoldiqlarini yangilash uchun sahifani yangilaymiz
     };
 
     return (
@@ -133,8 +156,8 @@ export default function CartModal({ open, onClose }: { open: boolean; onClose: (
                                     <button
                                         onClick={() => setPayMethod('naqd')}
                                         className={`flex items-center justify-center gap-2 rounded-lg border py-3 text-sm font-medium transition-all ${payMethod === 'naqd'
-                                                ? 'border-green-500 bg-green-500/10 text-green-400'
-                                                : 'border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
+                                            ? 'border-green-500 bg-green-500/10 text-green-400'
+                                            : 'border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
                                             }`}
                                     >
                                         <Banknote className="h-5 w-5" />
@@ -143,8 +166,8 @@ export default function CartModal({ open, onClose }: { open: boolean; onClose: (
                                     <button
                                         onClick={() => setPayMethod('karta')}
                                         className={`flex items-center justify-center gap-2 rounded-lg border py-3 text-sm font-medium transition-all ${payMethod === 'karta'
-                                                ? 'border-blue-500 bg-blue-500/10 text-blue-400'
-                                                : 'border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
+                                            ? 'border-blue-500 bg-blue-500/10 text-blue-400'
+                                            : 'border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
                                             }`}
                                     >
                                         <CreditCard className="h-5 w-5" />
@@ -162,10 +185,10 @@ export default function CartModal({ open, onClose }: { open: boolean; onClose: (
                             {/* To'lov tugmasi */}
                             <button
                                 onClick={handlePay}
-                                disabled={!payMethod}
+                                disabled={!payMethod || loading}
                                 className="w-full rounded-lg bg-white py-3 text-sm font-bold text-black transition-all hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed"
                             >
-                                {payMethod === 'naqd' ? '💵' : payMethod === 'karta' ? '💳' : '💰'} To'lov qilish — {formatStorePrice(totalPrice)}
+                                {loading ? "Bajarilmoqda..." : <>{payMethod === 'naqd' ? '💵' : payMethod === 'karta' ? '💳' : '💰'} To'lov qilish — {formatStorePrice(totalPrice)}</>}
                             </button>
                         </div>
                     </>

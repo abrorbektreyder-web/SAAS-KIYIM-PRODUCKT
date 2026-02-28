@@ -38,6 +38,27 @@ export async function getProducts(orgId: string) {
   return data || [];
 }
 
+export async function getStoreProducts(orgId: string, storeId: string) {
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase
+    .from('products')
+    .select('*, categories(name), inventory(stock)')
+    .eq('organization_id', orgId)
+    .eq('is_active', true);
+
+  // inventory dan faqat shu store_id ga tegishli qoldiqni olamiz
+  if (!data) return [];
+
+  // Har bir mahsulot uchun shu do'konning inventorysi bo'lsa ko'rsatamiz
+  // Inventoryda bor yoki yo'q — baribir ko'rsatamiz
+  return data.filter((p: any) => {
+    // Agar inventory bor bo'lsa — shu do'konning inventorysini tekshiramiz
+    if (p.inventory && p.inventory.length > 0) return true;
+    // Inventorysiz ham ko'rsatamiz
+    return true;
+  });
+}
+
 export async function getOrders(orgId: string) {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase

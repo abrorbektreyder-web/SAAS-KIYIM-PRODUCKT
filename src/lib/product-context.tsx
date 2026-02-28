@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
-import { storeProducts as initialProducts, type StoreProduct } from '@/lib/store-data';
+import { storeProducts as fallbackProducts, type StoreProduct } from '@/lib/store-data';
 
 type ProductContextType = {
     products: StoreProduct[];
@@ -15,7 +15,7 @@ type ProductContextType = {
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
-export function ProductProvider({ children }: { children: ReactNode }) {
+export function ProductProvider({ children, initialProducts = [] }: { children: ReactNode, initialProducts?: StoreProduct[] }) {
     const [products, setProducts] = useState<StoreProduct[]>(initialProducts);
 
     const addProduct = useCallback((product: Omit<StoreProduct, 'id'>) => {

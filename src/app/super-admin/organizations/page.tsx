@@ -21,7 +21,7 @@ export default function SuperAdminOrganizations() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const [form, setForm] = useState({
-        name: '', slug: '', email: '', plan: 'starter', max_stores: 1, max_cashiers: 2
+        name: '', slug: '', email: '', password: '', plan: 'starter', max_stores: 1, max_cashiers: 2
     });
 
     useEffect(() => {
@@ -170,11 +170,17 @@ export default function SuperAdminOrganizations() {
                                 <label className="text-xs text-neutral-400 mb-1 block">URL Slug (kuchsiz harflar, bo'sh joysiz)</label>
                                 <input required type="text" value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} className="w-full rounded-lg bg-neutral-800 border-neutral-700 text-sm text-white px-3 py-2" placeholder="baraka-dokon" />
                             </div>
-                            <div>
-                                <label className="text-xs text-neutral-400 mb-1 block">Egasi Email manzili</label>
-                                <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="w-full rounded-lg bg-neutral-800 border-neutral-700 text-sm text-white px-3 py-2" placeholder="owner@gmail.com" />
-                            </div>
                             <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-xs text-neutral-400 mb-1 block">Egasi Email manzili</label>
+                                    <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="w-full rounded-lg bg-neutral-800 border-neutral-700 text-sm text-white px-3 py-2" placeholder="owner@gmail.com" />
+                                </div>
+                                <div>
+                                    <label className="text-xs text-neutral-400 mb-1 block">Tizimga kirish paroli</label>
+                                    <input required minLength={6} type="text" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} className="w-full rounded-lg bg-neutral-800 border-neutral-700 text-sm text-white px-3 py-2" placeholder="Masalan: Maxfiy123!" />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 mt-4">
                                 <div>
                                     <label className="text-xs text-neutral-400 mb-1 block">Tarif</label>
                                     <select value={form.plan} onChange={e => setForm({ ...form, plan: e.target.value })} className="w-full rounded-lg bg-neutral-800 border-neutral-700 text-sm text-white px-3 py-2">

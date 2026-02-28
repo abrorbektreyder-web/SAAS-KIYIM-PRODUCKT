@@ -23,7 +23,8 @@ export default function KassirLoginPage() {
         try {
             const { profile } = await signIn(email, password);
             if (profile?.role === 'cashier') {
-                router.push('/store');
+                router.refresh();
+                window.location.href = '/store';
             } else {
                 setError("Sizda kassir huquqi yo'q.");
                 setLoading(false);

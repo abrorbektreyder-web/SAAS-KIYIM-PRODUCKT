@@ -1,4 +1,4 @@
-import { getCustomers, getOrgProfile, formatPrice, formatDate } from '@/lib/data';
+import { getCustomers, getOrgProfile } from '@/lib/data';
 import CustomersClient from './customers-client';
 
 export default async function CustomersPage() {
@@ -9,5 +9,5 @@ export default async function CustomersPage() {
 
     const customers = await getCustomers(profile.organization_id);
 
-    return <CustomersClient customers={customers} orgId={profile.organization_id} formatPrice={formatPrice} />;
+    return <CustomersClient customers={customers} orgId={profile.organization_id} />;
 }

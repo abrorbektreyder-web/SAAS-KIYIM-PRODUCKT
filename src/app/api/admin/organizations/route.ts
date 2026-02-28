@@ -30,12 +30,12 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { name, slug, email, plan, max_stores, max_cashiers } = body;
+        const { name, slug, email, password, plan, max_stores, max_cashiers } = body;
 
         // 1. Create a user for the organization owner
         const { data: userAuth, error: userError } = await supabaseAdmin.auth.admin.createUser({
             email,
-            password: 'Password123!', // Ma'mur buni keyin o'zgartira oladi
+            password: password || 'Password123!', // Admin kiritgan parol
             email_confirm: true,
             user_metadata: { role: 'store_admin', full_name: name + ' Egasi' }
         });
@@ -57,9 +57,13 @@ export async function POST(req: Request) {
         if (orgError) return NextResponse.json({ error: orgError.message }, { status: 400 });
 
         // 3. Ensure profile is updated properly since handle_new_user trigger creates one automatically
-        await supabaseAdmin.from('profiles').update({
-            organization_id: org.id
-        }).eq('id', userAuth.user.id);
+        await supabaseAdmin.from('profiles').upsert({
+            id: userAuth.user.id,
+            organization_id: org.id,
+            role: 'store_admin',
+            full_name: name + ' Egasi',
+            is_active: true
+        });
 
         return NextResponse.json(org);
     } catch (e: any) {

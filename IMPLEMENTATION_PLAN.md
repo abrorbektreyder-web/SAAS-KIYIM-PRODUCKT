@@ -630,7 +630,7 @@ my-app/src/app/dashboard/
 
 ---
 
-## Bosqich 3.2: Xodimlar (kassirlar) boshqaruvi
+## ✅ Bosqich 3.2: Xodimlar (kassirlar) boshqaruvi (Bajarildi)
 
 ### Vazifa:
 Admin panelda yangi sahifa: do'kon egasi o'z kassirlarini qo'shishi va boshqarishi.
@@ -667,7 +667,7 @@ await supabase.from('profiles').update({
 
 ---
 
-## Bosqich 3.3: Analitika sahifasi
+## ✅ Bosqich 3.3: Analitika sahifasi (Bajarildi)
 
 ### Vazifa:
 Admin panelga chuqur analitika sahifasi qo'shish.
@@ -696,7 +696,7 @@ npm install recharts
 # 🔴 FAZA 4: KASSIR PANELNI DATABASE GA ULASH
 # ═══════════════════════════════════════════
 
-## Bosqich 4.1: Kassir vitrinasini real ma'lumotlarga o'tkazish
+## ✅ Bosqich 4.1: Kassir vitrinasini real ma'lumotlarga o'tkazish (Bajarildi)
 
 ### Vazifa:
 `/store` sahifasidagi mock mahsulotlarni database dan olinadigan real mahsulotlarga almashtirish.
@@ -723,7 +723,7 @@ const { data: products } = await supabase
 
 ---
 
-## Bosqich 4.2: Savat va to'lov tizimini database ga ulash
+## ✅ Bosqich 4.2: Savat va to'lov tizimini database ga ulash (Bajarildi)
 
 ### Vazifa:
 Kassir savat orqali to'lov qilganda — buyurtma database ga saqlanishi kerak.
