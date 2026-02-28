@@ -131,7 +131,7 @@ export const supabaseAdmin = createClient(
 
 ---
 
-## Bosqich 1.2: Database schema yaratish
+## ✅ Bosqich 1.2: Database schema yaratish (Bajarildi)
 
 ### Vazifa:
 Supabase SQL Editor da barcha jadvallarni yaratish.
