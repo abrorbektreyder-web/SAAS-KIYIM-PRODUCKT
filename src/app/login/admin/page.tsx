@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Shield } from 'lucide-react';
 import HoyrLogo from '@/components/ui/hoyr-logo';
 import Link from 'next/link';
+import { signIn } from '@/lib/supabase/auth';
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -18,13 +19,19 @@ export default function AdminLoginPage() {
         e.preventDefault();
         setLoading(true);
         setError('');
-        await new Promise((r) => setTimeout(r, 800));
-        if (password.length < 3) {
-            setError('Parol noto\'g\'ri. (Kamida 3 belgi kiriting)');
+
+        try {
+            const { profile } = await signIn(email, password);
+            if (profile?.role === 'store_admin' || profile?.role === 'super_admin') {
+                router.push('/dashboard');
+            } else {
+                setError("Sizda do'kon admini huquqi yo'q.");
+                setLoading(false);
+            }
+        } catch (err: any) {
+            setError(err.message || 'Login xatosi ro\'y berdi');
             setLoading(false);
-            return;
         }
-        router.push('/dashboard');
     };
 
     return (

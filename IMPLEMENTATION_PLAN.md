@@ -419,7 +419,7 @@ CREATE TRIGGER on_order_item_created
 
 ---
 
-## Bosqich 1.3: Autentifikatsiya tizimi
+## ✅ Bosqich 1.3: Autentifikatsiya tizimi (Bajarildi)
 
 ### Vazifa:
 Login sahifalarni Supabase Auth ga ulash. 3-xil login: Super Admin, Do'kon Admin, Kassir.
