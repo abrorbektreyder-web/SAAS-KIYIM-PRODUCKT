@@ -1,4 +1,4 @@
-import { getProducts, getOrgProfile, formatPrice } from '@/lib/data';
+import { getProducts, getOrgProfile } from '@/lib/data';
 import ProductsClient from './products-client';
 
 export default async function ProductsPage() {
@@ -9,5 +9,5 @@ export default async function ProductsPage() {
 
     const products = await getProducts(profile.organization_id);
 
-    return <ProductsClient products={products} orgId={profile.organization_id} formatPrice={formatPrice} />;
+    return <ProductsClient products={products} orgId={profile.organization_id} />;
 }

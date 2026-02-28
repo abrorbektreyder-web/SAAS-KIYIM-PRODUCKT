@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Plus, Pencil, Trash2, X, Package, TrendingUp } from 'lucide-react';
 import { useProducts } from '@/lib/product-context';
 import { storeCategories, formatStorePrice, type StoreProduct } from '@/lib/store-data';
+import { useRouter } from 'next/navigation';
 
 type ModalMode = 'add' | 'edit';
 
@@ -13,13 +14,15 @@ const defaultForm = {
 };
 
 export default function StoreProductsPage() {
-    const { products, addProduct, removeProduct, updatePrice, totalProducts, totalValue } = useProducts();
+    const { products, totalProducts, totalValue } = useProducts();
+    const router = useRouter();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<ModalMode>('add');
     const [editId, setEditId] = useState<string | null>(null);
     const [form, setForm] = useState(defaultForm);
     const [success, setSuccess] = useState('');
     const [filterCat, setFilterCat] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const openAdd = () => {
         setForm(defaultForm);
@@ -43,27 +46,68 @@ export default function StoreProductsPage() {
         setModalOpen(true);
     };
 
-    const handleSave = () => {
-        if (!form.name || !form.price) return;
-        if (modalMode === 'add') {
-            addProduct({
-                name: form.name,
-                category: form.category,
-                price: Number(form.price),
-                image: form.image || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop',
-                label: form.label || undefined,
-            });
-            showSuccess(`"${form.name}" qo'shildi!`);
-        } else if (editId) {
-            updatePrice(editId, Number(form.price));
-            showSuccess(`"${form.name}" yangilandi!`);
+    const handleSave = async () => {
+        if (!form.name || !form.price || loading) return;
+        setLoading(true);
+
+        try {
+            if (modalMode === 'add') {
+                // API orqali database ga qo'shish
+                const res = await fetch('/api/admin/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        organization_id: 'auto', // Server o'zi aniqlaydi
+                        name: form.name,
+                        price: Number(form.price),
+                        sizes: form.sizes ? form.sizes.split(',').map(s => s.trim()) : [],
+                        colors: form.colors ? form.colors.split(',').map(c => c.trim()) : []
+                    })
+                });
+
+                if (res.ok) {
+                    showSuccess(`"${form.name}" qo'shildi!`);
+                    // Sahifani yangilash — serverdan yangi ma'lumotlarni olish
+                    window.location.reload();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Xatolik yuz berdi");
+                }
+            } else if (editId) {
+                // Tahrirlash — narxni yangilash
+                const res = await fetch(`/api/admin/products/${editId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ price: Number(form.price) })
+                });
+
+                if (res.ok) {
+                    showSuccess(`"${form.name}" yangilandi!`);
+                    window.location.reload();
+                } else {
+                    alert("Tahrirlashda xatolik yuz berdi");
+                }
+            }
+        } catch (e) {
+            alert("Tarmoq xatosi");
         }
+
+        setLoading(false);
         setModalOpen(false);
     };
 
-    const handleDelete = (id: string, name: string) => {
-        removeProduct(id);
-        showSuccess(`"${name}" o'chirildi!`);
+    const handleDelete = async (id: string, name: string) => {
+        try {
+            const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                showSuccess(`"${name}" o'chirildi!`);
+                window.location.reload();
+            } else {
+                alert("O'chirishda xatolik");
+            }
+        } catch {
+            alert("Tarmoq xatosi");
+        }
     };
 
     const showSuccess = (msg: string) => {
@@ -237,9 +281,9 @@ export default function StoreProductsPage() {
 
                             {/* Tugmalar */}
                             <div className="flex gap-2 pt-2">
-                                <button onClick={handleSave} disabled={!form.name || !form.price}
+                                <button onClick={handleSave} disabled={!form.name || !form.price || loading}
                                     className="flex-1 rounded-lg bg-white py-2.5 text-sm font-semibold text-black transition-all hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed">
-                                    {modalMode === 'add' ? '💾 Saqlash' : '✏️ Yangilash'}
+                                    {loading ? '⏳ Saqlanmoqda...' : modalMode === 'add' ? '💾 Saqlash' : '✏️ Yangilash'}
                                 </button>
                                 {modalMode === 'edit' && editId && (
                                     <button onClick={() => { handleDelete(editId, form.name); setModalOpen(false); }}

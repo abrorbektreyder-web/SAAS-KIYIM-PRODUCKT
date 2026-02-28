@@ -8,6 +8,8 @@ import {
     Package,
     ShoppingCart,
     Users,
+    UserCog,
+    LineChart,
     Warehouse,
     LogOut,
 } from 'lucide-react';
@@ -20,6 +22,8 @@ const navItems = [
     { href: '/dashboard/products', label: 'Mahsulotlar', icon: Package },
     { href: '/dashboard/orders', label: 'Buyurtmalar', icon: ShoppingCart },
     { href: '/dashboard/customers', label: 'Mijozlar', icon: Users },
+    { href: '/dashboard/staff', label: 'Xodimlar', icon: UserCog },
+    { href: '/dashboard/analytics', label: 'Analitika', icon: LineChart },
     { href: '/dashboard/inventory', label: 'Ombor', icon: Warehouse },
 ];
 

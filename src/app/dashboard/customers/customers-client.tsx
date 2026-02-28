@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function CustomersClient({ customers, orgId, formatPrice }: { customers: any[], orgId: string, formatPrice: (p: number) => string }) {
+export default function CustomersClient({ customers, orgId }: { customers: any[], orgId: string }) {
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({ full_name: '', phone: '' });
+
+    const formatPrice = (p: number) => new Intl.NumberFormat('uz-UZ').format(p || 0);
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
