@@ -1,0 +1,112 @@
+﻿
+> my-app@0.1.0 build
+> next build
+
+тЦ▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+node.exe : 
+строка:1 знак:1
++ & "C:\Program Files\nodejs/
+node.exe" "C:\Program Files\n
+odejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (:String  
+  ) [], RemoteException
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+> Build error occurred
+Error: Turbopack build failed
+ with 1 errors:
+./src/app/login/super/page.ts
+x:8:1
+Module not found: Can't resol
+ve '@/lib/supabase/auth'
+[0m [90m  6 |[39m [36mimp
+ort[39m [33mHoyrLogo[39m 
+[36mfrom[39m [32m'@/compone
+nts/ui/hoyr-logo'[39m[33m;
+[39m
+ [90m  7 |[39m [36mimport
+[39m [33mLink[39m [36mfrom
+[39m [32m'next/link'[39m[
+33m;[39m
+[31m[1m>[22m[39m[90m  8 
+|[39m [36mimport[39m { sig
+nIn } [36mfrom[39m [32m'@/
+lib/supabase/auth'[39m[33m;
+[39m
+ [90m    |[39m [31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m
+^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22
+m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m[
+39m[31m[1m^[22m[39m[31m
+[1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[2
+2m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m [36mexport
+[39m [36mdefault[39m [36mf
+unction[39m [33mSuperAdminL
+oginPage[39m() {
+ [90m 11 |[39m     [36mcon
+st[39m router [33m=[39m us
+eRouter()[33m;[39m[0m
+
+Import map: aliased to relati
+ve './src/lib/supabase/auth' 
+inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/login/super/pag
+e.tsx [Client Component Brows
+er]
+    ./src/app/login/super/pag
+e.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/login/super/pag
+e.tsx [Client Component SSR]
+    ./src/app/login/super/pag
+e.tsx [Server Component]
+
+https://nextjs.org/docs/messa
+ges/module-not-found
+
+
+    at <unknown> (./src/app/l
+ogin/super/page.tsx:8:1)
+    at <unknown> (https://nex
+tjs.org/docs/messages/module-
+not-found)
