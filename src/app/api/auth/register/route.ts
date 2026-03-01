@@ -75,6 +75,10 @@ export async function POST(req: Request) {
         }
 
         if (!profileUpdated) {
+            // Rollback if profile couldn't be updated (prevents incomplete state and 'already registered' error later)
+            await supabaseAdmin.from('organizations').delete().eq('id', orgData.id);
+            await supabaseAdmin.auth.admin.deleteUser(userId);
+
             return NextResponse.json({
                 error: `Profilni yangilashda xatolik. Tizim administratori bilan boglaning. Data: ${lastError?.message || JSON.stringify(lastError)}`
             }, { status: 500 })
