@@ -37,7 +37,7 @@ export async function POST(req: Request) {
                 name: orgName,
                 slug: slug,
                 plan: plan,
-                subscription_status: 'trial'
+                subscription_status: 'trialing'
             })
             .select()
             .single()
