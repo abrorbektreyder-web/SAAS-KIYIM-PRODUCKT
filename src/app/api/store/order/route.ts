@@ -71,6 +71,46 @@ export async function POST(req: Request) {
 
         if (itemsError) throw itemsError;
 
+        // --- 4. TELEGRAM XABARNOMA ---
+        // Async holatda ishlaydi (APIni kutib turmaydi)
+        (async () => {
+            try {
+                // Do'kon va Kassir (profil) egasining tokenni aniqlash uchun tashkilot egasi kerak
+                const { data: orgData } = await supabaseAdmin.from('organizations').select('owner_id').eq('id', organization_id).single();
+                if (!orgData?.owner_id) return;
+
+                const { data: userData } = await supabaseAdmin.auth.admin.getUserById(orgData.owner_id);
+                const botToken = userData?.user?.user_metadata?.telegram_bot_token;
+                const chatId = userData?.user?.user_metadata?.telegram_chat_id;
+
+                if (botToken && chatId) {
+                    const { data: storeData } = await supabaseAdmin.from('stores').select('name').eq('id', store_id).single();
+                    const storeName = storeData?.name || 'Noma\'lum filial';
+
+                    const productsText = items.map((i: any) => `${i.product.name} (${i.quantity})`).join(', ');
+
+                    const messageText = `🛒 *YANGI SOTUV!*\n` +
+                        `📍 Filial: *${storeName}*\n` +
+                        `💰 Summa: *${total_amount.toLocaleString()} so'm*\n` +
+                        `🧾 Buyurtma: *${order_number}*\n` +
+                        `📦 Mahsulotlar: ${productsText}\n` +
+                        `💳 To'lov: ${payment_method}`;
+
+                    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: messageText,
+                            parse_mode: 'Markdown'
+                        })
+                    }).catch(e => console.error("Telegram error:", e));
+                }
+            } catch (error) {
+                console.error("Telegram notification error:", error);
+            }
+        })();
+
         return NextResponse.json({ success: true, order });
     } catch (e: any) {
         return NextResponse.json({ error: e.message || 'Server xatosi' }, { status: 500 });

@@ -12,6 +12,7 @@ import {
     LineChart,
     Warehouse,
     LogOut,
+    Settings,
 } from 'lucide-react';
 import clsx from 'clsx';
 import HoyrLogo from '@/components/ui/hoyr-logo';
@@ -27,6 +28,7 @@ const navItems = [
     { href: '/dashboard/staff', label: 'Xodimlar', icon: UserCog },
     { href: '/dashboard/analytics', label: 'Analitika', icon: LineChart },
     { href: '/dashboard/inventory', label: 'Ombor', icon: Warehouse },
+    { href: '/dashboard/settings', label: 'Sozlamalar', icon: Settings },
 ];
 
 export default function Sidebar({ userEmail, userName }: { userEmail?: string, userName?: string }) {
