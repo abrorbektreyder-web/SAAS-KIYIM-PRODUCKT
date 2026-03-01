@@ -116,8 +116,8 @@ export default function ProductsClient({ products, orgId }: { products: any[], o
             )}
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
-                    <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl">
+                <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 px-4 pt-12 backdrop-blur-sm">
+                    <div className="relative w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl mb-12">
                         <h2 className="mb-4 text-lg font-bold text-white">Yangi mahsulot</h2>
                         <form onSubmit={handleAdd} className="space-y-4">
                             <div>

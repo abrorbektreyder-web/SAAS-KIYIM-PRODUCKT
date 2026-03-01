@@ -135,8 +135,8 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm shadow-2xl">
-                    <div className="w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl relative animate-fade-in custom-modal">
+                <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 px-4 pt-12 backdrop-blur-sm shadow-2xl">
+                    <div className="relative w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl animate-fade-in custom-modal mb-12">
                         <h2 className="mb-4 text-lg font-bold text-white">Yangi kassir qo'shish</h2>
                         <form onSubmit={handleAdd} className="space-y-4">
                             <div>

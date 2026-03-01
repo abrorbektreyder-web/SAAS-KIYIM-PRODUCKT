@@ -249,8 +249,8 @@ export default function StoreProductsPage() {
             {/* MODAL — Yangi/Tahrirlash */}
             {modalOpen && (
                 <div onClick={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-                    <div className="w-full max-w-[380px] max-h-[90vh] overflow-y-auto rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
+                    className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 backdrop-blur-sm p-4 pt-12 animate-fade-in">
+                    <div className="relative w-full max-w-[380px] rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl mb-12">
                         {/* Header */}
                         <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5 sticky top-0 bg-neutral-900 z-10">
                             <h2 className="text-sm font-semibold text-white">
