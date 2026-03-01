@@ -8,39 +8,9 @@ import dynamic from 'next/dynamic';
 
 const DownloadButton = dynamic(() => import('@/components/pdf/download-button'), { ssr: false });
 
-const monthlyData = [
-    { name: 'Yan', sotuv: 12000000 },
-    { name: 'Fev', sotuv: 19000000 },
-    { name: 'Mar', sotuv: 15000000 },
-    { name: 'Apr', sotuv: 23000000 },
-    { name: 'May', sotuv: 21000000 },
-    { name: 'Iyn', sotuv: 32000000 },
-];
-
-const customerGrowthData = [
-    { name: 'Yan', customers: 45 },
-    { name: 'Fev', customers: 85 },
-    { name: 'Mar', customers: 120 },
-    { name: 'Apr', customers: 180 },
-    { name: 'May', customers: 240 },
-    { name: 'Iyn', customers: 310 },
-];
-
-const categoryData = [
-    { name: "Ko'ylaklar", value: 400 },
-    { name: "Shimlar", value: 300 },
-    { name: "Poyabzallar", value: 300 },
-    { name: "Aksessuarlar", value: 200 },
-];
-
-const paymentData = [
-    { name: "Naqd", value: 65 },
-    { name: "Plastik", value: 35 },
-];
-
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
-export default function AnalyticsClient({ orgId }: { orgId: string }) {
+export default function AnalyticsClient({ orgId, initialData }: { orgId: string, initialData?: any }) {
 
     // Yordamchi formatter: 10000000 ni "10M" yoki "10 000 000" deb chiqarish uchun
     const formatCurrency = (value: number) => {
@@ -49,15 +19,21 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
         return value.toString();
     };
 
-    const topProducts = [
-        { name: "Klassik qora kurtka", sales: 124, price: 450000 },
-        { name: "Oq kedalar", sales: 98, price: 320000 },
-        { name: "Kuzgi sviter (Bej)", sales: 85, price: 210000 },
-        { name: "Jinsi shim (Slim fit)", sales: 74, price: 380000 },
-        { name: "Qishki qalpoq", sales: 62, price: 95000 },
-    ];
+    const safeData = initialData || {
+        monthlyData: [],
+        customerGrowthData: [],
+        paymentData: [],
+        categoryData: [],
+        topProducts: []
+    };
 
-    const totalAmount = topProducts.reduce((acc, curr) => acc + (curr.sales * curr.price), 0);
+    const topProducts = safeData.topProducts;
+    const monthlyData = safeData.monthlyData;
+    const customerGrowthData = safeData.customerGrowthData;
+    const categoryData = safeData.categoryData;
+    const paymentData = safeData.paymentData;
+
+    const totalAmount = topProducts.reduce((acc: number, curr: any) => acc + (curr.sales * curr.price), 0);
 
     return (
         <div className="space-y-6 animate-fade-in pb-10">
@@ -161,7 +137,7 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
                                     dataKey="value"
                                     stroke="none"
                                 >
-                                    {categoryData.map((entry, index) => (
+                                    {categoryData.map((entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
@@ -190,7 +166,7 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
                                     labelLine={false}
                                     label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                                 >
-                                    {paymentData.map((entry, index) => (
+                                    {paymentData.map((entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={index === 0 ? '#3b82f6' : '#a855f7'} />
                                     ))}
                                 </Pie>
@@ -205,7 +181,7 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
             <div className="mt-6 rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-md">
                 <h2 className="text-lg font-semibold text-white mb-4">Top 5 xaridgir mahsulotlar</h2>
                 <div className="space-y-4">
-                    {topProducts.map((item, idx) => (
+                    {topProducts.map((item: any, idx: number) => (
                         <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-neutral-800/40 hover:bg-neutral-800/70 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-950 border border-neutral-700 font-bold text-neutral-400">
