@@ -1,4 +1,4 @@
-import { getOrgProfile, getStoreProducts } from '@/lib/data';
+import { getOrganization, getOrgProfile, getStoreProducts } from '@/lib/data';
 import StoreLayoutClient from './store-layout-client';
 import { redirect } from 'next/navigation';
 
@@ -16,6 +16,11 @@ export default async function StoreLayout({ children }: { children: React.ReactN
 
     if (!profile.organization_id || !profile.store_id) {
         return <div className="p-8 text-neutral-400">Do'koningizga biriktirilmagansiz yoki tashkilot topilmadi.</div>;
+    }
+
+    const org = await getOrganization(profile.organization_id);
+    if (org && (org.subscription_status === 'expired' || org.subscription_status === 'blocked')) {
+        redirect('/subscription-expired');
     }
 
     // Kassir o'ziga biriktirilgan do'kon mahsulotlarini oladi

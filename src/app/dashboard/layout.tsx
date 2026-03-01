@@ -1,5 +1,5 @@
 import Sidebar from '@/components/layout/sidebar';
-import { getOrgProfile } from '@/lib/data';
+import { getOrganization, getOrgProfile } from '@/lib/data';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
@@ -17,6 +17,13 @@ export default async function DashboardLayout({
     }
 
     const profile = await getOrgProfile();
+
+    if (profile?.organization_id) {
+        const org = await getOrganization(profile.organization_id);
+        if (org && (org.subscription_status === 'expired' || org.subscription_status === 'blocked')) {
+            redirect('/subscription-expired');
+        }
+    }
 
     return (
         <div className="flex h-screen overflow-hidden bg-[#09090b]">

@@ -18,6 +18,16 @@ export async function getOrgProfile() {
   return profile;
 }
 
+export async function getOrganization(orgId: string) {
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase
+    .from('organizations')
+    .select('*')
+    .eq('id', orgId)
+    .single();
+  return data;
+}
+
 export async function getStores(orgId: string) {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase
