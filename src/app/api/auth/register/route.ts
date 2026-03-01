@@ -53,24 +53,31 @@ export async function POST(req: Request) {
         // Shuning uchun kutib turamiz va keyin update qilamiz:
 
         let profileUpdated = false;
+        let lastError = null;
         for (let i = 0; i < 3; i++) {
             const { error: profileError } = await supabaseAdmin
                 .from('profiles')
-                .update({
+                .upsert({
+                    id: userId,
                     organization_id: orgData.id,
-                    phone: phone
+                    phone: phone,
+                    full_name: fullName,
+                    role: 'store_admin'
                 })
-                .eq('id', userId)
 
             if (!profileError) {
                 profileUpdated = true;
                 break;
             }
+            lastError = profileError;
+            console.error('Profile update attempt error:', profileError);
             await new Promise(r => setTimeout(r, 500)); // biroz kutish (trigger ishlashiga vaqt)
         }
 
         if (!profileUpdated) {
-            return NextResponse.json({ error: 'Profilni yangilashda xatolik. Tizim administratori bilan boglaning.' }, { status: 500 })
+            return NextResponse.json({
+                error: `Profilni yangilashda xatolik. Tizim administratori bilan boglaning. Data: ${lastError?.message || JSON.stringify(lastError)}`
+            }, { status: 500 })
         }
 
         return NextResponse.json({ success: true, message: 'Royxatdan muvaffaqiyatli otdingiz', userId: userId }, { status: 200 })
