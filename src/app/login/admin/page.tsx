@@ -91,9 +91,12 @@ export default function AdminLoginPage() {
                     <p className="mt-4 text-center text-xs text-neutral-600">Demo: istalgan parol (3+ belgi)</p>
                 </div>
 
-                {/* Kassir link */}
-                <div className="mt-4 text-center">
-                    <Link href="/login" className="text-xs text-neutral-600 hover:text-neutral-400 transition-colors">
+                {/* Linklar */}
+                <div className="mt-4 flex flex-col gap-2 text-center">
+                    <Link href="/register" className="text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors">
+                        Yangi do'kon qo'shish (Ro'yxatdan o'tish)
+                    </Link>
+                    <Link href="/login" className="text-xs text-neutral-600 hover:text-neutral-400 transition-colors mt-2">
                         ← Kassir sifatida kirish
                     </Link>
                 </div>
