@@ -36,11 +36,8 @@ export async function POST(req: Request) {
             .insert({
                 name: orgName,
                 slug: slug,
-                owner_id: userId,
                 plan: plan,
-                subscription_status: 'trial',
-                phone: phone,
-                email: email
+                subscription_status: 'trial'
             })
             .select()
             .single()
