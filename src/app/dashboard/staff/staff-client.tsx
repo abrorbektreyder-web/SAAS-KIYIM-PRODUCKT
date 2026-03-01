@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Plus, Trash2, Copy, CheckCircle2, Link as LinkIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function StaffClient({ staff, stores, orgId }: { staff: any[], stores: any[], orgId: string }) {
@@ -10,10 +10,31 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         full_name: '',
-        email: '',
         password: '',
         store_id: stores[0]?.id || ''
     });
+    const [copied, setCopied] = useState(false);
+
+    // Auto generate login
+    const generatedLogin = useMemo(() => {
+        const selectedStore = stores.find(s => s.id === form.store_id);
+        const storePart = (selectedStore?.name || 'dokon').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        const namePart = (form.full_name || 'kassir').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        return `${storePart}_${namePart}@hoyr.uz`;
+    }, [form.store_id, form.full_name, stores]);
+
+    const handleCopy = () => {
+        const text = `Salom! Siz do'konga kassir etib tayinlandingiz.
+
+🏪 Dasturga kirish manzili: https://pos.hoyr.uz
+👤 Login: ${generatedLogin}
+🔑 Parol: ${form.password || '[Parol yozilmagan]'}
+
+Uzoq ishlashimiz nasib qilsin!`;
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +45,7 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     organization_id: orgId,
-                    email: form.email,
+                    email: generatedLogin,
                     password: form.password,
                     full_name: form.full_name,
                     role: 'cashier',
@@ -32,7 +53,7 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
                 })
             });
             if (res.ok) {
-                setForm({ full_name: '', email: '', password: '', store_id: stores[0]?.id || '' });
+                setForm({ full_name: '', password: '', store_id: stores[0]?.id || '' });
                 setModalOpen(false);
                 router.refresh(); // sahifani yangilash
             } else {
@@ -151,15 +172,19 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
                                 />
                             </div>
                             <div>
-                                <label className="mb-1 block text-xs font-medium text-neutral-400">Email (Login uchun)</label>
-                                <input
-                                    required
-                                    type="email"
-                                    className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm text-white focus:border-white focus:outline-none focus:ring-1 focus:ring-white transition-all"
-                                    placeholder="kassir@namuna.uz"
-                                    value={form.email}
-                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                                />
+                                <label className="mb-1 block text-xs font-medium text-neutral-400">Avtomatik Login (Tizim o'zi yasadi)</label>
+                                <div className="relative">
+                                    <input
+                                        readOnly
+                                        type="text"
+                                        className="w-full rounded-lg border border-neutral-800 bg-indigo-900/10 px-3 py-2 text-sm text-indigo-300 focus:outline-none transition-all"
+                                        value={generatedLogin}
+                                    />
+                                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                                        <span className="text-[10px] text-indigo-400/70 bg-indigo-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Avtomat</span>
+                                    </div>
+                                </div>
+                                <p className="mt-1.5 text-[11px] text-neutral-500">Bu login kassirga faqat uning do'koniga kirishga ruxsat beradi.</p>
                             </div>
                             <div>
                                 <label className="mb-1 block text-xs font-medium text-neutral-400">Parol</label>
@@ -187,6 +212,44 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
                                     ))}
                                 </select>
                             </div>
+
+                            {/* Tayyor link va Nusxalash */}
+                            <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 mt-2">
+                                <div className="mb-3">
+                                    <label className="mb-1 block text-xs font-medium text-indigo-300">Dasturga kirish manzili (Sizning do'koniz uchun maxsus)</label>
+                                    <div className="flex items-center gap-2 rounded-lg border border-indigo-500/20 bg-indigo-900/20 px-3 py-2">
+                                        <LinkIcon className="h-4 w-4 text-indigo-400" />
+                                        <input
+                                            readOnly
+                                            type="text"
+                                            className="w-full bg-transparent text-sm text-indigo-200 focus:outline-none"
+                                            value="https://pos.hoyr.uz"
+                                        />
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleCopy}
+                                    className={`w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-all ${copied
+                                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                                        }`}
+                                >
+                                    {copied ? (
+                                        <>
+                                            <CheckCircle2 className="h-4 w-4" />
+                                            Nusxalandi!
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Copy className="h-4 w-4" />
+                                            Kassir uchun barchasini nusxalash
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
                             <div className="mt-6 flex justify-end gap-3 text-sm">
                                 <button
                                     type="button"
