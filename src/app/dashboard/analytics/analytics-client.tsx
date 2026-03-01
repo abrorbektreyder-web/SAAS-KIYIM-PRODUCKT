@@ -4,6 +4,9 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     LineChart, Line, PieChart, Pie, Cell, Legend
 } from 'recharts';
+import dynamic from 'next/dynamic';
+
+const DownloadButton = dynamic(() => import('@/components/pdf/download-button'), { ssr: false });
 
 const monthlyData = [
     { name: 'Yan', sotuv: 12000000 },
@@ -46,11 +49,29 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
         return value.toString();
     };
 
+    const topProducts = [
+        { name: "Klassik qora kurtka", sales: 124, price: 450000 },
+        { name: "Oq kedalar", sales: 98, price: 320000 },
+        { name: "Kuzgi sviter (Bej)", sales: 85, price: 210000 },
+        { name: "Jinsi shim (Slim fit)", sales: 74, price: 380000 },
+        { name: "Qishki qalpoq", sales: 62, price: 95000 },
+    ];
+
+    const totalAmount = topProducts.reduce((acc, curr) => acc + (curr.sales * curr.price), 0);
+
     return (
         <div className="space-y-6 animate-fade-in pb-10">
-            <div>
-                <h1 className="text-2xl font-bold text-white">Analitika</h1>
-                <p className="text-sm text-neutral-500">Kompaniya va do'konlaringiz uchun chuqurlashtirilgan hisobotlar</p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">Analitika va Hisobot</h1>
+                    <p className="text-sm text-neutral-500">Kompaniya va do'konlaringiz uchun chuqurlashtirilgan hisobotlar</p>
+                </div>
+
+                {/* PDF yuklash */}
+                <div className="flex items-center gap-3">
+                    <span className="text-sm text-neutral-500">Hisobot (PDF)</span>
+                    <DownloadButton data={topProducts} title="Eng ko'p sotilgan mahsulotlar reytingi" totalAmount={totalAmount} />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -184,13 +205,7 @@ export default function AnalyticsClient({ orgId }: { orgId: string }) {
             <div className="mt-6 rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 backdrop-blur-md">
                 <h2 className="text-lg font-semibold text-white mb-4">Top 5 xaridgir mahsulotlar</h2>
                 <div className="space-y-4">
-                    {[
-                        { name: "Klassik qora kurtka", sales: 124, price: 450000 },
-                        { name: "Oq kedalar", sales: 98, price: 320000 },
-                        { name: "Kuzgi sviter (Bej)", sales: 85, price: 210000 },
-                        { name: "Jinsi shim (Slim fit)", sales: 74, price: 380000 },
-                        { name: "Qishki qalpoq", sales: 62, price: 95000 },
-                    ].map((item, idx) => (
+                    {topProducts.map((item, idx) => (
                         <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-neutral-800/40 hover:bg-neutral-800/70 transition-colors">
                             <div className="flex items-center gap-4">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-950 border border-neutral-700 font-bold text-neutral-400">
