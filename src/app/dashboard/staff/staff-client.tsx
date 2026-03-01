@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Plus, Trash2, Copy, CheckCircle2, Link as LinkIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -14,6 +14,12 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
         store_id: stores[0]?.id || ''
     });
     const [copied, setCopied] = useState(false);
+    const [siteUrl, setSiteUrl] = useState('https://kassa.vercel.app'); // Faqat fallback uchun
+
+    // Mijozning haqiqiy sayt manzilini aniqlash (localhost yoki vercel)
+    useEffect(() => {
+        setSiteUrl(window.location.origin);
+    }, []);
 
     // Auto generate login
     const generatedLogin = useMemo(() => {
@@ -26,7 +32,7 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
     const handleCopy = () => {
         const text = `Salom! Siz do'konga kassir etib tayinlandingiz.
 
-🏪 Dasturga kirish manzili: https://pos.hoyr.uz
+🏪 Dasturga kirish manzili: ${siteUrl}/login
 👤 Login: ${generatedLogin}
 🔑 Parol: ${form.password || '[Parol yozilmagan]'}
 
@@ -55,7 +61,7 @@ Uzoq ishlashimiz nasib qilsin!`;
             if (res.ok) {
                 setForm({ full_name: '', password: '', store_id: stores[0]?.id || '' });
                 setModalOpen(false);
-                router.refresh(); // sahifani yangilash
+                window.location.reload(); // qatiy yangilash
             } else {
                 const data = await res.json();
                 alert(data.error || 'Xatolik yuz berdi');
@@ -223,7 +229,7 @@ Uzoq ishlashimiz nasib qilsin!`;
                                             readOnly
                                             type="text"
                                             className="w-full bg-transparent text-sm text-indigo-200 focus:outline-none"
-                                            value="https://pos.hoyr.uz"
+                                            value={`${siteUrl}/login`}
                                         />
                                     </div>
                                 </div>
@@ -232,8 +238,8 @@ Uzoq ishlashimiz nasib qilsin!`;
                                     type="button"
                                     onClick={handleCopy}
                                     className={`w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-all ${copied
-                                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                                            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                        : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
                                         }`}
                                 >
                                     {copied ? (

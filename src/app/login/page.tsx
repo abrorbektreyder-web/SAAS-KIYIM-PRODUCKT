@@ -9,7 +9,7 @@ import { signIn } from '@/lib/supabase/auth';
 
 export default function KassirLoginPage() {
     const router = useRouter();
-    const [email, setEmail] = useState('kassir@hoyr.uz');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -21,7 +21,12 @@ export default function KassirLoginPage() {
         setError('');
 
         try {
-            const { profile } = await signIn(email, password);
+            let finalEmail = email.trim().toLowerCase();
+            if (finalEmail && !finalEmail.includes('@')) {
+                finalEmail += '@hoyr.uz';
+            }
+
+            const { profile } = await signIn(finalEmail, password);
             if (profile?.role === 'cashier') {
                 router.refresh();
                 window.location.href = '/store';
@@ -59,17 +64,17 @@ export default function KassirLoginPage() {
                     <h2 className="mb-1 text-lg font-semibold text-white">Kassir kirishi</h2>
                     <p className="mb-6 text-xs text-neutral-500">Sotuv va kassa uchun</p>
 
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
                         <div>
-                            <label className="mb-1.5 block text-xs font-medium text-neutral-400">Email manzil</label>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                            <label className="mb-1.5 block text-xs font-medium text-neutral-400">Login (misol: andijon_nodir)</label>
+                            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="off"
                                 className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2.5 text-sm text-white placeholder:text-neutral-500 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
-                                placeholder="kassir@hoyr.uz" />
+                                placeholder="Admin bergan loginni yozing" />
                         </div>
                         <div>
                             <label className="mb-1.5 block text-xs font-medium text-neutral-400">Parol</label>
                             <div className="relative">
-                                <input type={showPass ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required
+                                <input type={showPass ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password"
                                     className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2.5 pr-10 text-sm text-white placeholder:text-neutral-500 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-colors"
                                     placeholder="••••••••" />
                                 <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300">

@@ -2,6 +2,9 @@ import { getOrgProfile, getStores } from '@/lib/data';
 import StaffClient from './staff-client';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function StaffPage() {
     const profile = await getOrgProfile();
     if (!profile?.organization_id) {
@@ -17,7 +20,6 @@ export default async function StaffPage() {
         .select(`
             id,
             full_name,
-            phone,
             role,
             store_id,
             stores ( name )

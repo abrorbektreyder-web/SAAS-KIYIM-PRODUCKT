@@ -15,7 +15,6 @@ export async function GET(req: Request) {
         .select(`
             id,
             full_name,
-            phone,
             role,
             store_id,
             stores ( name )
@@ -64,6 +63,7 @@ export async function POST(req: Request) {
         // 2. Profilni upsert qilamiz (trigger ishlamasa ham ishlaydi)
         // Retrylar bilan — trigger profil yaratishni kechiktirishi mumkin
         let profileSaved = false;
+        let lastProfileError = null;
         for (let attempt = 0; attempt < 3; attempt++) {
             const { error: profileError } = await supabaseAdmin
                 .from('profiles')
@@ -82,13 +82,14 @@ export async function POST(req: Request) {
             }
 
             // Biroz kutib qaytadan urinish
+            lastProfileError = profileError;
             await new Promise(resolve => setTimeout(resolve, 500));
         }
 
         if (!profileSaved) {
             // Agar profil saqlanmasa, userni o'chiramiz
             await supabaseAdmin.auth.admin.deleteUser(userId);
-            return NextResponse.json({ error: 'Kassir profilini saqlashda xatolik yuz berdi. Qaytadan urinib koring.' }, { status: 400 });
+            return NextResponse.json({ error: 'Kassir profilini saqlashda xatolik yuz berdi. DB Error: ' + (lastProfileError?.message || 'Nomalum') }, { status: 400 });
         }
 
         return NextResponse.json({ success: true, user: authData.user });
