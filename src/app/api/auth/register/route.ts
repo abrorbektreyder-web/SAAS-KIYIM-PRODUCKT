@@ -37,7 +37,8 @@ export async function POST(req: Request) {
                 name: orgName,
                 slug: slug,
                 plan: plan,
-                subscription_status: 'trialing'
+                subscription_status: 'trialing',
+                phone: phone
             })
             .select()
             .single()
@@ -60,7 +61,6 @@ export async function POST(req: Request) {
                 .upsert({
                     id: userId,
                     organization_id: orgData.id,
-                    phone: phone,
                     full_name: fullName,
                     role: 'store_admin'
                 })
