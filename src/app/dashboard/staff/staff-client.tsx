@@ -31,13 +31,9 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
     }, [form.store_id, form.full_name, stores]);
 
     const handleCopy = () => {
-        const text = `Salom! Siz do'konga kassir etib tayinlandingiz.
-
-🏪 Dasturga kirish manzili: ${siteUrl}/login
-👤 Login: ${generatedLogin}
-🔑 Parol: ${form.password || '[Parol yozilmagan]'}
-
-Uzoq ishlashimiz nasib qilsin!`;
+        const text = `${siteUrl}/login
+Login: ${generatedLogin}
+Parol: ${form.password || '[Parol yozilmagan]'}`;
         navigator.clipboard.writeText(text);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
