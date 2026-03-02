@@ -217,12 +217,6 @@ export default function RegisterPage() {
                                     <ChevronRight className="ml-2 h-5 w-5" />
                                 </button>
 
-                                <div className="text-center mt-6">
-                                    <span className="text-neutral-500 text-sm">Akkauntingiz bormi? </span>
-                                    <Link href="/login/admin" className="text-blue-500 hover:text-blue-400 font-medium text-sm transition-colors">
-                                        Tizimga kirish
-                                    </Link>
-                                </div>
                             </form>
                         </div>
                     ) : (
@@ -243,8 +237,8 @@ export default function RegisterPage() {
                                 <div
                                     onClick={() => setForm({ ...form, plan: 'starter' })}
                                     className={`cursor-pointer rounded-xl border p-5 transition-all ${form.plan === 'starter'
-                                            ? 'border-blue-500 bg-blue-500/10'
-                                            : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
+                                        ? 'border-blue-500 bg-blue-500/10'
+                                        : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
                                         }`}
                                 >
                                     <div className="flex justify-between items-center mb-2">
@@ -258,8 +252,8 @@ export default function RegisterPage() {
                                 <div
                                     onClick={() => setForm({ ...form, plan: 'business' })}
                                     className={`relative cursor-pointer rounded-xl border p-5 transition-all ${form.plan === 'business'
-                                            ? 'border-blue-500 bg-blue-500/10'
-                                            : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
+                                        ? 'border-blue-500 bg-blue-500/10'
+                                        : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
                                         }`}
                                 >
                                     <div className="absolute -top-3 right-4 px-2 py-0.5 bg-blue-500 text-xs font-bold rounded text-white">
@@ -276,8 +270,8 @@ export default function RegisterPage() {
                                 <div
                                     onClick={() => setForm({ ...form, plan: 'premium' })}
                                     className={`cursor-pointer rounded-xl border p-5 transition-all ${form.plan === 'premium'
-                                            ? 'border-blue-500 bg-blue-500/10'
-                                            : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
+                                        ? 'border-blue-500 bg-blue-500/10'
+                                        : 'border-neutral-800 bg-neutral-900/50 hover:border-neutral-700'
                                         }`}
                                 >
                                     <div className="flex justify-between items-center mb-2">

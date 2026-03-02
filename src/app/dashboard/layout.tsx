@@ -26,13 +26,14 @@ export default async function DashboardLayout({
     }
 
     return (
-        <div className="flex h-screen overflow-hidden bg-[#09090b]">
+        <div className="flex h-screen w-full overflow-hidden bg-[#09090b]">
             <Sidebar
                 userEmail={user.email || 'Noma\'lum email'}
                 userName={profile?.full_name || 'Admin'}
             />
-            <div className="flex flex-1 flex-col overflow-hidden">
-                <main className="flex-1 overflow-y-auto p-6">
+            <div className="flex flex-1 flex-col overflow-hidden relative w-full">
+                {/* lg:mt-0 lg:p-6 is for desktop, pt-20 p-4 is for mobile (padding top 20 to avoid hidden content under the mobile header) */}
+                <main className="flex-1 overflow-y-auto p-4 pt-20 lg:p-6 lg:pt-6 w-full">
                     {children}
                 </main>
             </div>

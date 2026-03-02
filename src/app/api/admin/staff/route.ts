@@ -39,6 +39,33 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Barcha maydonlarni to'ldiring" }, { status: 400 });
         }
 
+        // Qaysi tarifda ekanligini va qancha limit borligini tekshiramiz
+        const { data: orgData, error: orgError } = await supabaseAdmin
+            .from('organizations')
+            .select('max_cashiers, plan')
+            .eq('id', organization_id)
+            .single();
+
+        if (orgError || !orgData) {
+            return NextResponse.json({ error: "Tashkilot ma'lumotlarini olishda xatolik yuz berdi" }, { status: 400 });
+        }
+
+        const { count, error: countError } = await supabaseAdmin
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('organization_id', organization_id)
+            .eq('role', 'cashier');
+
+        if (countError) {
+            return NextResponse.json({ error: "Kassirlar sonini hisoblashda xatolik yuz berdi" }, { status: 400 });
+        }
+
+        if (count !== null && count >= orgData.max_cashiers) {
+            return NextResponse.json({
+                error: `Sizning tarifingiz (${orgData.plan}) bo'yicha kassirlar limiti cheklangan! Siz faqat ${orgData.max_cashiers} ta kassir qo'sha olasiz. Cheklovni olib tashlash uchun hamkorlik kelishuvini amalga oshiring.`
+            }, { status: 403 });
+        }
+
         // 1. Supabase Auth da yaratamiz
         const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
             email,

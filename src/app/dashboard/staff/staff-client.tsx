@@ -13,6 +13,7 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
         password: '',
         store_id: stores[0]?.id || ''
     });
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [siteUrl, setSiteUrl] = useState('https://kassa.vercel.app'); // Faqat fallback uchun
 
@@ -45,6 +46,7 @@ Uzoq ishlashimiz nasib qilsin!`;
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setErrorMsg(null);
         try {
             const res = await fetch('/api/admin/staff', {
                 method: 'POST',
@@ -64,10 +66,10 @@ Uzoq ishlashimiz nasib qilsin!`;
                 window.location.reload(); // qatiy yangilash
             } else {
                 const data = await res.json();
-                alert(data.error || 'Xatolik yuz berdi');
+                setErrorMsg(data.error || 'Xatolik yuz berdi');
             }
         } catch (error) {
-            alert('Tarmoq xatosi');
+            setErrorMsg('Tarmoq xatosi. Iltimos qaytadan urinib ko\'ring.');
         }
         setLoading(false);
     };
@@ -166,6 +168,11 @@ Uzoq ishlashimiz nasib qilsin!`;
                     <div className="relative w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl animate-fade-in custom-modal mb-12">
                         <h2 className="mb-4 text-lg font-bold text-white">Yangi kassir qo'shish</h2>
                         <form onSubmit={handleAdd} className="space-y-4">
+                            {errorMsg && (
+                                <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-500 border border-red-500/20">
+                                    {errorMsg}
+                                </div>
+                            )}
                             <div>
                                 <label className="mb-1 block text-xs font-medium text-neutral-400">To'liq ism</label>
                                 <input

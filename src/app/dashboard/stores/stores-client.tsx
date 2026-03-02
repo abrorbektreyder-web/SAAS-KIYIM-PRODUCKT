@@ -8,6 +8,7 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const [form, setForm] = useState({
         name: '',
@@ -19,6 +20,7 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setErrorMsg(null);
         try {
             const res = await fetch('/api/admin/stores', {
                 method: 'POST',
@@ -31,10 +33,10 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                 router.refresh();
             } else {
                 const data = await res.json();
-                alert(data.error || 'Qo\'shishda xatolik yuz berdi');
+                setErrorMsg(data.error || 'Qo\'shishda xatolik yuz berdi');
             }
         } catch (error) {
-            alert('Tarmoq xatosi');
+            setErrorMsg('Tarmoq xatosi. Iltimos qaytadan urinib ko\'ring.');
         }
         setLoading(false);
     };
@@ -101,6 +103,11 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                     <div className="relative w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl animate-fade-in custom-modal mb-12">
                         <h2 className="mb-4 text-lg font-bold text-white">Yangi filial qo'shish</h2>
                         <form onSubmit={handleAdd} className="space-y-4">
+                            {errorMsg && (
+                                <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-500 border border-red-500/20">
+                                    {errorMsg}
+                                </div>
+                            )}
                             <div>
                                 <label className="mb-1 block text-xs font-medium text-neutral-400">Do'kon/Filial nomi</label>
                                 <input
