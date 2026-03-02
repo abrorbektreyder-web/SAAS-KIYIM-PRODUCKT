@@ -99,7 +99,7 @@ export default function RegisterPage() {
                     <HoyrLogo />
                 </div>
 
-                <div className="w-full max-w-md">
+                <div className="w-full max-w-md mt-16 lg:mt-0">
                     {step === 1 ? (
                         <div className="animate-fade-in text-white/90">
                             <div className="mb-8 text-center">
