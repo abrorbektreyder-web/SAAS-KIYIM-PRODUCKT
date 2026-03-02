@@ -87,27 +87,46 @@ function StorePageContent() {
     }, [activeCategory, activeSort, searchQuery, products]);
 
     return (
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            {/* Mobile Header (Sort & Info) */}
+            <div className="flex lg:hidden items-center justify-between">
+                <span className="text-sm font-medium text-neutral-400">{filtered.length} ta mahsulot</span>
+                <div className="flex items-center gap-2">
+                    <span className="text-xs text-neutral-500">Saralash:</span>
+                    <select
+                        value={activeSort}
+                        onChange={(e) => setActiveSort(e.target.value)}
+                        className="bg-neutral-900 border border-neutral-800 text-white text-xs rounded-lg px-2 py-1.5 outline-none focus:border-neutral-600 transition-colors"
+                    >
+                        {sortOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             <div className="flex-1 min-w-0">
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
                     {filtered.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
                 {filtered.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-20">
-                        <p className="text-lg text-neutral-500">
+                    <div className="flex flex-col items-center justify-center py-20 text-center">
+                        <p className="text-sm sm:text-lg text-neutral-500 px-4">
                             {searchQuery ? `"${searchQuery}" bo'yicha mahsulot topilmadi` : 'Bu turkumda mahsulot topilmadi'}
                         </p>
                     </div>
                 )}
             </div>
+
+            {/* Desktop Aside (Sort) */}
             <aside className="hidden lg:block w-[160px] flex-shrink-0">
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-neutral-500">Saralash</h3>
                 <ul className="space-y-1">
                     {sortOptions.map((opt) => (
                         <li key={opt.value}>
-                            <button onClick={() => setActiveSort(opt.value)} className={`block w-full text-left rounded-md px-2 py-1.5 text-sm transition-colors ${activeSort === opt.value ? 'text-white font-medium' : 'text-neutral-400 hover:text-white'}`}>
+                            <button onClick={() => setActiveSort(opt.value)} className={`block w-full text-left rounded-md px-2 py-1.5 text-sm transition-colors ${activeSort === opt.value ? 'text-white font-medium bg-neutral-800/50' : 'text-neutral-400 hover:text-white hover:bg-neutral-800/30'}`}>
                                 {opt.label}
                             </button>
                         </li>
