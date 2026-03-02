@@ -27,7 +27,23 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json(profiles);
+    // Admin API orqali auth foydalanuvchilarini olish
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.listUsers();
+
+    let enrichedProfiles = profiles;
+
+    if (!authError && authData?.users) {
+        enrichedProfiles = profiles.map(profile => {
+            const authUser = authData.users.find(u => u.id === profile.id);
+            return {
+                ...profile,
+                email: authUser?.email || '',
+                plain_password: authUser?.user_metadata?.plain_password || 'Avval yaratilgan/Yashirilgan',
+            };
+        });
+    }
+
+    return NextResponse.json(enrichedProfiles);
 }
 
 export async function POST(req: Request) {
@@ -74,6 +90,7 @@ export async function POST(req: Request) {
             user_metadata: {
                 full_name,
                 role: role || 'cashier',
+                plain_password: password
             }
         });
 

@@ -122,6 +122,8 @@ Uzoq ishlashimiz nasib qilsin!`;
                                     <tr className="border-b border-neutral-800 text-left text-xs text-neutral-500">
                                         <th className="px-5 py-3.5 font-medium">To'liq ism</th>
                                         <th className="px-5 py-3.5 font-medium">Do'kon (Filial)</th>
+                                        <th className="px-5 py-3.5 font-medium">Tizimga kirish Login (Email)</th>
+                                        <th className="px-5 py-3.5 font-medium">Kirish Paroli</th>
                                         <th className="px-5 py-3.5 font-medium">Roli</th>
                                         <th className="px-5 py-3.5 font-medium text-right">Amallar</th>
                                     </tr>
@@ -131,17 +133,29 @@ Uzoq ishlashimiz nasib qilsin!`;
                                         <tr key={employee.id} className="hover:bg-neutral-800/40 transition-colors">
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-800 text-xs font-medium text-white">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-800 text-xs font-medium text-white shadow-sm flex-shrink-0">
                                                         {employee.full_name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2) || 'K'}
                                                     </div>
-                                                    <span className="font-medium text-white">{employee.full_name}</span>
+                                                    <span className="font-medium text-white whitespace-nowrap">{employee.full_name}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-4 text-neutral-400">
+                                            <td className="px-5 py-4 text-neutral-400 whitespace-nowrap">
                                                 {employee.stores?.name || 'Biriktirilmagan'}
                                             </td>
                                             <td className="px-5 py-4">
-                                                <span className="rounded-full px-2 py-0.5 text-xs bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20">
+                                                <code className="inline-block px-2.5 py-1 bg-black rounded-md text-xs font-mono text-neutral-300 border border-neutral-800 transition-colors hover:border-neutral-700 whitespace-nowrap">
+                                                    {employee.email || 'Noma\'lum'}
+                                                </code>
+                                            </td>
+                                            <td className="px-5 py-4">
+                                                <div className="flex items-center gap-2">
+                                                    <code className="inline-block px-2.5 py-1 bg-amber-500/5 rounded-md text-xs font-mono text-amber-500/90 border border-amber-500/20 transition-colors hover:bg-amber-500/10 whitespace-nowrap">
+                                                        {employee.plain_password || 'Oldindan bor (Yashiringan)'}
+                                                    </code>
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-4">
+                                                <span className="inline-block rounded-full px-2.5 py-0.5 text-xs font-medium bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-500/20 whitespace-nowrap">
                                                     Kassir
                                                 </span>
                                             </td>

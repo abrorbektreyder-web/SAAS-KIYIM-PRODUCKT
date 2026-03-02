@@ -28,9 +28,25 @@ export default async function StaffPage() {
         .eq('role', 'cashier')
         .order('created_at', { ascending: false });
 
+    // Authdan foydalanuvchilar login va parollarini olish
+    const { data: authData } = await supabaseAdmin.auth.admin.listUsers();
+
+    let enrichedStaff = staff || [];
+
+    if (authData?.users && staff) {
+        enrichedStaff = staff.map(employee => {
+            const authUser = authData.users.find(u => u.id === employee.id);
+            return {
+                ...employee,
+                email: authUser?.email || '',
+                plain_password: authUser?.user_metadata?.plain_password || '',
+            };
+        });
+    }
+
     return (
         <StaffClient
-            staff={staff || []}
+            staff={enrichedStaff}
             stores={stores || []}
             orgId={profile.organization_id}
         />
