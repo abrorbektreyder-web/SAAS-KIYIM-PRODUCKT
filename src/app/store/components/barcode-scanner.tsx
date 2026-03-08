@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import BarcodeScannerComponent from 'react-qr-barcode-scanner';
 import { Camera, X, Check, CameraOff, RotateCcw } from 'lucide-react';
 
-export default function BarcodeScanner({
+function ScannerOverlay({
     onDetect,
     onClose
 }: {
@@ -26,10 +27,22 @@ export default function BarcodeScanner({
     };
 
     return (
-        <div className="fixed inset-0 z-[200] bg-black">
-            {/* Video'ni to'liq ekranga chiqarish uchun CSS */}
+        <div
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 99999,
+                background: '#000',
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
+            {/* Kamera video — CSS orqali to'liq ekranga */}
             <style>{`
-                .scanner-video-area video {
+                .cam-wrap video {
                     position: absolute !important;
                     top: 0 !important;
                     left: 0 !important;
@@ -37,7 +50,7 @@ export default function BarcodeScanner({
                     height: 100% !important;
                     object-fit: cover !important;
                 }
-                .scanner-video-area > div {
+                .cam-wrap > div {
                     position: absolute !important;
                     top: 0 !important;
                     left: 0 !important;
@@ -46,136 +59,145 @@ export default function BarcodeScanner({
                 }
             `}</style>
 
-            {/* Kamera — to'liq ekran background */}
-            {cameraActive && !success && (
-                <div className="scanner-video-area absolute inset-0">
-                    <BarcodeScannerComponent
-                        width={500}
-                        height={500}
-                        onUpdate={handleUpdate}
-                        facingMode={facingMode}
-                    />
-                </div>
-            )}
+            {/* ====== KAMERA OYNASI ====== */}
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: '#000' }}>
+                {/* Kamera yoqilgan */}
+                {cameraActive && !success && (
+                    <div className="cam-wrap" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                        <BarcodeScannerComponent
+                            width={500}
+                            height={500}
+                            onUpdate={handleUpdate}
+                            facingMode={facingMode}
+                        />
+                    </div>
+                )}
 
-            {/* Muvaffaqiyat ekrani */}
-            {success && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90">
-                    <div className="animate-scale-in flex flex-col items-center">
-                        <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
-                            <Check className="w-10 h-10 text-emerald-400" />
+                {/* Muvaffaqiyat */}
+                {success && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.85)' }}>
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                                <Check style={{ width: 40, height: 40, color: '#34d399' }} />
+                            </div>
+                            <p style={{ fontSize: 18, fontWeight: 600, color: '#fff' }}>Barkod o'qildi!</p>
                         </div>
-                        <p className="text-lg font-semibold text-white">Barkod o'qildi!</p>
                     </div>
-                </div>
-            )}
+                )}
 
-            {/* Kamera o'chirilgan holat */}
-            {!cameraActive && !success && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950">
-                    <div className="w-24 h-24 rounded-full bg-neutral-800/80 flex items-center justify-center mb-5">
-                        <CameraOff className="w-11 h-11 text-neutral-500" />
+                {/* Kamera o'chirilgan */}
+                {!cameraActive && !success && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a' }}>
+                        <div style={{ width: 96, height: 96, borderRadius: '50%', background: '#262626', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                            <CameraOff style={{ width: 44, height: 44, color: '#737373' }} />
+                        </div>
+                        <p style={{ fontSize: 18, fontWeight: 600, color: '#fff', marginBottom: 4 }}>Kamera o'chirilgan</p>
+                        <p style={{ fontSize: 14, color: '#737373', marginBottom: 24 }}>Pistalet skaner bilan ishlang</p>
+                        <button
+                            onClick={() => { setCameraActive(true); setSuccess(false); }}
+                            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 12, background: '#2563eb', color: '#fff', fontSize: 14, fontWeight: 500, border: 'none', cursor: 'pointer' }}
+                        >
+                            <RotateCcw style={{ width: 16, height: 16 }} />
+                            Kamerani yoqish
+                        </button>
                     </div>
-                    <p className="text-white font-semibold text-lg mb-1">Kamera o'chirilgan</p>
-                    <p className="text-neutral-500 text-sm mb-6">Pistalet skaner bilan ishlang</p>
-                    <button
-                        onClick={() => { setCameraActive(true); setSuccess(false); }}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors"
-                    >
-                        <RotateCcw className="w-4 h-4" />
-                        Kamerani yoqish
-                    </button>
-                </div>
-            )}
+                )}
 
-            {/* Skan ramkasi overlay — faqat kamera yoqilganda */}
-            {cameraActive && !success && (
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                    <div className="w-64 h-64 sm:w-72 sm:h-72 relative">
-                        {/* Qizil skan chizig'i */}
-                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-red-500 animate-scan shadow-[0_0_8px_rgba(255,0,0,0.6)]"></div>
-                        {/* Ko'k chiziqli ramka */}
-                        <div className="absolute inset-0 border-2 border-dashed border-blue-400/40 rounded-lg"></div>
-                        {/* Oq burchaklar */}
-                        <div className="absolute -top-0.5 -left-0.5 w-8 h-8 border-t-[3px] border-l-[3px] border-white rounded-tl-md"></div>
-                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 border-t-[3px] border-r-[3px] border-white rounded-tr-md"></div>
-                        <div className="absolute -bottom-0.5 -left-0.5 w-8 h-8 border-b-[3px] border-l-[3px] border-white rounded-bl-md"></div>
-                        <div className="absolute -bottom-0.5 -right-0.5 w-8 h-8 border-b-[3px] border-r-[3px] border-white rounded-br-md"></div>
+                {/* Skan ramkasi */}
+                {cameraActive && !success && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                        <div style={{ width: 240, height: 240, position: 'relative' }}>
+                            <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 2, background: '#ef4444', boxShadow: '0 0 8px rgba(255,0,0,0.6)', animation: 'scan 2s ease-in-out infinite' }}></div>
+                            <div style={{ position: 'absolute', inset: 0, border: '2px dashed rgba(96,165,250,0.4)', borderRadius: 8 }}></div>
+                            {/* Burchaklar */}
+                            <div style={{ position: 'absolute', top: -1, left: -1, width: 28, height: 28, borderTop: '3px solid #fff', borderLeft: '3px solid #fff', borderRadius: '6px 0 0 0' }}></div>
+                            <div style={{ position: 'absolute', top: -1, right: -1, width: 28, height: 28, borderTop: '3px solid #fff', borderRight: '3px solid #fff', borderRadius: '0 6px 0 0' }}></div>
+                            <div style={{ position: 'absolute', bottom: -1, left: -1, width: 28, height: 28, borderBottom: '3px solid #fff', borderLeft: '3px solid #fff', borderRadius: '0 0 0 6px' }}></div>
+                            <div style={{ position: 'absolute', bottom: -1, right: -1, width: 28, height: 28, borderBottom: '3px solid #fff', borderRight: '3px solid #fff', borderRadius: '0 0 6px 0' }}></div>
+                        </div>
                     </div>
-                    {/* Matn — ramka ostida */}
-                    <p className="absolute bottom-[30%] text-white/60 text-xs font-medium tracking-wide">
-                        Barkodni ramka ichiga keltiring
-                    </p>
-                </div>
-            )}
+                )}
+            </div>
 
-            {/* Yuqori panel — header */}
-            <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/70 to-transparent">
-                <div className="flex items-center gap-2">
-                    <Camera className="w-4 h-4 text-blue-400" />
-                    <span className="text-white text-sm font-medium">Skanerlash</span>
+            {/* ====== HEADER — yuqorida gradient ====== */}
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'linear-gradient(to bottom, rgba(0,0,0,0.7), transparent)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Camera style={{ width: 16, height: 16, color: '#60a5fa' }} />
+                    <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>Skanerlash</span>
                 </div>
                 <button
                     onClick={onClose}
-                    className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                    style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: '#fff' }}
                 >
-                    <X className="w-5 h-5" />
+                    <X style={{ width: 20, height: 20 }} />
                 </button>
             </div>
 
-            {/* Pastki panel — boshqaruv tugmalari */}
+            {/* ====== FOOTER — pastda tugmalar ====== */}
             {cameraActive && !success && (
-                <div className="absolute bottom-0 left-0 right-0 z-10 pb-6 pt-10 bg-gradient-to-t from-black/80 to-transparent">
-                    <div className="flex items-center justify-center gap-4 px-6 max-w-sm mx-auto">
-                        <button
-                            onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")}
-                            className="flex flex-col items-center gap-1.5"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <RotateCcw className="w-5 h-5 text-white" />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, padding: '40px 24px 28px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 32, maxWidth: 320, margin: '0 auto' }}>
+                        {/* Burish */}
+                        <button onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <RotateCcw style={{ width: 20, height: 20, color: '#fff' }} />
                             </div>
-                            <span className="text-[10px] text-white/70 font-medium">Burish</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Burish</span>
                         </button>
-
-                        <button
-                            onClick={() => setCameraActive(false)}
-                            className="flex flex-col items-center gap-1.5"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center justify-center hover:bg-red-500 transition-colors">
-                                <CameraOff className="w-5 h-5 text-white" />
+                        {/* O'chirish */}
+                        <button onClick={() => setCameraActive(false)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(220,38,38,0.4)' }}>
+                                <CameraOff style={{ width: 22, height: 22, color: '#fff' }} />
                             </div>
-                            <span className="text-[10px] text-white/70 font-medium">O'chirish</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>O'chirish</span>
                         </button>
-
-                        <button
-                            onClick={onClose}
-                            className="flex flex-col items-center gap-1.5"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <X className="w-5 h-5 text-white" />
+                        {/* Yopish */}
+                        <button onClick={onClose} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <X style={{ width: 20, height: 20, color: '#fff' }} />
                             </div>
-                            <span className="text-[10px] text-white/70 font-medium">Yopish</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Yopish</span>
                         </button>
                     </div>
                 </div>
             )}
 
-            {/* Kamera o'chirilgandagi pastki panel */}
+            {/* Kamera o'chirilgandagi yopish tugmasi */}
             {!cameraActive && !success && (
-                <div className="absolute bottom-0 left-0 right-0 z-10 pb-6 pt-4">
-                    <div className="flex items-center justify-center px-6 max-w-sm mx-auto">
-                        <button
-                            onClick={onClose}
-                            className="flex flex-col items-center gap-1.5"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
-                                <X className="w-5 h-5 text-white" />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10, padding: '20px 24px 28px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button onClick={onClose} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <X style={{ width: 20, height: 20, color: '#fff' }} />
                             </div>
-                            <span className="text-[10px] text-white/70 font-medium">Yopish</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>Yopish</span>
                         </button>
                     </div>
                 </div>
             )}
         </div>
+    );
+}
+
+export default function BarcodeScanner({
+    onDetect,
+    onClose
+}: {
+    onDetect: (code: string) => void,
+    onClose: () => void
+}) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
+    if (!mounted) return null;
+
+    // createPortal orqali document.body ga render — header/sidebar ichida qolmaydi
+    return createPortal(
+        <ScannerOverlay onDetect={onDetect} onClose={onClose} />,
+        document.body
     );
 }
