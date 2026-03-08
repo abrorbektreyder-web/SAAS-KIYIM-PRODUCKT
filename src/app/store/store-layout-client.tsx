@@ -9,6 +9,7 @@ import { Suspense, useState, useCallback, useEffect } from 'react';
 import { CartProvider, useCart } from '@/lib/cart-context';
 import { ProductProvider, useProducts } from '@/lib/product-context';
 import CartModal from '@/components/store/cart-modal';
+import { signOut } from '@/lib/supabase/auth';
 
 function CartButton({ orgId, storeId }: { orgId: string; storeId: string }) {
     const { totalItems } = useCart();
@@ -176,12 +177,18 @@ function StoreLayoutInner({ children, orgId, storeId }: { children: React.ReactN
                             </div>
                         )}
 
-                        {/* Mobile Logout (Optional inside drawer) */}
-                        <div className="mt-8 pt-8 border-t border-neutral-800 md:hidden">
-                            <Link href="/login" className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors">
+                        {/* Tizimdan chiqish */}
+                        <div className="mt-8 pt-8 border-t border-neutral-800">
+                            <button
+                                onClick={async () => {
+                                    await signOut();
+                                    window.location.href = '/login';
+                                }}
+                                className="flex w-full items-center gap-2 rounded-md px-3 md:px-2 py-2.5 md:py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                            >
                                 <LogOut className="h-4 w-4" />
                                 Tizimdan chiqish
-                            </Link>
+                            </button>
                         </div>
                     </aside>
                     <div className="flex-1 min-w-0">{children}</div>
