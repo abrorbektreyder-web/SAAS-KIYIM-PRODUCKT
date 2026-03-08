@@ -25,147 +25,157 @@ export default function BarcodeScanner({
         }
     };
 
-    const handleStopCamera = () => {
-        setCameraActive(false);
-    };
-
-    const handleRestartCamera = () => {
-        setSuccess(false);
-        setCameraActive(true);
-    };
-
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col bg-black animate-fade-in">
+        <div className="fixed inset-0 z-[200] bg-black">
+            {/* Video'ni to'liq ekranga chiqarish uchun CSS */}
+            <style>{`
+                .scanner-video-area video {
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    object-fit: cover !important;
+                }
+                .scanner-video-area > div {
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+            `}</style>
 
-            {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-neutral-800 bg-neutral-900">
-                <h3 className="font-semibold text-white flex items-center gap-2 text-sm">
-                    <Camera className="w-4 h-4 text-blue-500" />
-                    Skanerlash
-                </h3>
+            {/* Kamera — to'liq ekran background */}
+            {cameraActive && !success && (
+                <div className="scanner-video-area absolute inset-0">
+                    <BarcodeScannerComponent
+                        width={500}
+                        height={500}
+                        onUpdate={handleUpdate}
+                        facingMode={facingMode}
+                    />
+                </div>
+            )}
+
+            {/* Muvaffaqiyat ekrani */}
+            {success && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90">
+                    <div className="animate-scale-in flex flex-col items-center">
+                        <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
+                            <Check className="w-10 h-10 text-emerald-400" />
+                        </div>
+                        <p className="text-lg font-semibold text-white">Barkod o'qildi!</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Kamera o'chirilgan holat */}
+            {!cameraActive && !success && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950">
+                    <div className="w-24 h-24 rounded-full bg-neutral-800/80 flex items-center justify-center mb-5">
+                        <CameraOff className="w-11 h-11 text-neutral-500" />
+                    </div>
+                    <p className="text-white font-semibold text-lg mb-1">Kamera o'chirilgan</p>
+                    <p className="text-neutral-500 text-sm mb-6">Pistalet skaner bilan ishlang</p>
+                    <button
+                        onClick={() => { setCameraActive(true); setSuccess(false); }}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors"
+                    >
+                        <RotateCcw className="w-4 h-4" />
+                        Kamerani yoqish
+                    </button>
+                </div>
+            )}
+
+            {/* Skan ramkasi overlay — faqat kamera yoqilganda */}
+            {cameraActive && !success && (
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    <div className="w-64 h-64 sm:w-72 sm:h-72 relative">
+                        {/* Qizil skan chizig'i */}
+                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-red-500 animate-scan shadow-[0_0_8px_rgba(255,0,0,0.6)]"></div>
+                        {/* Ko'k chiziqli ramka */}
+                        <div className="absolute inset-0 border-2 border-dashed border-blue-400/40 rounded-lg"></div>
+                        {/* Oq burchaklar */}
+                        <div className="absolute -top-0.5 -left-0.5 w-8 h-8 border-t-[3px] border-l-[3px] border-white rounded-tl-md"></div>
+                        <div className="absolute -top-0.5 -right-0.5 w-8 h-8 border-t-[3px] border-r-[3px] border-white rounded-tr-md"></div>
+                        <div className="absolute -bottom-0.5 -left-0.5 w-8 h-8 border-b-[3px] border-l-[3px] border-white rounded-bl-md"></div>
+                        <div className="absolute -bottom-0.5 -right-0.5 w-8 h-8 border-b-[3px] border-r-[3px] border-white rounded-br-md"></div>
+                    </div>
+                    {/* Matn — ramka ostida */}
+                    <p className="absolute bottom-[30%] text-white/60 text-xs font-medium tracking-wide">
+                        Barkodni ramka ichiga keltiring
+                    </p>
+                </div>
+            )}
+
+            {/* Yuqori panel — header */}
+            <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/70 to-transparent">
+                <div className="flex items-center gap-2">
+                    <Camera className="w-4 h-4 text-blue-400" />
+                    <span className="text-white text-sm font-medium">Skanerlash</span>
+                </div>
                 <button
                     onClick={onClose}
-                    className="p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                    className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
                 >
                     <X className="w-5 h-5" />
                 </button>
             </div>
 
-            {/* Camera / Scanner Area — to'liq ekranni egallaydi */}
-            <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden" style={{ minHeight: '300px' }}>
-                {/* Video elementlarini to'liq ekranga chiqarish uchun CSS */}
-                <style>{`
-                    .scanner-area video {
-                        position: absolute !important;
-                        top: 0 !important;
-                        left: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                        object-fit: cover !important;
-                    }
-                    .scanner-area > div {
-                        position: absolute !important;
-                        top: 0 !important;
-                        left: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                    }
-                `}</style>
-
-                {success ? (
-                    <div className="flex flex-col items-center justify-center text-emerald-500 animate-scale-in">
-                        <Check className="w-20 h-20 mb-3" />
-                        <p className="text-lg font-medium text-white">O'qildi!</p>
-                    </div>
-                ) : cameraActive ? (
-                    <>
-                        <div className="scanner-area absolute inset-0">
-                            <BarcodeScannerComponent
-                                width={500}
-                                height={500}
-                                onUpdate={handleUpdate}
-                                facingMode={facingMode}
-                            />
-                        </div>
-                        {/* O'qish chizig'i va dizayn */}
-                        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                            <div className="w-[70%] max-w-[320px] aspect-square border-2 border-dashed border-blue-500/50 relative">
-                                <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-red-500 animate-scan shadow-[0_0_10px_red]"></div>
-
-                                {/* Burchaklar */}
-                                <div className="absolute -top-[2px] -left-[2px] w-8 h-8 border-t-4 border-l-4 border-white"></div>
-                                <div className="absolute -top-[2px] -right-[2px] w-8 h-8 border-t-4 border-r-4 border-white"></div>
-                                <div className="absolute -bottom-[2px] -left-[2px] w-8 h-8 border-b-4 border-l-4 border-white"></div>
-                                <div className="absolute -bottom-[2px] -right-[2px] w-8 h-8 border-b-4 border-r-4 border-white"></div>
+            {/* Pastki panel — boshqaruv tugmalari */}
+            {cameraActive && !success && (
+                <div className="absolute bottom-0 left-0 right-0 z-10 pb-6 pt-10 bg-gradient-to-t from-black/80 to-transparent">
+                    <div className="flex items-center justify-center gap-4 px-6 max-w-sm mx-auto">
+                        <button
+                            onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")}
+                            className="flex flex-col items-center gap-1.5"
+                        >
+                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
+                                <RotateCcw className="w-5 h-5 text-white" />
                             </div>
-                        </div>
-                    </>
-                ) : (
-                    /* Kamera o'chirilgan holat */
-                    <div className="flex flex-col items-center justify-center gap-5 p-8">
-                        <div className="w-24 h-24 rounded-full bg-neutral-800 flex items-center justify-center">
-                            <CameraOff className="w-12 h-12 text-neutral-500" />
-                        </div>
-                        <div className="text-center">
-                            <p className="text-white font-medium text-lg mb-1">Kamera o'chirilgan</p>
-                            <p className="text-neutral-500 text-sm">Pistalet skaner bilan ishlashingiz mumkin</p>
-                        </div>
+                            <span className="text-[10px] text-white/70 font-medium">Burish</span>
+                        </button>
+
+                        <button
+                            onClick={() => setCameraActive(false)}
+                            className="flex flex-col items-center gap-1.5"
+                        >
+                            <div className="w-12 h-12 rounded-full bg-red-600/90 backdrop-blur-sm flex items-center justify-center hover:bg-red-500 transition-colors">
+                                <CameraOff className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-[10px] text-white/70 font-medium">O'chirish</span>
+                        </button>
+
+                        <button
+                            onClick={onClose}
+                            className="flex flex-col items-center gap-1.5"
+                        >
+                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
+                                <X className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-[10px] text-white/70 font-medium">Yopish</span>
+                        </button>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
 
-            {/* Footer Controls — pastda hamisha ko'rinadi */}
-            <div className="flex-shrink-0 p-4 bg-neutral-900 border-t border-neutral-800 space-y-2">
-                {cameraActive && !success ? (
-                    <>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")}
-                                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-500 transition-colors text-sm"
-                            >
-                                <RotateCcw className="w-4 h-4" />
-                                Burish
-                            </button>
-                            <button
-                                onClick={handleStopCamera}
-                                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-red-600 text-white font-medium hover:bg-red-500 transition-colors text-sm"
-                            >
-                                <CameraOff className="w-4 h-4" />
-                                Kamerani o'chirish
-                            </button>
-                        </div>
+            {/* Kamera o'chirilgandagi pastki panel */}
+            {!cameraActive && !success && (
+                <div className="absolute bottom-0 left-0 right-0 z-10 pb-6 pt-4">
+                    <div className="flex items-center justify-center px-6 max-w-sm mx-auto">
                         <button
                             onClick={onClose}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 transition-colors text-sm"
+                            className="flex flex-col items-center gap-1.5"
                         >
-                            <X className="w-4 h-4" />
-                            Yopish
+                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-colors">
+                                <X className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-[10px] text-white/70 font-medium">Yopish</span>
                         </button>
-                    </>
-                ) : !cameraActive ? (
-                    <>
-                        <button
-                            onClick={handleRestartCamera}
-                            className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors"
-                        >
-                            <RotateCcw className="w-4 h-4" />
-                            Kamerani qayta yoqish
-                        </button>
-                        <button
-                            onClick={onClose}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 transition-colors text-sm"
-                        >
-                            <X className="w-4 h-4" />
-                            Yopish
-                        </button>
-                        <p className="text-neutral-500 text-xs text-center">
-                            Pistalet skaner bilan shtrix-kodni skanerlang
-                        </p>
-                    </>
-                ) : null}
-            </div>
-
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
-
