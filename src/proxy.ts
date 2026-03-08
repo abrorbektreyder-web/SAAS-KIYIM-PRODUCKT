@@ -3,6 +3,20 @@ import type { NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
 export async function proxy(request: NextRequest) {
+    const path = request.nextUrl.pathname;
+
+    // Login, API va statik sahifalarni OLDIN tekshirish — ular uchun auth kerak emas
+    if (
+        path.startsWith('/login') ||
+        path.startsWith('/register') ||
+        path.startsWith('/api') ||
+        path === '/' ||
+        path.startsWith('/_next') ||
+        path.startsWith('/favicon')
+    ) {
+        return NextResponse.next()
+    }
+
     let supabaseResponse = NextResponse.next({
         request,
     })
@@ -32,18 +46,6 @@ export async function proxy(request: NextRequest) {
     const {
         data: { user },
     } = await supabase.auth.getUser()
-
-    const path = request.nextUrl.pathname;
-
-    // Login va API sahifalarini himoya qilmaslik
-    if (
-        path.startsWith('/login') ||
-        path.startsWith('/api') ||
-        path === '/' ||
-        path.startsWith('/_next')
-    ) {
-        return supabaseResponse
-    }
 
     // Foydalanuvchi umuman kimaganmi?
     if (!user) {
