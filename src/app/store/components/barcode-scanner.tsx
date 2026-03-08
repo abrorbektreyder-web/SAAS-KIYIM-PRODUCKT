@@ -39,29 +39,17 @@ export default function BarcodeScanner({
             <div className="relative w-full max-w-sm rounded-2xl bg-neutral-900 border border-neutral-800 overflow-hidden shadow-2xl">
 
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-neutral-800">
-                    <h3 className="font-semibold text-white flex items-center gap-2">
-                        <Camera className="w-5 h-5 text-blue-500" />
+                <div className="flex items-center justify-between p-3 border-b border-neutral-800">
+                    <h3 className="font-semibold text-white flex items-center gap-2 text-sm">
+                        <Camera className="w-4 h-4 text-blue-500" />
                         Skanerlash
                     </h3>
-                    <div className="flex items-center gap-2">
-                        {cameraActive && !success && (
-                            <button
-                                onClick={handleStopCamera}
-                                className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 transition-colors"
-                                title="Kamerani o'chirish"
-                            >
-                                <CameraOff className="w-3.5 h-3.5" />
-                                <span>O'chirish</span>
-                            </button>
-                        )}
-                        <button
-                            onClick={onClose}
-                            className="p-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
                 </div>
 
                 {/* Camera / Scanner Area */}
@@ -102,34 +90,59 @@ export default function BarcodeScanner({
                                 <p className="text-white font-medium mb-1">Kamera o'chirilgan</p>
                                 <p className="text-neutral-500 text-xs">Pistalet skaner bilan ishlashingiz mumkin</p>
                             </div>
-                            <button
-                                onClick={handleRestartCamera}
-                                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors"
-                            >
-                                <RotateCcw className="w-4 h-4" />
-                                Kamerani qayta yoqish
-                            </button>
                         </div>
                     )}
                 </div>
 
-                {/* Footer Controls */}
-                <div className="p-4 bg-neutral-900 flex justify-between items-center text-sm border-t border-neutral-800">
+                {/* Footer Controls - ASOSIY TUGMALAR SHU YERDA */}
+                <div className="p-3 bg-neutral-900 border-t border-neutral-800 space-y-2">
                     {cameraActive && !success ? (
                         <>
+                            {/* Kamerani boshqarish tugmalari */}
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")}
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-500 transition-colors text-sm"
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    Burish
+                                </button>
+                                <button
+                                    onClick={handleStopCamera}
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-red-600 text-white font-medium hover:bg-red-500 transition-colors text-sm"
+                                >
+                                    <CameraOff className="w-4 h-4" />
+                                    Kamerani o'chirish
+                                </button>
+                            </div>
                             <button
-                                onClick={() => setFacingMode(prev => prev === "environment" ? "user" : "environment")}
-                                className="text-neutral-400 hover:text-white transition-colors flex items-center gap-1.5"
+                                onClick={onClose}
+                                className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 transition-colors text-xs"
                             >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                                Kamerani burish
+                                <X className="w-3.5 h-3.5" />
+                                Yopish
                             </button>
-                            <p className="text-neutral-500 text-xs">Barkodni chiziq ichiga keltiring</p>
                         </>
                     ) : !cameraActive ? (
-                        <p className="text-neutral-500 text-xs w-full text-center">
-                            Pistalet skaner bilan shtrix-kodni skanerlang
-                        </p>
+                        <>
+                            <button
+                                onClick={handleRestartCamera}
+                                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                                Kamerani qayta yoqish
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border border-neutral-700 text-neutral-400 hover:text-white hover:border-neutral-500 transition-colors text-xs"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                                Yopish
+                            </button>
+                            <p className="text-neutral-500 text-xs text-center mt-1">
+                                Pistalet skaner bilan shtrix-kodni skanerlang
+                            </p>
+                        </>
                     ) : null}
                 </div>
 
@@ -137,3 +150,4 @@ export default function BarcodeScanner({
         </div>
     );
 }
+
