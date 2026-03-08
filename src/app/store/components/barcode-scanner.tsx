@@ -52,7 +52,26 @@ export default function BarcodeScanner({
             </div>
 
             {/* Camera / Scanner Area — to'liq ekranni egallaydi */}
-            <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden">
+            <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden" style={{ minHeight: '300px' }}>
+                {/* Video elementlarini to'liq ekranga chiqarish uchun CSS */}
+                <style>{`
+                    .scanner-area video {
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        object-fit: cover !important;
+                    }
+                    .scanner-area > div {
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                    }
+                `}</style>
+
                 {success ? (
                     <div className="flex flex-col items-center justify-center text-emerald-500 animate-scale-in">
                         <Check className="w-20 h-20 mb-3" />
@@ -60,10 +79,10 @@ export default function BarcodeScanner({
                     </div>
                 ) : cameraActive ? (
                     <>
-                        <div className="w-full h-full flex items-center justify-center [&>video]:w-full [&>video]:h-full [&>video]:object-cover">
+                        <div className="scanner-area absolute inset-0">
                             <BarcodeScannerComponent
-                                width="100%"
-                                height="100%"
+                                width={500}
+                                height={500}
                                 onUpdate={handleUpdate}
                                 facingMode={facingMode}
                             />
