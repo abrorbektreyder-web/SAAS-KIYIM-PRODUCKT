@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, MapPin, Store } from 'lucide-react';
+import { Plus, MapPin, Store, Edit2, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function StoresClient({ initialStores, orgId }: { initialStores: any[], orgId: string }) {
@@ -9,6 +9,8 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
     const [isModalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [editingStore, setEditingStore] = useState<any>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const [form, setForm] = useState({
         name: '',
@@ -17,23 +19,72 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
         phone: ''
     });
 
-    const handleAdd = async (e: React.FormEvent) => {
+    const openAddModal = () => {
+        setEditingStore(null);
+        setForm({ name: '', address: '', city: '', phone: '' });
+        setErrorMsg(null);
+        setModalOpen(true);
+    };
+
+    const openEditModal = (store: any) => {
+        setEditingStore(store);
+        setForm({
+            name: store.name || '',
+            address: store.address || '',
+            city: store.city || '',
+            phone: store.phone || ''
+        });
+        setErrorMsg(null);
+        setModalOpen(true);
+    };
+
+    const handleDelete = async (id: string, name: string) => {
+        if (!confirm(`Siz rostdan ham "${name}" filialini o'chirib tashlamoqchimisiz? Agar o'chirsangiz, bu filialga tegishli barcha xodimlar va ba'zi ma'lumotlar o'chib ketishi yoki barbod bo'lishi mumkin.`)) {
+            return;
+        }
+
+        setDeletingId(id);
+        try {
+            const res = await fetch(`/api/admin/stores?id=${id}`, {
+                method: 'DELETE',
+            });
+            if (res.ok) {
+                router.refresh();
+            } else {
+                const data = await res.json();
+                alert(data.error || "O'chirishda xatolik yuz berdi");
+            }
+        } catch (error) {
+            alert("Tarmoq xatosi. Iltimos qaytadan urinib ko'ring.");
+        }
+        setDeletingId(null);
+    };
+
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg(null);
+
+        const isEditing = !!editingStore;
+
         try {
             const res = await fetch('/api/admin/stores', {
-                method: 'POST',
+                method: isEditing ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...form, organization_id: orgId })
+                body: JSON.stringify({
+                    ...form,
+                    id: isEditing ? editingStore.id : undefined,
+                    organization_id: orgId
+                })
             });
             if (res.ok) {
                 setForm({ name: '', address: '', city: '', phone: '' });
+                setEditingStore(null);
                 setModalOpen(false);
                 router.refresh();
             } else {
                 const data = await res.json();
-                setErrorMsg(data.error || 'Qo\'shishda xatolik yuz berdi');
+                setErrorMsg(data.error || 'Saqlashda xatolik yuz berdi');
             }
         } catch (error) {
             setErrorMsg('Tarmoq xatosi. Iltimos qaytadan urinib ko\'ring.');
@@ -50,7 +101,7 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                         <p className="text-sm text-neutral-500">Barcha filiallarni boshqarish</p>
                     </div>
                     <button
-                        onClick={() => setModalOpen(true)}
+                        onClick={openAddModal}
                         className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black transition-all hover:bg-neutral-200"
                     >
                         <Plus className="h-4 w-4" />
@@ -64,7 +115,7 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                         <p className="text-neutral-400 font-medium">Hali filiallar qo'shilmagan.</p>
                         <p className="text-neutral-500 text-sm mt-1">Siz xodimlar qo'shishingiz va savdo qilishingiz uchun avval filialingiz (do'koningiz) ni hududini ro'yxatdan o'tkazishingiz zarur.</p>
                         <button
-                            onClick={() => setModalOpen(true)}
+                            onClick={openAddModal}
                             className="mt-6 flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 px-6 py-2.5 text-sm font-semibold text-white transition-all shadow-sm shadow-black/50 hover:shadow-black"
                         >
                             Yangi filial qo'shish
@@ -73,8 +124,8 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                 ) : (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-2">
                         {initialStores.map((store: any) => (
-                            <div key={store.id} className="card-hover rounded-xl border border-neutral-800 bg-neutral-900 p-6">
-                                <div className="flex items-start justify-between mb-4">
+                            <div key={store.id} className="card-hover rounded-xl border border-neutral-800 bg-neutral-900 p-6 flex flex-col">
+                                <div className="flex items-start justify-between mb-4 flex-1">
                                     <div>
                                         <h3 className="text-base font-semibold text-white">{store.name}</h3>
                                         <div className="flex items-center gap-1 mt-1">
@@ -89,8 +140,25 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                                         {store.is_active ? 'Faol' : 'Nofaol'}
                                     </span>
                                 </div>
-                                <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-800">
-                                    <span className="text-xs text-neutral-500">{store.phone || 'Tel. belgilanmagan'}</span>
+                                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-neutral-800">
+                                    <div className="flex-1">
+                                        <span className="text-xs text-neutral-500">{store.phone || 'Tel. belgilanmagan'}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => openEditModal(store)}
+                                        className="p-1.5 text-neutral-400 hover:text-white bg-neutral-800/50 hover:bg-neutral-700 rounded-md transition-colors"
+                                        title="Tahrirlash"
+                                    >
+                                        <Edit2 className="h-4 w-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(store.id, store.name)}
+                                        disabled={deletingId === store.id}
+                                        className="p-1.5 text-red-400/70 hover:text-red-400 bg-red-950/30 hover:bg-red-900/50 rounded-md transition-colors disabled:opacity-50"
+                                        title="O'chirish"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -101,8 +169,8 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/50 px-4 pt-12 backdrop-blur-sm shadow-2xl">
                     <div className="relative w-full max-w-md rounded-2xl border border-neutral-800 bg-neutral-900 p-6 shadow-xl animate-fade-in custom-modal mb-12">
-                        <h2 className="mb-4 text-lg font-bold text-white">Yangi filial qo'shish</h2>
-                        <form onSubmit={handleAdd} className="space-y-4">
+                        <h2 className="mb-4 text-lg font-bold text-white">{editingStore ? "Filialni tahrirlash" : "Yangi filial qo'shish"}</h2>
+                        <form onSubmit={handleSave} className="space-y-4">
                             {errorMsg && (
                                 <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-500 border border-red-500/20">
                                     {errorMsg}
@@ -165,7 +233,7 @@ export default function StoresClient({ initialStores, orgId }: { initialStores: 
                                     disabled={loading}
                                     className="rounded-lg bg-white px-4 py-2 font-medium text-black transition-all hover:bg-neutral-200 disabled:opacity-50"
                                 >
-                                    {loading ? "Saqlanmoqda..." : "Tasdiqlash va qo'shish"}
+                                    {loading ? "Saqlanmoqda..." : (editingStore ? "Saqlash" : "Tasdiqlash va qo'shish")}
                                 </button>
                             </div>
                         </form>

@@ -54,3 +54,60 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: e.message || "Server xatosi" }, { status: 500 });
     }
 }
+
+export async function PUT(req: Request) {
+    try {
+        const body = await req.json();
+        const { id, name, address, city, phone, is_active } = body;
+
+        if (!id) {
+            return NextResponse.json({ error: "Filial ID ko'rsatilmagan!" }, { status: 400 });
+        }
+
+        const { data: store, error } = await supabaseAdmin
+            .from('stores')
+            .update({
+                name,
+                address,
+                city,
+                phone,
+                is_active
+            })
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+        return NextResponse.json(store);
+    } catch (e: any) {
+        return NextResponse.json({ error: e.message || "Server xatosi" }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: Request) {
+    try {
+        const url = new URL(req.url);
+        const id = url.searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ error: "Filial ID ko'rsatilmagan!" }, { status: 400 });
+        }
+
+        // Check if there are products or staff related to this store before deleting to prevent foreign key errors?
+        // In Supabase, if we have foreign keys set to CASCADE, it will delete gracefully. 
+        // If RESTRICT, it will error out. Let's try to delete directly.
+        const { error } = await supabaseAdmin
+            .from('stores')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (e: any) {
+        return NextResponse.json({ error: e.message || "Server xatosi" }, { status: 500 });
+    }
+}
