@@ -96,15 +96,7 @@ export default function KassirLoginPage() {
                     <p className="mt-4 text-center text-xs text-neutral-600">Demo: istalgan parol (3+ belgi)</p>
                 </div>
 
-                {/* Linklar */}
-                <div className="mt-4 flex flex-col gap-2 text-center">
-                    <Link href="/admin" className="text-xs text-neutral-600 hover:text-neutral-400 transition-colors">
-                        Admin sifatida kirish →
-                    </Link>
-                    <Link href="/register" className="text-xs text-blue-500 hover:text-blue-400 transition-colors">
-                        Yangi do'kon ochish (Ro'yxatdan o'tish)
-                    </Link>
-                </div>
+                {/* Login forms finish without external links for safety */}
 
                 <p className="mt-3 text-center text-xs text-neutral-700">© 2026 HOYR. Barcha huquqlar himoyalangan.</p>
             </div>
