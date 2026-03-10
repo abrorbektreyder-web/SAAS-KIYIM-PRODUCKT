@@ -31,7 +31,7 @@ export default function StaffClient({ staff, stores, orgId }: { staff: any[], st
     }, [form.store_id, form.full_name, stores]);
 
     const handleCopy = () => {
-        const text = `${siteUrl}/login
+        const text = `${siteUrl}/pos
 Login: ${generatedLogin}
 Parol: ${form.password || '[Parol yozilmagan]'}`;
         navigator.clipboard.writeText(text);
@@ -246,7 +246,7 @@ Parol: ${form.password || '[Parol yozilmagan]'}`;
                                             readOnly
                                             type="text"
                                             className="w-full bg-transparent text-sm text-indigo-200 focus:outline-none"
-                                            value={`${siteUrl}/login`}
+                                            value={`${siteUrl}/pos`}
                                         />
                                     </div>
                                 </div>

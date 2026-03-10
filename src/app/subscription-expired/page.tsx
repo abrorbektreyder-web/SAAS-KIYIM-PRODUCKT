@@ -10,7 +10,7 @@ export default async function SubscriptionExpiredPage() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        redirect('/login/admin');
+        redirect('/admin');
     }
 
     const profile = await getOrgProfile();

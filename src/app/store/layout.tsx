@@ -6,7 +6,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
     const profile = await getOrgProfile();
 
     if (!profile) {
-        redirect('/login');
+        redirect('/pos');
     }
 
     if (profile.role !== 'cashier') {

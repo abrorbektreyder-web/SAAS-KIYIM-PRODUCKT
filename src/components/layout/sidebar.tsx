@@ -48,7 +48,7 @@ export default function Sidebar({ userEmail, userName }: { userEmail?: string, u
     const handleLogout = async (e: React.MouseEvent) => {
         e.preventDefault();
         await supabase.auth.signOut();
-        router.push('/login/admin');
+        router.push('/admin');
     };
 
     return (

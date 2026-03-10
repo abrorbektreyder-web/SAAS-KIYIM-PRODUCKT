@@ -2,20 +2,51 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
-    // Login, API va statik sahifalarni OLDIN tekshirish — ular uchun auth kerak emas
+    // ===== PUBLIC SAHIFALAR =====
+    // Bu sahifalar uchun autentifikatsiya kerak emas — to'g'ridan-to'g'ri o'tkazamiz
+    const publicPaths = [
+        '/',
+        '/register',
+        '/pos',
+        '/admin',
+        '/super',
+        '/subscription-expired',
+    ];
+
+    const isPublicPath = publicPaths.some(p =>
+        p === '/' ? path === '/' : path.startsWith(p) && (path === p || path.charAt(p.length) === '/')
+    );
+
+    // Eski /login yo'llarini yangilariga redirect qilish (backward compatibility)
+    if (path === '/login' || path === '/login/') {
+        return NextResponse.redirect(new URL('/pos', request.url))
+    }
+    if (path === '/login/admin' || path === '/login/admin/') {
+        return NextResponse.redirect(new URL('/admin', request.url))
+    }
+    if (path === '/login/super' || path === '/login/super/') {
+        return NextResponse.redirect(new URL('/super', request.url))
+    }
+
+    // API va statik resurslarni o'tkazib yuborish
     if (
-        path.startsWith('/login') ||
-        path.startsWith('/register') ||
         path.startsWith('/api') ||
-        path === '/' ||
         path.startsWith('/_next') ||
         path.startsWith('/favicon')
     ) {
         return NextResponse.next()
     }
+
+    // Public sahifalarni o'tkazib yuborish
+    if (isPublicPath) {
+        return NextResponse.next()
+    }
+
+    // ===== HIMOYALANGAN SAHIFALAR =====
+    // Bu yerdan pastda faqat /dashboard, /store, /super-admin kabi himoyalangan sahifalar
 
     let supabaseResponse = NextResponse.next({
         request,
@@ -47,21 +78,22 @@ export async function proxy(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    // Foydalanuvchi umuman kimaganmi?
+    // Foydalanuvchi umuman kirmagan bo'lsa — mos login sahifasiga yo'naltirish
     if (!user) {
         if (path.startsWith('/dashboard')) {
-            return NextResponse.redirect(new URL('/login/admin', request.url))
+            return NextResponse.redirect(new URL('/admin', request.url))
         }
         if (path.startsWith('/store')) {
-            return NextResponse.redirect(new URL('/login', request.url))
+            return NextResponse.redirect(new URL('/pos', request.url))
         }
         if (path.startsWith('/super-admin')) {
-            return NextResponse.redirect(new URL('/login/super', request.url))
+            return NextResponse.redirect(new URL('/super', request.url))
         }
-        return supabaseResponse
+        // Boshqa barcha himoyalangan sahifalar uchun admin login
+        return NextResponse.redirect(new URL('/admin', request.url))
     }
 
-    // Foydalanuvchi bor, rolini tekshirish
+    // ===== ROL TEKSHIRISH =====
     let role: string | null = null;
     try {
         const { data: profile } = await supabase
@@ -74,19 +106,19 @@ export async function proxy(request: NextRequest) {
         role = null;
     }
 
-    // Dashboard qismi — faqat store_admin va super_admin
+    // Dashboard — faqat store_admin va super_admin
     if (path.startsWith('/dashboard') && role !== 'store_admin' && role !== 'super_admin') {
-        return NextResponse.redirect(new URL('/login/admin', request.url))
+        return NextResponse.redirect(new URL('/admin', request.url))
     }
 
-    // Store (POS/kassir) qismi — faqat cashier
+    // Store (POS/kassir sahifasi) — faqat cashier
     if (path.startsWith('/store') && role !== 'cashier') {
-        return NextResponse.redirect(new URL('/login', request.url))
+        return NextResponse.redirect(new URL('/pos', request.url))
     }
 
-    // Super Admin qismi — faqat super_admin
+    // Super Admin panel — faqat super_admin
     if (path.startsWith('/super-admin') && role !== 'super_admin') {
-        return NextResponse.redirect(new URL('/login/super', request.url))
+        return NextResponse.redirect(new URL('/super', request.url))
     }
 
     return supabaseResponse

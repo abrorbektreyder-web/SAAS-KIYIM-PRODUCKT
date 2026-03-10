@@ -88,7 +88,7 @@ function StoreNavContent({ orgId, storeId, onMenuClick }: { orgId: string; store
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
                     <CartButton orgId={orgId} storeId={storeId} />
-                    <Link href="/login" className="flex flex-shrink-0 items-center gap-1 rounded-lg border border-neutral-700 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-sm text-neutral-400 hover:border-red-800 hover:bg-red-900/20 hover:text-red-400 transition-colors">
+                    <Link href="/pos" className="flex flex-shrink-0 items-center gap-1 rounded-lg border border-neutral-700 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-sm text-neutral-400 hover:border-red-800 hover:bg-red-900/20 hover:text-red-400 transition-colors">
                         <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4" /><span className="hidden sm:inline">Chiqish</span>
                     </Link>
                 </div>
@@ -182,7 +182,7 @@ function StoreLayoutInner({ children, orgId, storeId }: { children: React.ReactN
                             <button
                                 onClick={async () => {
                                     await signOut();
-                                    window.location.href = '/login';
+                                    window.location.href = '/pos';
                                 }}
                                 className="flex w-full items-center gap-2 rounded-md px-3 md:px-2 py-2.5 md:py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
                             >
