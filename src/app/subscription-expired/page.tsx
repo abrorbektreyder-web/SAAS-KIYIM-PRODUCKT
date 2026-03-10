@@ -20,8 +20,18 @@ export default async function SubscriptionExpiredPage() {
         const org = await getOrganization(profile.organization_id);
         if (org) {
             orgName = org.name;
-            // Agar obuna faollashgan bo'lsa, dashboardga qaytaramiz
-            if (org.subscription_status === 'active' || org.subscription_status === 'trialing' || org.subscription_status === 'trial') {
+            let isTrialActive = false;
+            // Agar trial status bo'lsa, lakin hali muddati tugamagan bo'lsa
+            if ((org.subscription_status === 'trialing' || org.subscription_status === 'trial') && org.trial_ends_at) {
+                const now = new Date();
+                const endsAt = new Date(org.trial_ends_at);
+                if (endsAt.getTime() > now.getTime()) {
+                    isTrialActive = true;
+                }
+            }
+
+            // Agar obuna faol bo'lsa yoki trial hali o'tmagan bo'lsa, avtomat qaytaramiz
+            if (org.subscription_status === 'active' || isTrialActive) {
                 if (profile.role === 'cashier') redirect('/store');
                 else redirect('/dashboard');
             }

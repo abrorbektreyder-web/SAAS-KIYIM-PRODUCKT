@@ -18,9 +18,28 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         return <div className="p-8 text-neutral-400">Do'koningizga biriktirilmagansiz yoki tashkilot topilmadi.</div>;
     }
 
-    const org = await getOrganization(profile.organization_id);
-    if (org && (org.subscription_status === 'expired' || org.subscription_status === 'blocked')) {
-        redirect('/subscription-expired');
+    let isTrialExpired = false;
+
+    if (profile.organization_id) {
+        const org = await getOrganization(profile.organization_id);
+
+        if (org) {
+            // Trial muddatini tekshirish
+            if (org.trial_ends_at && (org.subscription_status === 'trialing' || org.subscription_status === 'trial')) {
+                const now = new Date();
+                const endsAt = new Date(org.trial_ends_at);
+                const diffTime = endsAt.getTime() - now.getTime();
+                const trialDaysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (trialDaysRemaining <= 0) {
+                    isTrialExpired = true;
+                }
+            }
+
+            if (org.subscription_status === 'expired' || org.subscription_status === 'blocked' || isTrialExpired) {
+                redirect('/subscription-expired');
+            }
+        }
     }
 
     // Kassir o'ziga biriktirilgan do'kon mahsulotlarini oladi
