@@ -25,10 +25,19 @@ export default async function DashboardLayout({
         const org = await getOrganization(profile.organization_id);
 
         if (org) {
+            let trialEndSource = org.trial_ends_at;
+
+            // Agar bazada trial_ends_at ustuni bo'lmasa yoki null bo'lsa, created_at dan 14 kun qoshib hisoblaydi
+            if (!trialEndSource && org.created_at) {
+                const createdDate = new Date(org.created_at);
+                createdDate.setDate(createdDate.getDate() + 14);
+                trialEndSource = createdDate.toISOString();
+            }
+
             // Trial muddatini tekshirish
-            if (org.trial_ends_at && (org.subscription_status === 'trialing' || org.subscription_status === 'trial')) {
+            if (trialEndSource && (org.subscription_status === 'trialing' || org.subscription_status === 'trial')) {
                 const now = new Date();
-                const endsAt = new Date(org.trial_ends_at);
+                const endsAt = new Date(trialEndSource);
                 const diffTime = endsAt.getTime() - now.getTime();
                 trialDaysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 

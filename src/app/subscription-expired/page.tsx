@@ -21,10 +21,19 @@ export default async function SubscriptionExpiredPage() {
         if (org) {
             orgName = org.name;
             let isTrialActive = false;
+            let trialEndSource = org.trial_ends_at;
+
+            // Agar bazada trial_ends_at ustuni bo'lmasa yoki null bo'lsa, created_at dan 14 kun qoshib hisoblaydi
+            if (!trialEndSource && org.created_at) {
+                const createdDate = new Date(org.created_at);
+                createdDate.setDate(createdDate.getDate() + 14);
+                trialEndSource = createdDate.toISOString();
+            }
+
             // Agar trial status bo'lsa, lakin hali muddati tugamagan bo'lsa
-            if ((org.subscription_status === 'trialing' || org.subscription_status === 'trial') && org.trial_ends_at) {
+            if ((org.subscription_status === 'trialing' || org.subscription_status === 'trial') && trialEndSource) {
                 const now = new Date();
-                const endsAt = new Date(org.trial_ends_at);
+                const endsAt = new Date(trialEndSource);
                 if (endsAt.getTime() > now.getTime()) {
                     isTrialActive = true;
                 }
