@@ -65,7 +65,6 @@ export default function RegisterPage() {
         <div className="flex min-h-screen bg-[#09090b]">
             {/* Chap tomon - Ma'lumot va Banner */}
             <div className="hidden w-1/2 flex-col justify-between bg-neutral-900 border-r border-neutral-800 p-12 lg:flex relative overflow-hidden">
-                <div className="absolute inset-0 bg-blue-500/10 blur-[100px] rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 pointer-events-none" />
                 <div className="relative z-10">
                     <HoyrLogo />
                 </div>
