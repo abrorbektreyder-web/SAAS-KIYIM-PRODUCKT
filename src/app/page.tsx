@@ -39,9 +39,9 @@ export default function Home() {
                         HOYR SaaS - Tizim yangilandi
                     </div>
                     
-                    <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0 }}>
+                    <h1 className="text-[32px] leading-[1.2] sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 sm:mb-8 animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0 }}>
                         Kiyim do'koningizni <br className="hidden md:block" />
-                        <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text">
+                        <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text block mt-1 sm:mt-0 sm:inline">
                             avtomatlashtiring
                         </span>
                     </h1>
@@ -60,9 +60,9 @@ export default function Home() {
                         </Link>
                     </div>
 
-                    <div className="mt-20 w-full rounded-2xl border border-white/10 bg-[#121214] overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.15)] animate-fade-in relative group" style={{ animationDelay: '0.5s', opacity: 0 }}>
+                    <div className="mt-12 sm:mt-20 w-full rounded-2xl border border-white/10 bg-[#121214] overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.15)] animate-fade-in relative group" style={{ animationDelay: '0.5s', opacity: 0 }}>
                         <div className="absolute inset-0 bg-gradient-to-t from-[#09090b]/90 via-[#09090b]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-8 z-20">
-                            <Link href="/register" className="text-white font-medium border border-emerald-500/50 bg-emerald-500/20 px-8 py-4 rounded-full backdrop-blur-md hover:bg-emerald-500/30 transition-colors flex items-center">
+                            <Link href="/register" className="text-sm sm:text-base text-white font-medium border border-emerald-500/50 bg-emerald-500/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full backdrop-blur-md hover:bg-emerald-500/30 transition-colors flex items-center">
                                 To'liq versiyani ko'rish <ArrowRight className="ml-2 w-4 h-4" />
                             </Link>
                         </div>
@@ -74,13 +74,13 @@ export default function Home() {
                                 <div className="w-3 h-3 rounded-full bg-[#eab308] shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
                                 <div className="w-3 h-3 rounded-full bg-[#22c55e] shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
                             </div>
-                            <div className="mx-auto bg-white/5 rounded-md px-32 py-1 flex items-center border border-white/5">
-                                <span className="text-xs text-neutral-500">app.hoyr.uz/dashboard</span>
+                            <div className="mx-auto bg-white/5 rounded-md px-4 sm:px-32 py-1 flex items-center border border-white/5 truncate max-w-[200px] sm:max-w-none">
+                                <span className="text-[10px] sm:text-xs text-neutral-500 truncate">app.hoyr.uz/dashboard</span>
                             </div>
                         </div>
 
                         {/* App UI */}
-                        <div className="h-[450px] flex bg-[#0c0c0e]">
+                        <div className="h-[400px] sm:h-[450px] flex bg-[#0c0c0e]">
                             {/* Sidebar */}
                             <div className="w-64 hidden md:flex flex-col border-r border-white/5 bg-[#09090b] p-4 font-inter text-left">
                                 <div className="flex items-center gap-3 mb-8 px-2">
@@ -124,13 +124,13 @@ export default function Home() {
                             </div>
 
                             {/* Main Content */}
-                            <div className="flex-1 p-6 flex flex-col items-start text-left relative overflow-hidden">
+                            <div className="flex-1 p-4 sm:p-6 flex flex-col items-start text-left relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
                                 
-                                <div className="flex justify-between items-center w-full mb-6 z-10">
+                                <div className="flex justify-between items-center w-full mb-4 sm:mb-6 z-10">
                                     <div>
-                                        <h3 className="text-2xl font-bold text-white">Xush kelibsiz, Sardor</h3>
-                                        <p className="text-sm text-neutral-400">Bugungi savdolar xulosasi (12 Aprel, 2026)</p>
+                                        <h3 className="text-xl sm:text-2xl font-bold text-white">Xush kelibsiz, Sardor</h3>
+                                        <p className="text-xs sm:text-sm text-neutral-400">Bugungi savdolar xulosasi</p>
                                     </div>
                                     <div className="hidden sm:flex bg-white/5 border border-white/10 rounded-lg p-1">
                                         <div className="px-4 py-1.5 bg-white/10 rounded-md text-sm font-medium shadow-sm">Bugun</div>
@@ -141,31 +141,31 @@ export default function Home() {
                                 {/* KPIs */}
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-6 z-10">
                                     {/* Card 1 */}
-                                    <div className="rounded-xl bg-white/[0.03] border border-white/10 p-5 hover:border-white/20 transition-colors">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <div className="rounded-xl bg-white/[0.03] border border-white/10 p-4 sm:p-5 hover:border-white/20 transition-colors">
+                                        <div className="flex items-center gap-3 mb-2 sm:mb-3">
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                             </div>
-                                            <span className="text-sm text-neutral-400 font-medium">Kunlik Tushum</span>
+                                            <span className="text-xs sm:text-sm text-neutral-400 font-medium">Kunlik Tushum</span>
                                         </div>
-                                        <div className="text-3xl font-bold text-white tracking-tight">12,450,000 <span className="text-lg text-neutral-500 font-normal">UZS</span></div>
-                                        <div className="mt-2 text-xs flex items-center text-emerald-400">
-                                            <TrendingUp className="w-3 h-3 mr-1" /> +14.5% kechagidan
+                                        <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight truncate">12,450,000 <span className="text-sm sm:text-lg text-neutral-500 font-normal">UZS</span></div>
+                                        <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs flex items-center text-emerald-400 truncate">
+                                            <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0" /> +14.5% kechagidan
                                         </div>
                                     </div>
                                     
                                     {/* Card 2 */}
-                                    <div className="rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 p-5 shadow-[0_0_20px_rgba(16,185,129,0.05)] relative overflow-hidden">
+                                    <div className="rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 p-4 sm:p-5 shadow-[0_0_20px_rgba(16,185,129,0.05)] relative overflow-hidden">
                                         <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/20 blur-2xl rounded-full" />
-                                        <div className="flex items-center gap-3 mb-3 relative z-10">
-                                            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30">
-                                                <Package className="w-5 h-5" />
+                                        <div className="flex items-center gap-3 mb-2 sm:mb-3 relative z-10">
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/30">
+                                                <Package className="w-4 h-4 sm:w-5 sm:h-5" />
                                             </div>
-                                            <span className="text-sm text-neutral-400 font-medium">Sotilgan tovarlar</span>
+                                            <span className="text-xs sm:text-sm text-neutral-400 font-medium">Sotilgan tovarlar</span>
                                         </div>
-                                        <div className="text-3xl font-bold text-white tracking-tight relative z-10">142 <span className="text-lg text-neutral-500 font-normal">dona</span></div>
-                                        <div className="mt-2 text-xs flex items-center text-emerald-400 relative z-10">
-                                            <TrendingUp className="w-3 h-3 mr-1" /> +8% o'sish
+                                        <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight relative z-10">142 <span className="text-sm sm:text-lg text-neutral-500 font-normal">dona</span></div>
+                                        <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs flex items-center text-emerald-400 relative z-10">
+                                            <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0" /> +8% o'sish
                                         </div>
                                     </div>
 
@@ -196,24 +196,24 @@ export default function Home() {
                                             { id: "#B-1041", time: "2soat oldin", item: "Oq ko'ylak (L) + Jinsi", amount: "620,000 UZS", type: "Naqd", status: "To'langan" },
                                             { id: "#B-1040", time: "Bugun 11:30", item: "Krossovka Nike (42)", amount: "890,000 UZS", type: "Terminal", status: "To'langan" }
                                         ].map((order, i) => (
-                                            <div key={i} className="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors border-b border-white/[0.02] last:border-0 group cursor-default">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 group-hover:bg-white/10 group-hover:text-white transition-colors">
-                                                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                            <div key={i} className="flex items-center justify-between p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors border-b border-white/[0.02] last:border-0 group cursor-default gap-2">
+                                                <div className="flex items-center gap-3 sm:gap-4 truncate mr-2">
+                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 group-hover:bg-white/10 group-hover:text-white transition-colors">
+                                                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
                                                     </div>
-                                                    <div>
-                                                        <div className="text-sm font-medium text-white">{order.item}</div>
-                                                        <div className="text-xs text-neutral-500 flex items-center gap-2">
+                                                    <div className="truncate">
+                                                        <div className="text-xs sm:text-sm font-medium text-white truncate">{order.item}</div>
+                                                        <div className="text-[10px] sm:text-xs text-neutral-500 flex items-center gap-1 sm:gap-2">
                                                             <span className="font-mono">{order.id}</span>
-                                                            <span className="w-1 h-1 rounded-full bg-neutral-600"></span>
-                                                            {order.time}
+                                                            <span className="w-1 h-1 rounded-full bg-neutral-600 flex-shrink-0"></span>
+                                                            <span className="truncate">{order.time}</span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <div className="text-sm font-bold text-white">{order.amount}</div>
-                                                    <div className="text-xs text-neutral-500 flex items-center justify-end gap-1 mt-0.5">
-                                                        {order.type} • <span className="text-emerald-400">{order.status}</span>
+                                                <div className="text-right flex-shrink-0">
+                                                    <div className="text-xs sm:text-sm font-bold text-white">{order.amount}</div>
+                                                    <div className="text-[10px] sm:text-xs text-neutral-500 flex items-center justify-end gap-1 mt-0.5">
+                                                        <span className="hidden sm:inline">{order.type} • </span><span className="text-emerald-400">{order.status}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,12 +243,12 @@ export default function Home() {
                             { icon: ShieldCheck, title: "To'liq Xavfsizlik", desc: "Ma'lumotlaringiz ishonchli himoyalangan va faqat o'zingiz ko'ra olasiz." },
                             { icon: CheckCircle2, title: "Multi-Filial tizimi", desc: "10 ta do'koningiz bo'lsa ham ularning barchasini 1 ta joydan boshqaring." }
                         ].map((feature, idx) => (
-                            <div key={idx} className="group p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-emerald-500/30 transition-all hover:-translate-y-1">
-                                <div className="h-12 w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
-                                    <feature.icon className="h-6 w-6" />
+                            <div key={idx} className="group p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-emerald-500/30 transition-all hover:-translate-y-1">
+                                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                                    <feature.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                                 </div>
-                                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                                <p className="text-neutral-400 leading-relaxed">{feature.desc}</p>
+                                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{feature.title}</h3>
+                                <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">{feature.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -266,52 +266,52 @@ export default function Home() {
 
                     <div className="grid md:grid-cols-3 gap-8">
                         {/* Starter */}
-                        <div className="rounded-3xl border border-white/10 bg-[#121214] p-8 flex flex-col hover:border-white/20 transition-colors">
-                            <h3 className="text-xl font-medium text-neutral-300">Starter</h3>
-                            <div className="mt-4 mb-8 flex items-baseline">
-                                <span className="text-4xl font-bold">150,000</span>
-                                <span className="text-neutral-500 ml-2">so'm/oy</span>
+                        <div className="rounded-3xl border border-white/10 bg-[#121214] p-6 sm:p-8 flex flex-col hover:border-white/20 transition-colors">
+                            <h3 className="text-lg sm:text-xl font-medium text-neutral-300">Starter</h3>
+                            <div className="mt-3 sm:mt-4 mb-6 sm:mb-8 flex items-baseline">
+                                <span className="text-3xl sm:text-4xl font-bold">150,000</span>
+                                <span className="text-sm text-neutral-500 ml-2">so'm/oy</span>
                             </div>
-                            <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> 1 ta filial</li>
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> 2 ta kassir</li>
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Asosiy reyting</li>
+                            <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 flex-1">
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> 1 ta filial</li>
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> 2 ta kassir</li>
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Asosiy reyting</li>
                             </ul>
                             <Link href="/register" className="w-full h-12 rounded-full border border-white/10 flex items-center justify-center font-medium hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
                                 Tanlash
                             </Link>
                         </div>
                         {/* Business */}
-                        <div className="rounded-3xl border-2 border-emerald-500 bg-gradient-to-b from-emerald-500/10 to-[#121214] p-8 flex flex-col relative transform md:-translate-y-4 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        <div className="rounded-3xl border-2 border-emerald-500 bg-gradient-to-b from-emerald-500/10 to-[#121214] p-6 sm:p-8 flex flex-col relative transform md:-translate-y-4 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-black text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">
                                 Eng ommabop
                             </div>
-                            <h3 className="text-xl font-medium text-white">Business</h3>
-                            <div className="mt-4 mb-8 flex items-baseline">
-                                <span className="text-4xl font-bold">350,000</span>
-                                <span className="text-neutral-500 ml-2">so'm/oy</span>
+                            <h3 className="text-lg sm:text-xl font-medium text-white">Business</h3>
+                            <div className="mt-3 sm:mt-4 mb-6 sm:mb-8 flex items-baseline">
+                                <span className="text-3xl sm:text-4xl font-bold">350,000</span>
+                                <span className="text-sm text-neutral-500 ml-2">so'm/oy</span>
                             </div>
-                            <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> 5 ta filialgacha</li>
-                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> 10 ta kassirgacha</li>
-                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Kengaytirilgan analitika</li>
-                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Mijozlar bazasi</li>
+                            <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 flex-1">
+                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> 5 ta filialgacha</li>
+                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> 10 ta kassirgacha</li>
+                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Kengaytirilgan analitika</li>
+                                <li className="flex items-center text-sm text-white"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Mijozlar bazasi</li>
                             </ul>
                             <Link href="/register" className="w-full h-12 rounded-full bg-emerald-500 text-black flex items-center justify-center font-bold hover:bg-emerald-400 hover:shadow-lg transition-colors">
                                 Boshlash
                             </Link>
                         </div>
                         {/* Premium */}
-                        <div className="rounded-3xl border border-white/10 bg-[#121214] p-8 flex flex-col hover:border-white/20 transition-colors">
-                            <h3 className="text-xl font-medium text-neutral-300">Premium</h3>
-                            <div className="mt-4 mb-8 flex items-baseline">
-                                <span className="text-4xl font-bold">Maxsus</span>
+                        <div className="rounded-3xl border border-white/10 bg-[#121214] p-6 sm:p-8 flex flex-col hover:border-white/20 transition-colors">
+                            <h3 className="text-lg sm:text-xl font-medium text-neutral-300">Premium</h3>
+                            <div className="mt-3 sm:mt-4 mb-6 sm:mb-8 flex items-baseline">
+                                <span className="text-3xl sm:text-4xl font-bold">Maxsus</span>
                             </div>
-                            <ul className="space-y-4 mb-8 flex-1">
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Cheksiz filiallar</li>
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Cheksiz xodimlar</li>
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Shaxsiy menejer</li>
-                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-5 w-5 text-emerald-500 mr-3" /> Sotuv tahlil markazi</li>
+                            <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 flex-1">
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Cheksiz filiallar</li>
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Cheksiz xodimlar</li>
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Shaxsiy menejer</li>
+                                <li className="flex items-center text-sm text-neutral-300"><CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 mr-2 sm:mr-3 flex-shrink-0" /> Sotuv tahlil markazi</li>
                             </ul>
                             <Link href="/register" className="w-full h-12 rounded-full border border-white/10 flex items-center justify-center font-medium hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
                                 Bog'lanish
