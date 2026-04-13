@@ -13,8 +13,39 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         if (body.sizes !== undefined) updateData.sizes = body.sizes;
         if (body.colors !== undefined) updateData.colors = body.colors;
         if (body.image_url !== undefined) updateData.sku = body.image_url;
-        if (body.category !== undefined || body.label !== undefined) {
-            updateData.barcode = JSON.stringify({ category: body.category || 'Boshqa', label: body.label || '' });
+        if (body.label !== undefined) updateData.barcode = body.label;
+
+        // Kategoriya mantiqi
+        if (body.category !== undefined) {
+            // Tashkilot ID sini topamiz
+            const { data: product } = await supabaseAdmin
+                .from('products')
+                .select('organization_id')
+                .eq('id', id)
+                .single();
+            
+            if (product?.organization_id) {
+                const orgId = product.organization_id;
+                const catName = body.category;
+
+                const { data: catData } = await supabaseAdmin
+                    .from('categories')
+                    .select('id')
+                    .eq('organization_id', orgId)
+                    .eq('name', catName)
+                    .maybeSingle();
+                
+                if (catData) {
+                    updateData.category_id = catData.id;
+                } else {
+                    const { data: newCat } = await supabaseAdmin
+                        .from('categories')
+                        .insert({ organization_id: orgId, name: catName })
+                        .select('id')
+                        .single();
+                    if (newCat) updateData.category_id = newCat.id;
+                }
+            }
         }
 
         const { data, error } = await supabaseAdmin
@@ -35,11 +66,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     try {
         const { id } = await params;
 
-        // Xatolik bermasligi uchun avval ushbu mahsulot qatnashgan buyurtma qismlarini o'chiramiz 
-        // (Test muhitida mahsulotni to'liq o'chirib yuborish uchun)
+        // Bog'liqliklarni o'chirish
         await supabaseAdmin.from('order_items').delete().eq('product_id', id);
-
-        // Inventoryni ham o'chirish
         await supabaseAdmin.from('inventory').delete().eq('product_id', id);
 
         const { error } = await supabaseAdmin
@@ -48,12 +76,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
             .eq('id', id);
 
         if (error) {
-            console.error('Delete product err:', error);
             return NextResponse.json({ error: error.message }, { status: 400 });
         }
         return NextResponse.json({ success: true });
     } catch (e: any) {
-        console.error('Delete product catch err:', e);
         return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }

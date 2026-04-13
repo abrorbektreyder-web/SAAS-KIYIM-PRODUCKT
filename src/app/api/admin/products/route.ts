@@ -27,7 +27,29 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Barcha maydonlarni to\'ldiring' }, { status: 400 });
         }
 
-        // 1. Mahsulotni yaratamiz (image -> sku, categoy/label -> barcode ga yozdik, chunki bu ustunlar mavjud va bo'sh sturibdi)
+        // 1. Kategoriyani topamiz yoki yaratamiz
+        let categoryId = null;
+        if (category) {
+            const { data: catData, error: catError } = await supabaseAdmin
+                .from('categories')
+                .select('id')
+                .eq('organization_id', organization_id)
+                .eq('name', category)
+                .maybeSingle();
+            
+            if (catData) {
+                categoryId = catData.id;
+            } else {
+                const { data: newCat, error: newCatErr } = await supabaseAdmin
+                    .from('categories')
+                    .insert({ organization_id, name: category })
+                    .select('id')
+                    .single();
+                if (!newCatErr) categoryId = newCat.id;
+            }
+        }
+
+        // 2. Mahsulotni yaratamiz (Mavjud ustunlarga: image_url -> sku, label -> barcode)
         const { data, error } = await supabaseAdmin
             .from('products')
             .insert({
@@ -37,7 +59,8 @@ export async function POST(req: Request) {
                 sizes: sizes || [],
                 colors: colors || [],
                 sku: image_url || null,
-                barcode: JSON.stringify({ category: category || 'Boshqa', label: label || '' }),
+                category_id: categoryId,
+                barcode: label || null,
                 is_active: true
             }).select().single();
 

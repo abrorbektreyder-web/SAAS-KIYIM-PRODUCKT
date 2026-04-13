@@ -58,8 +58,8 @@ my-app/
 
 Ushbu ro'yxat tizimni yanada mukammal "Pro" darajaga ko'tarish hamda hozirdagi vaqtinchalik va zaif yechimlarni to'g'rilash uchun eslatma sifatida yozildi:
 
-- [ ] 1. **Rasm yuklash va Saqlash (Supabase Storage):** Hozirda mahsulot rasmlari vaqtinchalik `sku` ustuniga havola (URL) sifatida yozilmoqda. Buning o'rniga Supabase Storage (Bucket) yordamida rasmlarni to'g'ridan-to'g'ri bulutga yuklashni yo'lga qo'yish.
-- [ ] 2. **Ma'lumotlar bazasi arxitekturasi:** Turkum (`category`) va belgilar (`label`) hozir vaqtinchalik `barcode` ustuni ichiga JSON holatida saqlanmoqda. Buni to'g'rilab, o'zining mustaqil ustunlari yoki bog'liqlik (relations) asosiga qaytarish.
+- [x] 1. **Rasm yuklash va Saqlash (Supabase Storage):** Mahsulot rasmlari endi Supabase Storage (Bucket) ga yuklanadi. `Base64` usulidan butunlay voz kechildi.
+- [x] 2. **Ma'lumotlar bazasi arxitekturasi:** Mahsulotlar uchun `category_id` (bog'liqlik) va `label` (mustaqil ustun) tizimi to'liq joriy qilindi. `barcode` ichidagi JSON formatidan voz kechildi.
 - [ ] 3. **Sahifalash (Pagination):** Mahsulotlar, filiallar va mijozlar ro'yxati ortib borishi bilan tizim tezligi tushmasligi uchun backend (`.range()`) va frontend da sahifalash mantiqini (Pagination) joriy qilish.
 - [ ] 4. **Dinamik Tariflar va Sozlamalar (Super Admin):** Hozirda Super Admin sozlamalar sahifasidagi ma'lumotlar (paketlar, logolar, SMTP qoidalar) statik (faqat vizual). Buning uchun tizimga maxsus Global Settings va Plans bazasini ulab saqlash kerak.
 - [ ] 5. **Sessiya To'qnashuvi:** Admin va Kassir bitta brauzerda ishlaganda (tabdan tabga o'tganda) Supabase nomli JWT cookie'lar bir-biri bilan to'qnashib, konflikt bermoqda. Buni alohida brauzer yoki domen orqali ishlash tartibiga, yoxud cookie-nomlarini dinamik qilishga o'tkazish.
