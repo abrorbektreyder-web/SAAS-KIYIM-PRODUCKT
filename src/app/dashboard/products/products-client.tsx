@@ -37,10 +37,47 @@ export default function ProductsClient({ products, orgId }: { products: any[], o
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        setSelectedFile(file);
+
         const reader = new FileReader();
         reader.onload = (ev) => setImagePreview(ev.target?.result as string);
         reader.readAsDataURL(file);
+
+        if (file.size > 1024 * 1024) {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let { width, height } = img;
+                const MAX_SIZE = 1000;
+
+                if (width > height && width > MAX_SIZE) {
+                    height = Math.round(height * (MAX_SIZE / width));
+                    width = MAX_SIZE;
+                } else if (height > MAX_SIZE) {
+                    width = Math.round(width * (MAX_SIZE / height));
+                    height = MAX_SIZE;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx?.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const newFile = new File([blob], file.name || 'image.jpg', {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        setSelectedFile(newFile);
+                    } else {
+                        setSelectedFile(file);
+                    }
+                }, 'image/jpeg', 0.85); // Compress quality
+            };
+            img.src = URL.createObjectURL(file);
+        } else {
+            setSelectedFile(file);
+        }
     };
 
     const openAdd = () => {
@@ -87,8 +124,16 @@ export default function ProductsClient({ products, orgId }: { products: any[], o
                     const uploadData = await uploadRes.json();
                     finalImageUrl = uploadData.url;
                 } else {
-                    const err = await uploadRes.json();
-                    alert(`Xato: ${err.error}`);
+                    const text = await uploadRes.text();
+                    let errMsg = 'Kutilmagan xatolik yuz berdi';
+                    try {
+                        const err = JSON.parse(text);
+                        errMsg = err.error || errMsg;
+                    } catch (e) {
+                        if (uploadRes.status === 413) errMsg = 'Rasm hajmi juda katta. Iltimos kichikroq rasm yuklang!';
+                        else errMsg = `Xato: HTTP ${uploadRes.status}`;
+                    }
+                    alert(`Yuklashda xato: ${errMsg}`);
                     setLoading(false);
                     return;
                 }
@@ -116,10 +161,17 @@ export default function ProductsClient({ products, orgId }: { products: any[], o
                 setModalOpen(false);
                 router.refresh();
             } else {
-                alert('Saqlashda xatolik yuz berdi');
+                const text = await res.text();
+                let errMsg = 'Saqlashda xatolik yuz berdi';
+                try {
+                    const err = JSON.parse(text);
+                    errMsg = err.error || errMsg;
+                } catch(e) {}
+                alert(errMsg);
             }
-        } catch (error) {
-            alert('Tarmoq xatosi');
+        } catch (error: any) {
+            alert(`Tarmoq yoki uzilish xatosi yuz berdi. Qayta urinib ko'ring.`);
+            console.error(error);
         }
         setLoading(false);
     };
