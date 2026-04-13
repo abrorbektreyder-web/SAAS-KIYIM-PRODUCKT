@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-    title: "{HOYR} - Kiyim Do'koni Boshqaruv Tizimi",
+    title: "HOYR",
     description: "Kichik va o'rta kiyim do'konlari uchun professional SaaS boshqaruv dasturi",
 };
 

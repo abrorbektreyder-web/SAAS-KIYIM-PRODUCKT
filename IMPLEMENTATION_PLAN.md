@@ -54,6 +54,21 @@ my-app/
 
 ---
 
+# 🚀 PRO DARAJA UCHUN QILINISHI KERAK BO'LGAN VAZIFALAR VA KAMCHILIKLAR
+
+Ushbu ro'yxat tizimni yanada mukammal "Pro" darajaga ko'tarish hamda hozirdagi vaqtinchalik va zaif yechimlarni to'g'rilash uchun eslatma sifatida yozildi:
+
+- [ ] 1. **Rasm yuklash va Saqlash (Supabase Storage):** Hozirda mahsulot rasmlari vaqtinchalik `sku` ustuniga havola (URL) sifatida yozilmoqda. Buning o'rniga Supabase Storage (Bucket) yordamida rasmlarni to'g'ridan-to'g'ri bulutga yuklashni yo'lga qo'yish.
+- [ ] 2. **Ma'lumotlar bazasi arxitekturasi:** Turkum (`category`) va belgilar (`label`) hozir vaqtinchalik `barcode` ustuni ichiga JSON holatida saqlanmoqda. Buni to'g'rilab, o'zining mustaqil ustunlari yoki bog'liqlik (relations) asosiga qaytarish.
+- [ ] 3. **Sahifalash (Pagination):** Mahsulotlar, filiallar va mijozlar ro'yxati ortib borishi bilan tizim tezligi tushmasligi uchun backend (`.range()`) va frontend da sahifalash mantiqini (Pagination) joriy qilish.
+- [ ] 4. **Dinamik Tariflar va Sozlamalar (Super Admin):** Hozirda Super Admin sozlamalar sahifasidagi ma'lumotlar (paketlar, logolar, SMTP qoidalar) statik (faqat vizual). Buning uchun tizimga maxsus Global Settings va Plans bazasini ulab saqlash kerak.
+- [ ] 5. **Sessiya To'qnashuvi:** Admin va Kassir bitta brauzerda ishlaganda (tabdan tabga o'tganda) Supabase nomli JWT cookie'lar bir-biri bilan to'qnashib, konflikt bermoqda. Buni alohida brauzer yoki domen orqali ishlash tartibiga, yoxud cookie-nomlarini dinamik qilishga o'tkazish.
+- [ ] 6. **Xavfsizlik va RLS (Row Level Security):** API'larda (DELETE/PATCH va h.k.) foydalanuvchining `organization_id` huquqlarini yanada qat'iylashtirib, birov boshqa birovning ma'lumotiga o'zgartirish kiritolmasligiga yana bir bor amin bo'lish.
+- [ ] 7. **Eslatmalar va Telegram Triggerlari:** Sotuv bo'lganda yoki obuna muddati tugab qolayotganda mijozlarni va super adminni Telegram yoki Email orqali xabardor qiluvchi orqa fon (backend) skriptlarini to'liq integratsiya qilish.
+- [ ] 8. **Ombor Qoldiqlari optimizatsiyasi:** Hozirda yuzaki ishlayotgan mahsulot xarididagi inventarni hisob kitob qilib ayrish holatini va har xil xatolar(stock minusga o'tib ketishi kabi)ni oldini oluvchi mustahkam himoya mexanizmini yozish.
+
+---
+
 # ═══════════════════════════════════════════
 # 🔵 FAZA 1: DATABASE VA AUTENTIFIKATSIYA
 # ═══════════════════════════════════════════
