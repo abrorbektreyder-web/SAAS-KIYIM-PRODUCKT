@@ -132,15 +132,15 @@ export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersCl
         <div className="space-y-6">
             {/* Filter Section */}
             <div className="bg-[#121214] border border-neutral-800 rounded-xl p-4 sm:p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-2 text-white font-semibold">
                         <Settings2 className="w-5 h-5 text-blue-500" />
-                        <h2>PDF Hisobot va Ma'lumotlarni boshqarish</h2>
+                        <h2 className="text-sm sm:text-base">PDF Hisobot va Ma'lumotlar</h2>
                     </div>
                     {ready && filters.startDate && filters.endDate && (
                         <button
                             onClick={handleBulkDelete}
-                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 rounded-lg border border-red-500/20 hover:bg-red-500/20 transition-colors"
+                            className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-400 bg-red-500/10 rounded-lg border border-red-500/20 hover:bg-red-500/20 transition-colors w-full sm:w-auto"
                         >
                             <ShieldAlert className="w-3.5 h-3.5" />
                             Tozalash ({filteredOrders.length} ta)
@@ -223,7 +223,7 @@ export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersCl
             {/* Orders Table Section */}
             <div className="rounded-xl border border-neutral-800 bg-neutral-900 overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full text-sm min-w-[800px]">
                         <thead>
                             <tr className="border-b border-neutral-800 text-left text-xs text-neutral-500 uppercase tracking-wider">
                                 <th className="px-5 py-4 font-semibold">Buyurtma №</th>
