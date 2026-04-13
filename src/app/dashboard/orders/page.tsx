@@ -1,4 +1,5 @@
 import { getOrders, getOrgProfile, formatPrice, formatDate } from '@/lib/data';
+import OrdersClient from './orders-client';
 
 const statusColor: Record<string, string> = {
     new: 'bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20',
@@ -21,9 +22,12 @@ export default async function OrdersPage() {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div>
-                <h1 className="text-2xl font-bold text-white">Buyurtmalar</h1>
-                <p className="text-sm text-neutral-500">Barcha buyurtmalarni kuzatish va boshqarish</p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">Buyurtmalar</h1>
+                    <p className="text-sm text-neutral-500">Barcha buyurtmalarni kuzatish va boshqarish</p>
+                </div>
+                <OrdersClient orders={orders} orgName={profile.organizations?.name || 'HOYR Do\'koni'} />
             </div>
 
             {orders.length === 0 ? (

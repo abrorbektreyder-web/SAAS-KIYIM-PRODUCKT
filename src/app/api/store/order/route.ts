@@ -46,23 +46,8 @@ export async function POST(req: Request) {
                 quantity,
                 subtotal: quantity * price
             });
-
-            // Ombordan ayirish (inventory ni update qilish)
-            const { data: invData } = await supabaseAdmin
-                .from('inventory')
-                .select('stock, id')
-                .eq('store_id', store_id)
-                .eq('product_id', product.id)
-                .single();
-
-            if (invData) {
-                const newStock = Math.max(0, invData.stock - quantity);
-                await supabaseAdmin
-                    .from('inventory')
-                    .update({ stock: newStock })
-                    .eq('id', invData.id);
-            }
         }
+
 
         // 3. Order itemlarni qo'shish
         const { error: itemsError } = await supabaseAdmin
