@@ -804,7 +804,7 @@ export async function POST(req: Request) {
 # 🟣 FAZA 5: RO'YXATDAN O'TISH VA OBUNA
 # ═══════════════════════════════════════════
 
-## Bosqich 5.1: Ro'yxatdan o'tish sahifasi
+## ✅ Bosqich 5.1: Ro'yxatdan o'tish sahifasi (Bajarildi)
 
 ### Vazifa:
 Yangi do'kon egasi ro'yxatdan o'tadigan sahifa yaratish.
@@ -865,7 +865,7 @@ if (org.subscription_status === 'expired' || org.subscription_status === 'blocke
 # 🟤 FAZA 6: QO'SHIMCHA FUNKSIYALAR
 # ═══════════════════════════════════════════
 
-## Bosqich 6.1: Telegram bot integratsiya
+## ✅ Bosqich 6.1: Telegram bot integratsiya (Bajarildi)
 
 ### Vazifa:
 Har bir sotuv haqida do'kon egasiga Telegram xabar yuborish.
@@ -904,7 +904,7 @@ npm install @react-pdf/renderer
 
 ---
 
-## Bosqich 6.3: Shtrix-kod skaneri
+## ✅ Bosqich 6.3: Shtrix-kod skaneri (Bajarildi)
 
 ### Vazifa:
 Kassir panelda kameradan shtrix-kod skanerlash.
