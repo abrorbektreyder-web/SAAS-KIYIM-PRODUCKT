@@ -64,8 +64,11 @@ Ushbu ro'yxat tizimni yanada mukammal "Pro" darajaga ko'tarish hamda hozirdagi v
 - [ ] 4. **Dinamik Tariflar va Sozlamalar (Super Admin):** Hozirda Super Admin sozlamalar sahifasidagi ma'lumotlar (paketlar, logolar, SMTP qoidalar) statik (faqat vizual). Buning uchun tizimga maxsus Global Settings va Plans bazasini ulab saqlash kerak.
 - [ ] 5. **Sessiya To'qnashuvi:** Admin va Kassir bitta brauzerda ishlaganda (tabdan tabga o'tganda) Supabase nomli JWT cookie'lar bir-biri bilan to'qnashib, konflikt bermoqda. Buni alohida brauzer yoki domen orqali ishlash tartibiga, yoxud cookie-nomlarini dinamik qilishga o'tkazish.
 - [ ] 6. **Xavfsizlik va RLS (Row Level Security):** API'larda (DELETE/PATCH va h.k.) foydalanuvchining `organization_id` huquqlarini yanada qat'iylashtirib, birov boshqa birovning ma'lumotiga o'zgartirish kiritolmasligiga yana bir bor amin bo'lish.
-- [ ] 7. **Eslatmalar va Telegram Triggerlari:** Sotuv bo'lganda yoki obuna muddati tugab qolayotganda mijozlarni va super adminni Telegram yoki Email orqali xabardor qiluvchi orqa fon (backend) skriptlarini to'liq integratsiya qilish.
-- [x] 8. **Ombor Qoldiqlari optimizatsiyasi:** Hozirda yuzaki ishlayotgan mahsulot xarididagi inventarni hisob kitob qilib ayrish holatini va har xil xatolar(stock minusga o'tib ketishi kabi)ni oldini oluvchi mustahkam himoya mexanizmini yozish.
+- [x] 7. **Eslatmalar va Telegram Triggerlari:** Sotuv bo'lganda yoki obuna muddati tugab qolayotganda mijozlarni va super adminni Telegram yoki Email orqali xabardor qiluvchi orqa fon (backend) skriptlarini to'liq integratsiya qilish.
+- [x] 8. **Ombor Qoldiqlari optimizatsiyasi:** Sotuv paytida omborni avtomatik ayirish (trigger orqali) va stock minusga o'tib ketishini tekshirish mexanizmi.
+- [x] 9. **Pro PDF Hisobot**: Sana oralig'i (Dan/Gacha) va limit bo'yicha saralash, yuklab olish.
+- [x] 10. **Buyurtmalarni boshqarish**: Yakka va ommaviy (Bulk Delete) o'chirish imkoniyati.
+- [x] 11. **Mobil Responsiveness**: Dashboard'ni mobil qurilmalar uchun to'liq moslashtirish.
 
 ---
 
