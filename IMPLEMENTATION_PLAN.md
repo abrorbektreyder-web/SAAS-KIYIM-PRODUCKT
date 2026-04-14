@@ -69,6 +69,8 @@ Ushbu ro'yxat tizimni yanada mukammal "Pro" darajaga ko'tarish hamda hozirdagi v
 - [x] 9. **Pro PDF Hisobot**: Sana oralig'i (Dan/Gacha) va limit bo'yicha saralash, yuklab olish.
 - [x] 10. **Buyurtmalarni boshqarish**: Yakka va ommaviy (Bulk Delete) o'chirish imkoniyati.
 - [x] 11. **Mobil Responsiveness**: Dashboard'ni mobil qurilmalar uchun to'liq moslashtirish.
+- [x] 12. **Mahsulot Variantlari (PRO):** Rang va o'lcham bo'yicha qoldiqlarni alohida boshqarish va o'chirish tizimi.
+- [x] 13. **Arxiv Tozalash (PRO):** Sanalar oralig'ida (Dan-Gacha) ommaviy zaxirani tozalash (Sklad tozalash) funksiyasi.
 
 ---
 

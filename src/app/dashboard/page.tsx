@@ -28,10 +28,10 @@ export default async function DashboardPage() {
     }
 
     const orgId = profile.organization_id;
-    const [stores, orders, products] = await Promise.all([
+    const [stores, orders, { totalCount: totalProducts }] = await Promise.all([
         getStores(orgId),
         getOrders(orgId),
-        getProducts(orgId)
+        getProducts(orgId, 1, 1) // We only need the count for the dashboard KPI
     ]);
 
     const totalRevenue = orders
@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     const kpis = [
         { label: 'Jami daromad', value: formatPrice(totalRevenue) + ' so\'m', icon: TrendingUp, change: '+12.4%', up: true },
         { label: 'Jami buyurtmalar', value: orders.length.toLocaleString(), icon: ShoppingCart, change: '+8.1%', up: true },
-        { label: 'Mahsulotlar', value: products.length.toLocaleString(), icon: Package, change: '+5.3%', up: true },
+        { label: 'Mahsulotlar', value: totalProducts.toLocaleString(), icon: Package, change: '+5.3%', up: true },
         { label: 'Filiallar', value: stores.length.toString(), icon: Store, change: '0%', up: false },
     ];
 

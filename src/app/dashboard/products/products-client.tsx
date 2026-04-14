@@ -241,7 +241,19 @@ function StepDot({ step, current, label }: { step: number; current: number; labe
 
 // ─── Main Component ────────────────────────────────────────────────────────
 
-export default function ProductsClient({ products, orgId }: { products: Product[]; orgId: string }) {
+export default function ProductsClient({ 
+    products, 
+    orgId, 
+    totalCount = 0, 
+    currentPage = 1, 
+    pageSize = 20 
+}: { 
+    products: Product[]; 
+    orgId: string;
+    totalCount?: number;
+    currentPage?: number;
+    pageSize?: number;
+}) {
     const router = useRouter();
     const [mounted, setMounted]       = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -405,18 +417,8 @@ export default function ProductsClient({ products, orgId }: { products: Product[
 
             if (res.ok) {
                 const product = await res.json();
-                // 2. Save variants separately (for edit mode)
-                if (variants.length > 0 && product?.id) {
-                    if (modalMode === 'edit') {
-                        // Delete old & re-insert
-                        await fetch(`/api/admin/products/variants?productId=${product.id}`, { method: 'DELETE' });
-                    }
-                    await fetch('/api/admin/products/variants', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body:    JSON.stringify({ productId: product.id, variants }),
-                    });
-                }
+                // Let server endpoint handle variant inserts.
+                // It now inserts variants natively through POST and PATCH (modified).
                 setModalOpen(false);
                 router.refresh();
             } else {
@@ -573,13 +575,41 @@ export default function ProductsClient({ products, orgId }: { products: Product[
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Controls */}
+                {totalCount > pageSize && (
+                    <div className="flex items-center justify-between border-t border-neutral-800 bg-[#060606] px-5 py-3">
+                        <div className="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">
+                            Jami: {totalCount} ta mahsulot
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                               disabled={currentPage <= 1}
+                               onClick={() => router.push(`/dashboard/products?page=${currentPage - 1}`)}
+                               className="px-3 py-1.5 text-xs font-bold rounded-lg border border-neutral-800 text-neutral-300 hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                Oldingi
+                            </button>
+                            <span className="text-xs font-bold text-neutral-400 bg-neutral-900 px-3 py-1.5 rounded-lg border border-neutral-800">
+                                {currentPage}
+                            </span>
+                            <button
+                               disabled={currentPage * pageSize >= totalCount}
+                               onClick={() => router.push(`/dashboard/products?page=${currentPage + 1}`)}
+                               className="px-3 py-1.5 text-xs font-bold rounded-lg border border-neutral-800 text-neutral-300 hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                Keyingi
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* ─── PRO Modal ─────────────────────────────────────────────── */}
             {isModalOpen && mounted && createPortal(
                 <div
                     onClick={e => e.target === e.currentTarget && setModalOpen(false)}
-                    className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-sm p-0 sm:p-4"
+                    className="fixed inset-0 z-[250] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-sm p-0 sm:p-4"
                     style={{ animation: 'fadeIn 150ms ease-out' }}
                 >
                     <div className="bg-[#0d0d0d] border border-neutral-800/80 w-full sm:max-w-[400px] rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[85vh]"

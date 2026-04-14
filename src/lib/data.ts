@@ -38,14 +38,19 @@ export async function getStores(orgId: string) {
   return data || [];
 }
 
-export async function getProducts(orgId: string) {
+export async function getProducts(orgId: string, page: number = 1, pageSize: number = 20) {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, count } = await supabase
     .from('products')
-    .select('*, categories(name)')
+    .select('*, categories(name)', { count: 'exact' })
     .eq('organization_id', orgId)
-    .order('created_at', { ascending: false });
-  return data || [];
+    .order('created_at', { ascending: false })
+    .range(from, to);
+
+  return { products: data || [], totalCount: count || 0 };
 }
 
 export async function getStoreProducts(orgId: string, storeId: string) {
