@@ -5,7 +5,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        let { organization_id, name, price, sizes, colors, image_url, category, label } = body;
+        let { organization_id, name, price, sizes, colors, image_url, category, label, variants } = body;
 
         // Agar 'auto' yuborilsa — logindan organization_id ni topamiz
         if (organization_id === 'auto') {
@@ -24,19 +24,19 @@ export async function POST(req: Request) {
         }
 
         if (!organization_id || !name) {
-            return NextResponse.json({ error: 'Barcha maydonlarni to\'ldiring' }, { status: 400 });
+            return NextResponse.json({ error: "Barcha maydonlarni to'ldiring" }, { status: 400 });
         }
 
         // 1. Kategoriyani topamiz yoki yaratamiz
         let categoryId = null;
         if (category) {
-            const { data: catData, error: catError } = await supabaseAdmin
+            const { data: catData } = await supabaseAdmin
                 .from('categories')
                 .select('id')
                 .eq('organization_id', organization_id)
                 .eq('name', category)
                 .maybeSingle();
-            
+
             if (catData) {
                 categoryId = catData.id;
             } else {
@@ -49,42 +49,77 @@ export async function POST(req: Request) {
             }
         }
 
-        // 2. Mahsulotni yaratamiz (Mavjud ustunlarga: image_url -> sku, label -> barcode)
-        const { data, error } = await supabaseAdmin
+        // colors & sizes — variant bo'lsa, undan extract qilamiz
+        let finalColors = colors || [];
+        let finalSizes = sizes || [];
+        if (variants && Array.isArray(variants) && variants.length > 0) {
+            finalColors = [...new Set(variants.map((v: any) => v.color).filter(Boolean))];
+            finalSizes  = [...new Set(variants.map((v: any) => v.size).filter(Boolean))];
+        }
+
+        // 2. Mahsulotni yaratamiz
+        const { data: product, error: productError } = await supabaseAdmin
             .from('products')
             .insert({
                 organization_id,
                 name,
                 price: Number(price) || 0,
-                sizes: sizes || [],
-                colors: colors || [],
+                sizes: finalSizes,
+                colors: finalColors,
                 sku: image_url || null,
                 category_id: categoryId,
                 barcode: label || null,
                 is_active: true
-            }).select().single();
+            })
+            .select()
+            .single();
 
-        if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+        if (productError) return NextResponse.json({ error: productError.message }, { status: 400 });
 
-        // 2. Barcha filiallarga inventory yozuvini qo'shamiz (boshlang'ich 0 dona)
+        // 3. Variant Inventory — product_variants jadvaliga saqlash
+        if (variants && Array.isArray(variants) && variants.length > 0 && product) {
+            const variantRows = variants.map((v: any) => ({
+                product_id: product.id,
+                color: (v.color || '').trim(),
+                size:  (v.size  || '').trim(),
+                stock: Number(v.stock) || 0,
+            }));
+
+            const { error: variantError } = await supabaseAdmin
+                .from('product_variants')
+                .insert(variantRows);
+
+            if (variantError) {
+                console.error('Variant save error:', variantError.message);
+                // Mahsulot yaratildi lekin variant saqlanmadi — log qilamiz, xato qaytarmaymiz
+            }
+        }
+
+        // 4. Barcha filiallarga inventory yozuvini qo'shamiz (boshlang'ich soni)
         const { data: stores } = await supabaseAdmin
             .from('stores')
             .select('id')
             .eq('organization_id', organization_id);
 
-        if (stores && stores.length > 0 && data) {
+        if (stores && stores.length > 0 && product) {
+            // Umumiy stock — variantlar yig'indisi
+            const totalStock = variants && Array.isArray(variants)
+                ? variants.reduce((sum: number, v: any) => sum + (Number(v.stock) || 0), 0)
+                : 0;
+
             const inventoryRows = stores.map((store: any) => ({
                 store_id: store.id,
-                product_id: data.id,
-                stock: 10 // Boshlang'ich miqdor: 10 dona
+                product_id: product.id,
+                stock: totalStock || 0
             }));
 
-            await supabaseAdmin
-                .from('inventory')
-                .insert(inventoryRows);
+            await supabaseAdmin.from('inventory').upsert(inventoryRows, {
+                onConflict: 'store_id,product_id',
+                ignoreDuplicates: false
+            });
         }
 
-        return NextResponse.json(data);
+        return NextResponse.json(product);
     } catch (e: any) {
         return NextResponse.json({ error: e.message }, { status: 500 });
     }
