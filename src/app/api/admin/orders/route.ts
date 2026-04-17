@@ -1,17 +1,16 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { getSessionOrg } from '@/lib/auth-utils';
 
 export async function GET(req: Request) {
     try {
+        const { orgId, error: authError } = await getSessionOrg();
+        if (authError || !orgId) return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
+
         const { searchParams } = new URL(req.url);
-        const orgId = searchParams.get('orgId');
         const startDate = searchParams.get('startDate');
         const endDate = searchParams.get('endDate');
         const limit = parseInt(searchParams.get('limit') || '500');
-
-        if (!orgId) {
-            return NextResponse.json({ error: 'Organization ID kutilmadi' }, { status: 400 });
-        }
 
         let query = supabaseAdmin
             .from('orders')
@@ -24,31 +23,35 @@ export async function GET(req: Request) {
             query = query.gte('created_at', startDate);
         }
         if (endDate) {
-            // End date bo'lsa, kun oxirigacha olish uchun soatni qo'shamiz
             const end = new Date(endDate);
             end.setHours(23, 59, 59, 999);
             query = query.lte('created_at', end.toISOString());
         }
 
         const { data, error } = await query;
-
         if (error) throw error;
 
-        return NextResponse.json(data);
+        return NextResponse.json(data || []);
     } catch (e: any) {
-        return NextResponse.json({ error: e.message || 'Server xatosi' }, { status: 500 });
+        return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }
 
 export async function DELETE(req: Request) {
     try {
+        const { orgId, role, error: authError } = await getSessionOrg();
+        if (authError || !orgId) return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
+
+        if (role !== 'store_admin' && role !== 'super_admin') {
+            return NextResponse.json({ error: 'Ruxsat etilmagan' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(req.url);
-        const orgId = searchParams.get('orgId');
         const startDate = searchParams.get('startDate');
         const endDate = searchParams.get('endDate');
 
-        if (!orgId || !startDate || !endDate) {
-            return NextResponse.json({ error: 'OrgId, boshlanish va tugash sanalari talab qilinadi' }, { status: 400 });
+        if (!startDate || !endDate) {
+            return NextResponse.json({ error: 'Boshlanish va tugash sanalari talab qilinadi' }, { status: 400 });
         }
 
         const end = new Date(endDate);
@@ -65,7 +68,8 @@ export async function DELETE(req: Request) {
 
         return NextResponse.json({ success: true });
     } catch (e: any) {
-        return NextResponse.json({ error: e.message || 'Server xatosi' }, { status: 500 });
+        return NextResponse.json({ error: e.message }, { status: 500 });
     }
 }
+
 

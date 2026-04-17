@@ -5,8 +5,7 @@ import { createServerClient } from '@supabase/ssr'
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
-    // ===== PUBLIC SAHIFALAR =====
-    // Bu sahifalar uchun autentifikatsiya kerak emas — to'g'ridan-to'g'ri o'tkazamiz
+    // ===== 1. PUBLIC YO'LLAR =====
     const publicPaths = [
         '/',
         '/register',
@@ -20,51 +19,33 @@ export async function middleware(request: NextRequest) {
         p === '/' ? path === '/' : path.startsWith(p) && (path === p || path.charAt(p.length) === '/')
     );
 
-    // Eski /login yo'llarini yangilariga redirect qilish (backward compatibility)
-    if (path === '/login' || path === '/login/') {
-        return NextResponse.redirect(new URL('/pos', request.url))
-    }
-    if (path === '/login/admin' || path === '/login/admin/') {
-        return NextResponse.redirect(new URL('/admin', request.url))
-    }
-    if (path === '/login/super' || path === '/login/super/') {
-        return NextResponse.redirect(new URL('/super', request.url))
-    }
-
-    // API va statik resurslarni o'tkazib yuborish
+    // API va Statik resurslarni o'tkazib yuborish
     if (
         path.startsWith('/api') ||
         path.startsWith('/_next') ||
-        path.startsWith('/favicon')
+        path.startsWith('/favicon') ||
+        path.includes('.')
     ) {
         return NextResponse.next()
     }
 
-    // Public sahifalarni o'tkazib yuborish
+    // Public sahifalar uchun autentifikatsiya shart emas
     if (isPublicPath) {
         return NextResponse.next()
     }
 
-    // ===== HIMOYALANGAN SAHIFALAR =====
-    // Bu yerdan pastda faqat /dashboard, /store, /super-admin kabi himoyalangan sahifalar
-
-    let supabaseResponse = NextResponse.next({
-        request,
-    })
+    // ===== 2. SUPABASE INITIALIZATION =====
+    let supabaseResponse = NextResponse.next({ request })
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             cookies: {
-                getAll() {
-                    return request.cookies.getAll()
-                },
+                getAll() { return request.cookies.getAll() },
                 setAll(cookiesToSet) {
                     cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-                    supabaseResponse = NextResponse.next({
-                        request,
-                    })
+                    supabaseResponse = NextResponse.next({ request })
                     cookiesToSet.forEach(({ name, value, options }) =>
                         supabaseResponse.cookies.set(name, value, options)
                     )
@@ -73,50 +54,39 @@ export async function middleware(request: NextRequest) {
         }
     )
 
-    // MUHIM: getUser() chaqirish tokenni yangilaydi
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    // Foydalanuvchini olish (tokenni avtomatik yangilaydi)
+    const { data: { user } } = await supabase.auth.getUser()
 
-    // Foydalanuvchi umuman kirmagan bo'lsa — mos login sahifasiga yo'naltirish
+    // ===== 3. AUTENTIFIKATSIYA TEKSHIRUVI =====
     if (!user) {
-        if (path.startsWith('/dashboard')) {
-            return NextResponse.redirect(new URL('/admin', request.url))
-        }
-        if (path.startsWith('/store')) {
-            return NextResponse.redirect(new URL('/pos', request.url))
-        }
-        if (path.startsWith('/super-admin')) {
-            return NextResponse.redirect(new URL('/super', request.url))
-        }
-        // Boshqa barcha himoyalangan sahifalar uchun admin login
+        // Himoyalangan sahifadan (masalan /dashboard) mos login sahifasiga yo'naltirish
+        if (path.startsWith('/dashboard')) return NextResponse.redirect(new URL('/admin', request.url))
+        if (path.startsWith('/store')) return NextResponse.redirect(new URL('/pos', request.url))
+        if (path.startsWith('/super-admin')) return NextResponse.redirect(new URL('/super', request.url))
+
         return NextResponse.redirect(new URL('/admin', request.url))
     }
 
-    // ===== ROL TEKSHIRISH =====
-    let role: string | null = null;
-    try {
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-        role = profile?.role || null;
-    } catch {
-        role = null;
-    }
+    // ===== 4. ROL ASOSIDA KIRISHNI CHEKLASH (RBAC) =====
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
 
-    // Dashboard — faqat store_admin va super_admin
+    const role = profile?.role || null;
+
+    // Admin Dashboard (/dashboard) -> faqat store_admin yoki super_admin
     if (path.startsWith('/dashboard') && role !== 'store_admin' && role !== 'super_admin') {
         return NextResponse.redirect(new URL('/admin', request.url))
     }
 
-    // Store (POS/kassir sahifasi) — faqat cashier
+    // POS / Kassir sahifasi (/store) -> faqat cashier
     if (path.startsWith('/store') && role !== 'cashier') {
         return NextResponse.redirect(new URL('/pos', request.url))
     }
 
-    // Super Admin panel — faqat super_admin
+    // Platforma Super Admin (/super-admin) -> faqat super_admin
     if (path.startsWith('/super-admin') && role !== 'super_admin') {
         return NextResponse.redirect(new URL('/super', request.url))
     }

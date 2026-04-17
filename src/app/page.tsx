@@ -18,8 +18,8 @@ export default function Home() {
                         <Link href="/login" className="hover:text-white transition-colors">Tizimga kirish</Link>
                     </nav>
                     <div className="flex items-center">
-                        <Link 
-                            href="/register" 
+                        <Link
+                            href="/register"
                             className="group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 px-6 font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(52,211,153,0.4)]"
                         >
                             <span className="mr-2">Boshlash</span>
@@ -32,27 +32,27 @@ export default function Home() {
             {/* Hero Section */}
             <section className="relative pt-40 pb-20 px-6 max-w-7xl mx-auto">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
-                
+
                 <div className="relative z-10 flex flex-col items-center text-center">
                     <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400 mb-8 animate-fade-in" style={{ animationDelay: '0.1s', opacity: 0 }}>
                         <span className="flex h-2 w-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
                         HOYR SaaS - Tizim yangilandi
                     </div>
-                    
+
                     <h1 className="text-[32px] leading-[1.2] sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 sm:mb-8 animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0 }}>
                         Kiyim do'koningizni <br className="hidden md:block" />
                         <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text block mt-1 sm:mt-0 sm:inline">
                             avtomatlashtiring
                         </span>
                     </h1>
-                    
+
                     <p className="max-w-2xl text-lg md:text-xl text-neutral-400 mb-10 animate-fade-in" style={{ animationDelay: '0.3s', opacity: 0 }}>
                         Savdoni oshiring, omborni aniq boshqaring va xodimlar ishini nazorat qiling. Barchasi bitta professional dasturda.
                     </p>
-                    
+
                     <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-in" style={{ animationDelay: '0.4s', opacity: 0 }}>
-                        <Link 
-                            href="/register" 
+                        <Link
+                            href="/register"
                             className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-white px-8 font-semibold text-black transition-all hover:scale-105"
                         >
                             <span>Bepul sinab ko'rish</span>
@@ -66,7 +66,7 @@ export default function Home() {
                                 To'liq versiyani ko'rish <ArrowRight className="ml-2 w-4 h-4" />
                             </Link>
                         </div>
-                        
+
                         {/* Fake Mac Window Header */}
                         <div className="h-12 border-b border-white/5 bg-[#18181b] flex items-center px-4 gap-2">
                             <div className="flex gap-2">
@@ -126,7 +126,7 @@ export default function Home() {
                             {/* Main Content */}
                             <div className="flex-1 p-4 sm:p-6 flex flex-col items-start text-left relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
-                                
+
                                 <div className="flex justify-between items-center w-full mb-4 sm:mb-6 z-10">
                                     <div>
                                         <h3 className="text-xl sm:text-2xl font-bold text-white">Xush kelibsiz, Sardor</h3>
@@ -153,7 +153,7 @@ export default function Home() {
                                             <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0" /> +14.5% kechagidan
                                         </div>
                                     </div>
-                                    
+
                                     {/* Card 2 */}
                                     <div className="rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 p-4 sm:p-5 shadow-[0_0_20px_rgba(16,185,129,0.05)] relative overflow-hidden">
                                         <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/20 blur-2xl rounded-full" />
@@ -257,7 +257,7 @@ export default function Home() {
 
             {/* Pricing Section */}
             <section id="pricing" className="py-24 px-6 relative">
-                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none" />
                 <div className="max-w-5xl mx-auto relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold mb-4">Moslashuvchan tariflar</h2>
@@ -326,18 +326,18 @@ export default function Home() {
                 <div className="max-w-4xl mx-auto text-center mb-16">
                     <h2 className="text-3xl md:text-5xl font-bold mb-6">Tayyormisiz?</h2>
                     <p className="text-xl text-neutral-400 mb-10">Biznesingizni samarali va zamonaviy usulda boshqarishni bugundanoq boshlang.</p>
-                    <Link 
-                        href="/register" 
+                    <Link
+                        href="/register"
                         className="inline-flex h-14 items-center justify-center rounded-full bg-white px-10 font-bold text-black transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
                     >
                         Ro'yxatdan o'tish
                     </Link>
                 </div>
-                
+
                 <div className="max-w-7xl mx-auto border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
                     <div className="flex items-center gap-2">
-                         <span className="font-bold text-neutral-300">HOYR SaaS</span>
-                         <span>© 2026. Barcha huquqlar himoyalangan.</span>
+                        <span className="font-bold text-neutral-300">HOYR SaaS</span>
+                        <span>© 2026. Barcha huquqlar himoyalangan.</span>
                     </div>
                     <div className="flex gap-6">
                         <Link href="/login" className="hover:text-white transition-colors">Admin Login</Link>

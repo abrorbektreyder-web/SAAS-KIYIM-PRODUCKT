@@ -60,9 +60,9 @@ Ushbu ro'yxat tizimni yanada mukammal "Pro" darajaga ko'tarish hamda hozirdagi v
 
 - [x] 1. **Rasm yuklash va Saqlash (Supabase Storage):** Mahsulot rasmlari endi Supabase Storage (Bucket) ga yuklanadi. `Base64` usulidan butunlay voz kechildi.
 - [x] 2. **Ma'lumotlar bazasi arxitekturasi:** Mahsulotlar uchun `category_id` (bog'liqlik) va `label` (mustaqil ustun) tizimi to'liq joriy qilindi. `barcode` ichidagi JSON formatidan voz kechildi.
-- [ ] 3. **Sahifalash (Pagination):** Mahsulotlar, filiallar va mijozlar ro'yxati ortib borishi bilan tizim tezligi tushmasligi uchun backend (`.range()`) va frontend da sahifalash mantiqini (Pagination) joriy qilish.
-- [ ] 4. **Dinamik Tariflar va Sozlamalar (Super Admin):** Hozirda Super Admin sozlamalar sahifasidagi ma'lumotlar (paketlar, logolar, SMTP qoidalar) statik (faqat vizual). Buning uchun tizimga maxsus Global Settings va Plans bazasini ulab saqlash kerak.
-- [ ] 5. **Sessiya To'qnashuvi:** Admin va Kassir bitta brauzerda ishlaganda (tabdan tabga o'tganda) Supabase nomli JWT cookie'lar bir-biri bilan to'qnashib, konflikt bermoqda. Buni alohida brauzer yoki domen orqali ishlash tartibiga, yoxud cookie-nomlarini dinamik qilishga o'tkazish.
+- [x] 3. **Sahifalash (Pagination):** Mahsulotlar, filiallar va mijozlar ro'yxati uchun backend (.range()) va frontend pagination joriy qilindi.
+- [x] 4. **Dinamik Tariflar va Sozlamalar (Super Admin):** Super Admin settings API va UI to'liq ulandi.
+- [ ] 5. **Sessiya To'qnashuvi:** Admin va Kassir sessiyalari brauzerda to'qnashishini hal qilish (Cookie separation) - PLANLASHTIRILGAN.
 - [ ] 6. **Xavfsizlik va RLS (Row Level Security):** API'larda (DELETE/PATCH va h.k.) foydalanuvchining `organization_id` huquqlarini yanada qat'iylashtirib, birov boshqa birovning ma'lumotiga o'zgartirish kiritolmasligiga yana bir bor amin bo'lish.
 - [x] 7. **Eslatmalar va Telegram Triggerlari:** Sotuv bo'lganda yoki obuna muddati tugab qolayotganda mijozlarni va super adminni Telegram yoki Email orqali xabardor qiluvchi orqa fon (backend) skriptlarini to'liq integratsiya qilish.
 - [x] 8. **Ombor Qoldiqlari optimizatsiyasi:** Sotuv paytida omborni avtomatik ayirish (trigger orqali) va stock minusga o'tib ketishini tekshirish mexanizmi.

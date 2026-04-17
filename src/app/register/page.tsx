@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Store, User, Phone, Mail, Lock, Building2, CheckCircle2, ChevronRight, Loader2 } from 'lucide-react'
+import { Store, User, Phone, Mail, Lock, Building2, CheckCircle2, ChevronRight, Loader2, Eye, EyeOff } from 'lucide-react'
 import HoyrLogo from '@/components/ui/hoyr-logo'
 import { signIn } from '@/lib/supabase/auth'
 
@@ -13,6 +13,7 @@ export default function RegisterPage() {
     const [step, setStep] = useState(1) // 1: Info, 2: Plan
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     const [form, setForm] = useState({
         orgName: '',
@@ -198,19 +199,27 @@ export default function RegisterPage() {
                                             <Lock className="h-5 w-5 text-neutral-500" />
                                         </div>
                                         <input
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             required
-                                            className="block w-full rounded-lg border border-neutral-800 bg-neutral-900/50 p-3 pl-10 text-white placeholder-neutral-500 transition-all focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                            className="block w-full rounded-lg border border-neutral-800 bg-neutral-900/50 p-3 pl-10 pr-10 text-white placeholder-neutral-500 transition-all focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                                             placeholder="Kamida 6ta belgi hrf va son:"
                                             value={form.password}
                                             onChange={(e) => setForm({ ...form, password: e.target.value })}
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-500 hover:text-neutral-300 transition-colors"
+                                        >
+                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                        </button>
                                     </div>
                                 </div>
 
                                 <button
-                                    type="submit"
-                                    className="flex w-full items-center justify-center rounded-lg bg-blue-600 p-3 font-medium text-white transition-all hover:bg-blue-700 active:scale-[0.98]"
+                                    type="button"
+                                    disabled
+                                    className="flex w-full items-center justify-center rounded-lg bg-blue-600/50 p-3 font-medium text-white/50 cursor-not-allowed"
                                 >
                                     Keyingi qadam
                                     <ChevronRight className="ml-2 h-5 w-5" />
