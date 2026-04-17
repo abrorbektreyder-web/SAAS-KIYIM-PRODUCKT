@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import {
     Settings, CreditCard, Shield, Bell, Save,
     Database, Activity, Key, Globe, Mail, MessageSquare, Trash2, X,
-    RefreshCcw, Check, AlertCircle, Loader2
+    RefreshCcw, Check, AlertCircle, Loader2, Zap, Layout, HardDrive, 
+    Lock, Sparkles, Server, Cpu, Layers, Store
 } from 'lucide-react';
 
 type PackageItem = {
@@ -138,323 +139,536 @@ export default function SuperAdminSettings() {
 
     if (loading) {
         return (
-            <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
-                <Loader2 className="w-10 h-10 text-red-500 animate-spin" />
-                <p className="text-neutral-400 animate-pulse">Sozlamalar yuklanmoqda...</p>
+            <div className="h-[60vh] flex flex-col items-center justify-center gap-6">
+                <div className="relative">
+                    <div className="w-16 h-16 border-4 border-red-500/20 border-t-red-500 rounded-full animate-spin" />
+                    <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-red-500 animate-pulse" />
+                </div>
+                <div className="space-y-2 text-center">
+                    <p className="text-xl font-bold text-white tracking-tight">Xavfsiz ulanish o'rnatilmoqda</p>
+                    <p className="text-sm text-neutral-500">Global sozlamalar yuklanmoqda...</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-[1200px] mx-auto space-y-8 animate-in fade-in duration-700 relative pb-20">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-neutral-900/40 p-8 rounded-3xl border border-neutral-800/50 backdrop-blur-xl">
-                <div className="space-y-2">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[10px] font-bold text-red-400 uppercase tracking-widest">
-                        System Configuration
+        <div className="max-w-[1400px] mx-auto space-y-10 pb-24">
+            {/* Header Section with Glassmorphism */}
+            <div className="relative overflow-hidden rounded-[32px] border border-neutral-800/50 bg-[#09090b] p-8 shadow-2xl">
+                {/* Background Decor */}
+                <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none" />
+                
+                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                            <div className="px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-[9px] font-black text-red-500 uppercase tracking-[0.2em]">
+                                Enterprise Console
+                            </div>
+                            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-bold text-emerald-400">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                Tizim Faol
+                            </div>
+                        </div>
+                        <h1 className="text-3xl lg:text-4xl font-black text-white tracking-tighter leading-tight">
+                            Platforma <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-500">Sozlamalari</span>
+                        </h1>
+                        <p className="text-sm text-neutral-400 max-w-xl font-medium leading-relaxed">
+                            HOYR ekotizimining global parametrlari va tijorat tariflarini boshqarish markazi.
+                        </p>
                     </div>
-                    <h1 className="text-4xl font-extrabold text-white tracking-tight">Platforma Sozlamalari</h1>
-                    <p className="text-neutral-400 max-w-md">Loyiha xavfsizligi, tariflar va global parametrlarni nazorat qilish markazi.</p>
-                </div>
 
-                <div className="flex flex-col items-end gap-3">
-                    {status && (
-                        <div className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl animate-in slide-in-from-top-2 duration-300 ${
-                            status.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                        }`}>
-                            {status.type === 'success' ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-                            {status.msg}
-                        </div>
-                    )}
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="group relative flex items-center gap-3 bg-white text-black hover:bg-neutral-200 disabled:opacity-50 px-8 py-4 rounded-2xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 overflow-hidden"
-                    >
-                        {saving ? (
-                            <RefreshCcw className="w-5 h-5 animate-spin" />
-                        ) : (
-                            <Save className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                        {status && (
+                            <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl animate-in fade-in slide-in-from-right-4 duration-500 ${
+                                status.type === 'success' 
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                            }`}>
+                                {status.type === 'success' ? <Check className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                                <span className="text-[10px] font-bold tracking-tight">{status.msg}</span>
+                            </div>
                         )}
-                        <span>{saving ? 'Saqlanmoqda...' : 'O\'zgarishlarni Tasdiqlash'}</span>
-                    </button>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
-                <div className="space-y-2 sticky top-8 h-fit">
-                    {[
-                        { id: 'tizim', label: 'Asosiy Axborotlar', icon: Globe },
-                        { id: 'tariflar', label: 'Tariflar & Narxlar', icon: CreditCard },
-                        { id: 'xavfsizlik', label: 'Xavfsizlik & Zaxira', icon: Shield },
-                        { id: 'xabarlar', label: 'Xabarnomalar & Bot', icon: Bell },
-                    ].map((tab) => (
                         <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-semibold transition-all duration-300 ${
-                                activeTab === tab.id 
-                                ? 'bg-white text-black shadow-xl shadow-white/5' 
-                                : 'text-neutral-500 hover:bg-neutral-800/50 hover:text-neutral-300'
-                            }`}
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="group relative flex items-center gap-3 bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 px-7 py-3.5 rounded-xl text-xs font-black transition-all shadow-[0_10px_20px_rgba(220,38,38,0.2)] active:scale-95 overflow-hidden"
                         >
-                            <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-red-600' : ''}`} />
-                            {tab.label}
+                            {saving ? (
+                                <RefreshCcw className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                                <Save className="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-300" />
+                            )}
+                            <span className="tracking-widest">{saving ? 'SAQLANMOQDA...' : 'TASDIQLASH'}</span>
                         </button>
-                    ))}
-                </div>
-
-                <div className="bg-neutral-900/20 border border-neutral-800/40 rounded-[32px] p-8 backdrop-blur-sm min-h-[500px]">
-                    {activeTab === 'tizim' && (
-                        <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-                            <div className="space-y-1">
-                                <h3 className="text-xl font-bold text-white">Platforma Identiteti</h3>
-                                <p className="text-sm text-neutral-500">Loyiha nomi va aloqa ma'lumotlari.</p>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Platforma Nomi</label>
-                                    <input 
-                                        type="text" 
-                                        value={systemSettings.platform_name}
-                                        onChange={e => setSystemSettings({...systemSettings, platform_name: e.target.value})}
-                                        className="w-full bg-neutral-800/40 border border-neutral-700/50 rounded-2xl px-5 py-4 text-sm text-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 outline-none transition-all hover:bg-neutral-800/60" 
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Asosiy Domen</label>
-                                    <input 
-                                        type="text" 
-                                        value={systemSettings.base_url}
-                                        onChange={e => setSystemSettings({...systemSettings, base_url: e.target.value})}
-                                        className="w-full bg-neutral-800/40 border border-neutral-700/50 rounded-2xl px-5 py-4 text-sm text-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 outline-none transition-all hover:bg-neutral-800/60" 
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Qo'llab-quvvatlash Emaili</label>
-                                <div className="relative group">
-                                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 group-focus-within:text-red-400 transition-colors" />
-                                    <input 
-                                        type="email" 
-                                        value={systemSettings.support_email}
-                                        onChange={e => setSystemSettings({...systemSettings, support_email: e.target.value})}
-                                        className="w-full bg-neutral-800/40 border border-neutral-700/50 rounded-2xl pl-13 pr-5 py-4 text-sm text-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 outline-none transition-all hover:bg-neutral-800/60" 
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-neutral-500 uppercase tracking-widest ml-1">Loyiha Tavsifi (SEO)</label>
-                                <textarea 
-                                    rows={4} 
-                                    value={systemSettings.seo_description}
-                                    onChange={e => setSystemSettings({...systemSettings, seo_description: e.target.value})}
-                                    className="w-full bg-neutral-800/40 border border-neutral-700/50 rounded-2xl px-5 py-4 text-sm text-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 outline-none transition-all hover:bg-neutral-800/60 resize-none tabular-nums" 
-                                />
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'tariflar' && (
-                        <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-1">
-                                    <h3 className="text-xl font-bold text-white">Obuna Paketlari</h3>
-                                    <p className="text-sm text-neutral-500">Mijozlaringiz uchun SAAS rejalari.</p>
-                                </div>
-                                <button
-                                    onClick={() => openPackageModal()}
-                                    className="px-6 py-3 rounded-xl bg-red-600/10 text-red-400 border border-red-600/20 hover:bg-red-600 hover:text-white transition-all font-bold text-xs"
-                                >
-                                    + Yangi Paket
-                                </button>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {packages.map((pkg, idx) => (
-                                    <div key={idx} className="group relative bg-neutral-800/30 border border-neutral-700/40 rounded-3xl p-6 hover:border-red-500/30 transition-all duration-500">
-                                        <div className="flex justify-between items-start mb-6">
-                                            <span className="px-3 py-1 rounded-full bg-white/5 text-[10px] font-black text-neutral-400 group-hover:text-red-400 transition-colors uppercase tracking-widest border border-white/5">
-                                                {pkg.tag}
-                                            </span>
-                                            <div className="flex gap-2">
-                                                <button onClick={() => openPackageModal(idx)} className="p-2 bg-neutral-900 rounded-lg text-neutral-500 hover:text-white transition-colors border border-neutral-700/50">
-                                                    <Settings className="w-3.5 h-3.5" />
-                                                </button>
-                                                <button onClick={() => deletePackage(idx)} className="p-2 bg-neutral-900 rounded-lg text-neutral-500 hover:text-red-400 transition-colors border border-neutral-700/50">
-                                                    <Trash2 className="w-3.5 h-3.5" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="mb-6">
-                                            <div className="text-3xl font-black text-white">{pkg.price}</div>
-                                            <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mt-1">O'zbek so'mi / oy</div>
-                                        </div>
-
-                                        <div className="space-y-3 pt-6 border-t border-neutral-700/30">
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-neutral-500 font-medium">Filiallar:</span>
-                                                <span className="text-white font-bold">{pkg.stores}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-neutral-500 font-medium">Kassirlar:</span>
-                                                <span className="text-white font-bold">{pkg.cashiers}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-neutral-500 font-medium">Status:</span>
-                                                <span className={`font-bold ${pkg.isActive ? 'text-emerald-400' : 'text-red-400'}`}>
-                                                    {pkg.isActive ? 'Faol' : 'Nofaol'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'xavfsizlik' && (
-                        <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-                             <div className="space-y-1">
-                                <h3 className="text-xl font-bold text-white">Tizim Xavfsizligi</h3>
-                                <p className="text-sm text-neutral-500">Muhim himoya va zaxiralash parametrlari.</p>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between p-6 bg-neutral-800/30 border border-neutral-700/40 rounded-[28px]">
-                                    <div className="space-y-1">
-                                        <div className="font-bold text-white flex items-center gap-2">
-                                            <Shield className="w-4 h-4 text-emerald-400" />
-                                            Ikki Bosqichli Himoya (2FA)
-                                        </div>
-                                        <p className="text-xs text-neutral-500">Super Admin kirishi uchun SMS/Email tasdiqlash.</p>
-                                    </div>
-                                    <label className="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" className="sr-only peer" defaultChecked />
-                                        <div className="w-14 h-7 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
-                                    </label>
-                                </div>
-
-                                <div className="flex items-center justify-between p-6 bg-neutral-800/30 border border-neutral-700/40 rounded-[28px]">
-                                    <div className="space-y-1">
-                                        <div className="font-bold text-white flex items-center gap-2">
-                                            <Database className="w-4 h-4 text-blue-400" />
-                                            Avtomatik Zaxiralash
-                                        </div>
-                                        <p className="text-xs text-neutral-500">Ma'lumotlar bazasini kunlik zaxiralash.</p>
-                                    </div>
-                                    <select className="bg-neutral-900 border border-neutral-700 text-xs text-white px-4 py-3 rounded-xl outline-none focus:border-red-500 transition-colors cursor-pointer font-bold">
-                                        <option>Har kuni soat 23:59 da</option>
-                                        <option>Har 12 soatda</option>
-                                        <option>Haftada bir marta</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'xabarlar' && (
-                        <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-                             <div className="space-y-1">
-                                <h3 className="text-xl font-bold text-white">Bildirishnomalar</h3>
-                                <p className="text-sm text-neutral-500">SMTP va Telegram Bot integratsiyasi.</p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="p-8 bg-neutral-800/30 border border-neutral-700/40 rounded-[32px] space-y-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-3 bg-red-500/10 rounded-2xl">
-                                            <Mail className="w-6 h-6 text-red-400" />
-                                        </div>
-                                        <div className="font-black text-white uppercase tracking-wider text-sm">SMTP Server</div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <input type="text" placeholder="Host (smtp.gmail.com)" defaultValue="smtp.gmail.com" className="w-full bg-neutral-900 border border-neutral-700/50 rounded-xl px-4 py-3 text-xs text-white focus:border-red-500/50 transition-all outline-none" />
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <input type="text" placeholder="Port" defaultValue="587" className="w-full bg-neutral-900 border border-neutral-700/50 rounded-xl px-4 py-3 text-xs text-white outline-none" />
-                                            <input type="password" placeholder="Parol" className="w-full bg-neutral-900 border border-neutral-700/50 rounded-xl px-4 py-3 text-xs text-white outline-none" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="p-8 bg-neutral-800/30 border border-neutral-700/40 rounded-[32px] space-y-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-3 bg-blue-500/10 rounded-2xl">
-                                            <MessageSquare className="w-6 h-6 text-blue-400" />
-                                        </div>
-                                        <div className="font-black text-white uppercase tracking-wider text-sm">Telegram Bot</div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <input type="text" placeholder="Bot Token" className="w-full bg-neutral-900 border border-neutral-700/50 rounded-xl px-4 py-3 text-xs text-white focus:border-blue-500/50 transition-all outline-none" />
-                                        <input type="text" placeholder="Chat ID" className="w-full bg-neutral-900 border border-neutral-700/50 rounded-xl px-4 py-3 text-xs text-white outline-none" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
 
-             {isPackageModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={closePackageModal}></div>
-                    <div className="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-[32px] overflow-hidden relative animate-in zoom-in-95 duration-300">
-                        <div className="flex items-center justify-between p-8 border-b border-neutral-800">
-                            <h2 className="text-xl font-bold text-white">
-                                {editingIndex !== null ? 'Tarifni Tahrirlash' : 'Yangi Tarif Qo\'shish'}
-                            </h2>
-                            <button onClick={closePackageModal} className="text-neutral-500 hover:text-white transition-colors">
-                                <X className="w-6 h-6" />
+            {/* Main Layout: Bento Style Sidebar & Content */}
+            <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-6">
+                {/* Navigation Column */}
+                <div className="space-y-3">
+                    <div className="bg-[#09090b] border border-neutral-800/50 rounded-[28px] p-4 space-y-1 shadow-xl">
+                        <p className="text-[9px] font-black text-neutral-600 uppercase tracking-[0.2em] mb-3 px-3">Kategoriyalar</p>
+                        {[
+                            { id: 'tizim', label: 'Identitet', icon: Globe, desc: 'Domen va SEO' },
+                            { id: 'tariflar', label: 'Tariflar', icon: CreditCard, desc: 'SAAS rejalari' },
+                            { id: 'xavfsizlik', label: 'Xavfsizlik', icon: Shield, desc: '2FA va Zaxira' },
+                            { id: 'xabarlar', label: 'Bildirishnomalar', icon: Bell, desc: 'Bot va Email' },
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`w-full group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 ${
+                                    activeTab === tab.id 
+                                    ? 'bg-neutral-800 text-white shadow-lg ring-1 ring-neutral-700/50' 
+                                    : 'text-neutral-500 hover:bg-neutral-800/30 hover:text-neutral-300'
+                                }`}
+                            >
+                                <div className={`p-2 rounded-lg transition-colors ${
+                                    activeTab === tab.id ? 'bg-red-500 text-white' : 'bg-neutral-900 text-neutral-700 group-hover:text-neutral-500'
+                                }`}>
+                                    <tab.icon className="w-4 h-4" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-black tracking-tight leading-tight pt-0.5">{tab.label}</p>
+                                    <p className="text-[9px] font-bold text-neutral-600 uppercase tracking-wider">{tab.desc}</p>
+                                </div>
                             </button>
+                        ))}
+                    </div>
+
+                    {/* System Stats Card */}
+                    <div className="bg-gradient-to-br from-red-600/5 to-transparent border border-neutral-800/50 rounded-[28px] p-6 space-y-5">
+                        <div className="flex items-center justify-between">
+                            <Activity className="w-4 h-4 text-red-500" />
+                            <span className="text-[9px] font-black text-red-500/70 uppercase tracking-widest">Live Stats</span>
                         </div>
-                        <div className="p-8 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.2em] ml-1">Paket Nomi</label>
-                                <input
-                                    type="text"
-                                    value={packageForm.tag}
-                                    onChange={e => setPackageForm({ ...packageForm, tag: e.target.value.toUpperCase() })}
-                                    placeholder="PREMIUM"
-                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl px-5 py-4 text-sm text-white focus:border-red-500 outline-none transition-all"
-                                />
+                        <div className="space-y-3">
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between text-[10px] font-bold text-neutral-500">
+                                    <span>Server Load</span>
+                                    <span>12%</span>
+                                </div>
+                                <div className="h-1 w-full bg-neutral-900 rounded-full overflow-hidden">
+                                    <div className="h-full bg-red-500/50 w-[12%]" />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.2em] ml-1">Narxi (So'm)</label>
-                                <input
-                                    type="text"
-                                    value={packageForm.price}
-                                    onChange={e => setPackageForm({ ...packageForm, price: e.target.value })}
-                                    placeholder="500 000"
-                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl px-5 py-4 text-sm text-white focus:border-red-500 outline-none transition-all"
-                                />
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between text-[10px] font-bold text-neutral-500">
+                                    <span>DB Capacity</span>
+                                    <span>4.2GB</span>
+                                </div>
+                                <div className="h-1 w-full bg-neutral-900 rounded-full overflow-hidden">
+                                    <div className="h-full bg-amber-500/50 w-[8%]" />
+                                </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                        </div>
+                    </div>
+                </div>
+
+                {/* Content Area */}
+                <div className="bg-[#09090b] border border-neutral-800/50 rounded-[32px] p-8 shadow-2xl min-h-[500px] relative overflow-hidden">
+                    <div className="relative z-10">
+                        {activeTab === 'tizim' && (
+                            <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2 text-red-500 mb-1">
+                                        <Globe className="w-4 h-4" />
+                                        <span className="text-[9px] font-black uppercase tracking-[0.2em]">Core Identity</span>
+                                    </div>
+                                    <h3 className="text-2xl font-black text-white tracking-tight">Platforma Identiteti</h3>
+                                    <p className="text-xs text-neutral-500 font-medium">Loyiha nomi va SEO parametrlari.</p>
+                                </div>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2 group">
+                                        <label className="text-[9px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1 group-focus-within:text-red-500 transition-colors">Platforma Nomi</label>
+                                        <div className="relative">
+                                            <input 
+                                                type="text" 
+                                                value={systemSettings.platform_name}
+                                                onChange={e => setSystemSettings({...systemSettings, platform_name: e.target.value})}
+                                                className="w-full bg-[#111111] border border-neutral-800 rounded-xl px-5 py-3 text-sm font-bold text-white focus:border-red-500/50 outline-none transition-all" 
+                                            />
+                                            <Zap className="absolute right-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-800" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[9px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1 group-focus-within:text-amber-500 transition-colors">Asosiy Domen</label>
+                                        <div className="relative">
+                                            <input 
+                                                type="text" 
+                                                value={systemSettings.base_url}
+                                                onChange={e => setSystemSettings({...systemSettings, base_url: e.target.value})}
+                                                className="w-full bg-[#111111] border border-neutral-800 rounded-xl px-5 py-3 text-sm font-bold text-white focus:border-amber-500/50 outline-none transition-all" 
+                                            />
+                                            <Globe className="absolute right-5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-800" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2 group">
+                                    <label className="text-[9px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1">Qo'llab-quvvatlash Emaili</label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-600 group-focus-within:text-red-500 transition-colors" />
+                                        <input 
+                                            type="email" 
+                                            value={systemSettings.support_email}
+                                            onChange={e => setSystemSettings({...systemSettings, support_email: e.target.value})}
+                                            className="w-full bg-[#111111] border border-neutral-800 rounded-xl pl-13 pr-5 py-3 text-sm font-bold text-white focus:border-red-500/50 outline-none transition-all" 
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2 group">
+                                    <div className="flex items-center justify-between ml-1">
+                                        <label className="text-[9px] font-black text-neutral-600 uppercase tracking-[0.2em]">SEO Tavsifi</label>
+                                        <span className="text-[9px] font-bold text-neutral-800 uppercase tracking-widest">{systemSettings.seo_description.length} / 300</span>
+                                    </div>
+                                    <textarea 
+                                        rows={4} 
+                                        value={systemSettings.seo_description}
+                                        onChange={e => setSystemSettings({...systemSettings, seo_description: e.target.value})}
+                                        className="w-full bg-[#111111] border border-neutral-800 rounded-[20px] px-6 py-4 text-sm font-medium text-neutral-400 focus:border-red-500/50 outline-none transition-all resize-none" 
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'tariflar' && (
+                            <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+                                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2 text-red-500 mb-1">
+                                            <CreditCard className="w-4 h-4" />
+                                            <span className="text-[9px] font-black uppercase tracking-[0.2em]">Pricing Plans</span>
+                                        </div>
+                                        <h3 className="text-2xl font-black text-white tracking-tight">Obuna Paketlari</h3>
+                                        <p className="text-xs text-neutral-500 font-medium">SAAS rejalarini boshqarish.</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openPackageModal()}
+                                        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black hover:bg-neutral-200 transition-all font-black text-[11px] shadow-lg active:scale-95"
+                                    >
+                                        <Zap className="w-3.5 h-3.5 fill-current" />
+                                        YANGI PAKET
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {packages.map((pkg, idx) => (
+                                        <div key={idx} className="group relative bg-[#111111] border border-neutral-800 rounded-[24px] p-6 hover:border-red-500/30 transition-all duration-300">
+                                            <div className="space-y-6">
+                                                <div className="flex justify-between items-start">
+                                                    <div className="space-y-1">
+                                                        <span className="px-2 py-0.5 rounded-md bg-red-500/10 text-[8px] font-black text-red-500 uppercase tracking-widest">
+                                                            {pkg.tag}
+                                                        </span>
+                                                        <div className="flex items-baseline gap-1">
+                                                            <span className="text-2xl font-black text-white">{pkg.price}</span>
+                                                            <span className="text-[8px] text-neutral-600 font-bold uppercase tracking-widest">UZS</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex gap-1.5">
+                                                        <button 
+                                                            onClick={() => openPackageModal(idx)} 
+                                                            className="p-2 bg-neutral-900 rounded-lg text-neutral-600 hover:text-white transition-all border border-neutral-800"
+                                                        >
+                                                            <Settings className="w-3.5 h-3.5" />
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => deletePackage(idx)} 
+                                                            className="p-2 bg-neutral-900 rounded-lg text-neutral-600 hover:text-red-400 transition-all border border-neutral-800"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-3 pt-4 border-t border-neutral-800/50">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[9px] font-black text-neutral-600 uppercase tracking-widest">Filiallar</span>
+                                                        <span className="text-xs font-black text-white">{pkg.stores}</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[9px] font-black text-neutral-600 uppercase tracking-widest">Kassirlar</span>
+                                                        <span className="text-xs font-black text-white">{pkg.cashiers}</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-[9px] font-black text-neutral-600 uppercase tracking-widest">Status</span>
+                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${pkg.isActive ? 'text-emerald-500' : 'text-red-500'}`}>
+                                                            {pkg.isActive ? 'Faol' : 'Nofaol'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'xavfsizlik' && (
+                            <div className="space-y-12 animate-in slide-in-from-right-8 duration-700">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.2em] ml-1">Filiallar</label>
+                                    <div className="flex items-center gap-3 text-red-500 mb-2">
+                                        <Shield className="w-5 h-5" />
+                                        <span className="text-xs font-black uppercase tracking-[0.3em]">Security Protocols</span>
+                                    </div>
+                                    <h3 className="text-3xl font-black text-white tracking-tight">Xavfsizlik & Zaxira</h3>
+                                    <p className="text-neutral-500 font-medium">Muhim himoya va ma'lumotlar butunligi parametrlari.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-6">
+                                    <div className="group flex items-center justify-between p-8 bg-[#111111] border border-neutral-800 rounded-[32px] hover:border-red-500/20 transition-all duration-300">
+                                        <div className="flex items-center gap-6">
+                                            <div className="p-4 bg-emerald-500/5 rounded-2xl group-hover:bg-emerald-500/10 transition-colors">
+                                                <Lock className="w-8 h-8 text-emerald-500" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-lg font-black text-white tracking-tight">Ikki Bosqichli Himoya (2FA)</h4>
+                                                <p className="text-sm text-neutral-500 font-medium">Super Admin kirishi uchun SMS va Email tasdiqlash talab etilsin.</p>
+                                            </div>
+                                        </div>
+                                        <label className="relative inline-flex items-center cursor-pointer scale-110">
+                                            <input type="checkbox" className="sr-only peer" defaultChecked />
+                                            <div className="w-16 h-8 bg-neutral-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-neutral-500 after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-red-600 peer-checked:after:bg-white" />
+                                        </label>
+                                    </div>
+
+                                    <div className="group flex items-center justify-between p-8 bg-[#111111] border border-neutral-800 rounded-[32px] hover:border-amber-500/20 transition-all duration-300">
+                                        <div className="flex items-center gap-6">
+                                            <div className="p-4 bg-amber-500/5 rounded-2xl group-hover:bg-amber-500/10 transition-colors">
+                                                <Database className="w-8 h-8 text-amber-500" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-lg font-black text-white tracking-tight">Avtomatik Zaxira (Backup)</h4>
+                                                <p className="text-sm text-neutral-500 font-medium">Ma'lumotlar bazasini belgilangan vaqtda avtomatik bulutga nusxalash.</p>
+                                            </div>
+                                        </div>
+                                        <div className="relative">
+                                            <select className="appearance-none bg-[#1a1a1a] border border-neutral-800 text-sm font-black text-white px-8 py-4 pr-12 rounded-[20px] outline-none focus:border-amber-500 transition-all cursor-pointer shadow-xl">
+                                                <option>Har kuni 23:59</option>
+                                                <option>Har 12 soatda</option>
+                                                <option>Har 6 soatda</option>
+                                            </select>
+                                            <RefreshCcw className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-600 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="bg-red-500/5 border border-red-500/10 rounded-[32px] p-8 flex items-start gap-6">
+                                    <div className="p-3 bg-red-500/10 rounded-xl mt-1">
+                                        <AlertCircle className="w-6 h-6 text-red-500" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h4 className="text-lg font-black text-red-500 tracking-tight">Xavf zonasi: Ma'lumotlarni o'chirish</h4>
+                                        <p className="text-sm text-neutral-400 font-medium leading-relaxed">
+                                            Agar siz barcha tranzaksiya va loglarni tozalashni xohlasangiz, quyidagi tugmani bosing. Bu amalni ortga qaytarib bo'lmaydi va xavfsizlik uchun parolingizni kiritishingiz kerak bo'ladi.
+                                        </p>
+                                        <button className="mt-4 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all">
+                                            Barcha loglarni tozalash
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'xabarlar' && (
+                            <div className="space-y-12 animate-in slide-in-from-right-8 duration-700">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-3 text-red-500 mb-2">
+                                        <Bell className="w-5 h-5" />
+                                        <span className="text-xs font-black uppercase tracking-[0.3em]">Integrations</span>
+                                    </div>
+                                    <h3 className="text-3xl font-black text-white tracking-tight">Bildirishnomalar & Integratsiya</h3>
+                                    <p className="text-neutral-500 font-medium">Tashqi kanallar va avtomatlashtirilgan xabarlar tizimi.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    {/* SMTP Server Card */}
+                                    <div className="group bg-[#111111] border border-neutral-800 rounded-[40px] p-10 space-y-8 hover:border-red-500/20 transition-all duration-300">
+                                        <div className="flex items-center gap-5">
+                                            <div className="p-4 bg-red-500/10 rounded-2xl group-hover:scale-110 transition-transform">
+                                                <Mail className="w-8 h-8 text-red-500" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-xl font-black text-white tracking-tight">SMTP SERVER</h4>
+                                                <p className="text-xs text-neutral-600 font-black uppercase tracking-widest">Email Gateway</p>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-5">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Host Manzili</label>
+                                                <input type="text" placeholder="smtp.gmail.com" defaultValue="smtp.gmail.com" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:border-red-500/50 outline-none transition-all" />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Port</label>
+                                                    <input type="text" placeholder="587" defaultValue="587" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white outline-none" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Xavfsizlik</label>
+                                                    <select className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white outline-none appearance-none">
+                                                        <option>STARTTLS</option>
+                                                        <option>SSL/TLS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Maxfiy Kalit (App Password)</label>
+                                                <div className="relative">
+                                                    <input type="password" placeholder="••••••••••••••••" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white outline-none focus:border-red-500/50 transition-all" />
+                                                    <Key className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-700" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Telegram Bot Card */}
+                                    <div className="group bg-[#111111] border border-neutral-800 rounded-[40px] p-10 space-y-8 hover:border-blue-500/20 transition-all duration-300">
+                                        <div className="flex items-center gap-5">
+                                            <div className="p-4 bg-blue-500/10 rounded-2xl group-hover:scale-110 transition-transform">
+                                                <MessageSquare className="w-8 h-8 text-blue-400" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="text-xl font-black text-white tracking-tight">TELEGRAM BOT</h4>
+                                                <p className="text-xs text-neutral-600 font-black uppercase tracking-widest">Real-time alerts</p>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-5">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Bot Token (API Key)</label>
+                                                <input type="text" placeholder="712345678:AAH..." className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:border-blue-500/50 outline-none transition-all" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-neutral-600 uppercase tracking-widest ml-1">Ma'mur Chat ID</label>
+                                                <div className="relative">
+                                                    <input type="text" placeholder="-100123456789" className="w-full bg-[#1a1a1a] border border-neutral-800 rounded-2xl px-6 py-4 text-sm font-bold text-white outline-none focus:border-blue-500/50 transition-all" />
+                                                    <Activity className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-700" />
+                                                </div>
+                                            </div>
+                                            <div className="pt-4">
+                                                <button className="w-full py-4 bg-blue-500 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]">
+                                                    Ulanishni tekshirish
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Premium Package Modal */}
+            {isPackageModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md animate-in fade-in duration-300" onClick={closePackageModal} />
+                    <div className="w-full max-w-md bg-[#09090b] border border-neutral-800 rounded-[32px] overflow-hidden relative z-10 animate-in zoom-in-95 duration-500 shadow-[0_50px_100px_rgba(0,0,0,0.8)]">
+                        {/* Modal Header */}
+                        <div className="relative p-7 pb-3">
+                            <button 
+                                onClick={closePackageModal} 
+                                className="absolute right-6 top-6 p-2 bg-neutral-900 rounded-full text-neutral-500 hover:text-white transition-all border border-neutral-800"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            
+                            <div className="space-y-1.5">
+                                <div className="flex items-center gap-2 text-red-500">
+                                    <Sparkles className="w-4 h-4" />
+                                    <span className="text-[8px] font-black uppercase tracking-[0.3em]">Configuration</span>
+                                </div>
+                                <h2 className="text-2xl font-black text-white tracking-tighter">
+                                    {editingIndex !== null ? 'Tarifni Tahrirlash' : 'Yangi Tarif'}
+                                </h2>
+                            </div>
+                        </div>
+
+                        {/* Modal Body */}
+                        <div className="p-7 space-y-5 max-h-[55vh] overflow-y-auto custom-scrollbar">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5 group">
+                                    <label className="text-[8px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1">Paket Nomi</label>
+                                    <input
+                                        type="text"
+                                        value={packageForm.tag}
+                                        onChange={e => setPackageForm({ ...packageForm, tag: e.target.value.toUpperCase() })}
+                                        placeholder="PREMIUM"
+                                        className="w-full bg-[#111111] border border-neutral-800 rounded-lg px-4 py-2.5 text-xs font-black text-white focus:border-red-500 outline-none transition-all uppercase"
+                                    />
+                                </div>
+                                <div className="space-y-1.5 group">
+                                    <label className="text-[8px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1">Narxi (So'm)</label>
+                                    <input
+                                        type="text"
+                                        value={packageForm.price}
+                                        onChange={e => setPackageForm({ ...packageForm, price: e.target.value })}
+                                        placeholder="500 000"
+                                        className="w-full bg-[#111111] border border-neutral-800 rounded-lg px-4 py-2.5 text-xs font-black text-white focus:border-red-500 outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5 group">
+                                    <label className="text-[8px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1">Filiallar</label>
                                     <input
                                         type="text"
                                         value={packageForm.stores}
                                         onChange={e => setPackageForm({ ...packageForm, stores: e.target.value === 'Cheksiz' ? 'Cheksiz' : parseInt(e.target.value) || 1 })}
-                                        className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl px-5 py-4 text-sm text-white focus:border-red-500 outline-none"
+                                        className="w-full bg-[#111111] border border-neutral-800 rounded-lg px-4 py-2.5 text-xs font-black text-white focus:border-amber-500 outline-none transition-all"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-neutral-500 uppercase tracking-[0.2em] ml-1">Kassirlar</label>
+                                <div className="space-y-1.5 group">
+                                    <label className="text-[8px] font-black text-neutral-600 uppercase tracking-[0.2em] ml-1">Kassirlar</label>
                                     <input
                                         type="text"
                                         value={packageForm.cashiers}
                                         onChange={e => setPackageForm({ ...packageForm, cashiers: e.target.value === 'Cheksiz' ? 'Cheksiz' : parseInt(e.target.value) || 2 })}
-                                        className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl px-5 py-4 text-sm text-white focus:border-red-500 outline-none"
+                                        className="w-full bg-[#111111] border border-neutral-800 rounded-lg px-4 py-2.5 text-xs font-black text-white focus:border-amber-500 outline-none transition-all"
                                     />
                                 </div>
                             </div>
+
+                            <div className="flex items-center gap-3 p-4 bg-neutral-900/50 border border-neutral-800 rounded-xl">
+                                <div className="p-2 bg-red-500/10 rounded-lg">
+                                    <Activity className="w-4 h-4 text-red-500" />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-[9px] font-black text-white uppercase tracking-widest leading-none">Status</p>
+                                    <p className="text-[8px] text-neutral-600 font-bold uppercase tracking-widest mt-1">Sotuvga chiqarish</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        className="sr-only peer" 
+                                        checked={packageForm.isActive}
+                                        onChange={e => setPackageForm({...packageForm, isActive: e.target.checked})}
+                                    />
+                                    <div className="w-10 h-5 bg-neutral-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-neutral-600 after:rounded-full after:h-[16px] after:w-[16px] after:transition-all peer-checked:bg-emerald-500" />
+                                </label>
+                            </div>
                         </div>
-                        <div className="p-8 bg-neutral-800/30 flex justify-end gap-3">
-                            <button onClick={closePackageModal} className="px-6 py-3 text-sm font-bold text-neutral-400 hover:text-white transition-colors">Bekor qilish</button>
-                            <button onClick={savePackage} className="px-8 py-3 bg-white text-black rounded-2xl text-sm font-bold hover:bg-neutral-200 transition-all">Saqlash</button>
+
+                        {/* Modal Footer */}
+                        <div className="p-7 pt-2 flex gap-3">
+                            <button 
+                                onClick={closePackageModal} 
+                                className="flex-1 py-3 text-[10px] font-black text-neutral-600 hover:text-white transition-all uppercase tracking-widest border border-transparent hover:border-neutral-800 rounded-lg"
+                            >
+                                Bekor qilish
+                            </button>
+                            <button 
+                                onClick={savePackage} 
+                                className="flex-[1.5] py-3 bg-red-600 text-white rounded-xl text-[10px] font-black hover:bg-red-700 transition-all shadow-lg uppercase tracking-widest active:scale-95"
+                            >
+                                Saqlash
+                            </button>
                         </div>
                     </div>
                 </div>
