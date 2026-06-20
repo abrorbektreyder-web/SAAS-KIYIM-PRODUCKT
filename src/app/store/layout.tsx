@@ -20,39 +20,33 @@ export default async function StoreLayout({ children }: { children: React.ReactN
 
     let isTrialExpired = false;
 
-    if (profile.organization_id) {
-        const org = await getOrganization(profile.organization_id);
+    // Parallel so'rovlar — ketma-ket emas, bir vaqtda yuboriladi
+    const [org, { products: rawProducts }] = await Promise.all([
+        getOrganization(profile.organization_id),
+        getStoreProducts(profile.organization_id, profile.store_id, 1, 1000)
+    ]);
 
-        if (org) {
-            let trialEndSource = org.trial_ends_at;
+    if (org) {
+        let trialEndSource = org.trial_ends_at;
 
-            // Agar bazada trial_ends_at ustuni bo'lmasa yoki null bo'lsa, created_at dan 14 kun qoshib hisoblaydi
-            if (!trialEndSource && org.created_at) {
-                const createdDate = new Date(org.created_at);
-                createdDate.setDate(createdDate.getDate() + 14);
-                trialEndSource = createdDate.toISOString();
-            }
+        if (!trialEndSource && org.created_at) {
+            const createdDate = new Date(org.created_at);
+            createdDate.setDate(createdDate.getDate() + 14);
+            trialEndSource = createdDate.toISOString();
+        }
 
-            // Trial muddatini tekshirish
-            if (trialEndSource && (org.subscription_status === 'trialing' || org.subscription_status === 'trial')) {
-                const now = new Date();
-                const endsAt = new Date(trialEndSource);
-                const diffTime = endsAt.getTime() - now.getTime();
-                const trialDaysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (trialEndSource && (org.subscription_status === 'trialing' || org.subscription_status === 'trial')) {
+            const now = new Date();
+            const endsAt = new Date(trialEndSource);
+            const diffTime = endsAt.getTime() - now.getTime();
+            const trialDaysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            if (trialDaysRemaining <= 0) isTrialExpired = true;
+        }
 
-                if (trialDaysRemaining <= 0) {
-                    isTrialExpired = true;
-                }
-            }
-
-            if (org.subscription_status === 'expired' || org.subscription_status === 'blocked' || isTrialExpired) {
-                redirect('/subscription-expired');
-            }
+        if (org.subscription_status === 'expired' || org.subscription_status === 'blocked' || isTrialExpired) {
+            redirect('/subscription-expired');
         }
     }
-
-    // Kassir o'ziga biriktirilgan do'kon mahsulotlarini oladi (avvaliga 1000 tagacha)
-    const { products: rawProducts } = await getStoreProducts(profile.organization_id, profile.store_id, 1, 1000);
 
     // Context uchun formatlashtirish
     const initialProducts = rawProducts.map((p: any) => {

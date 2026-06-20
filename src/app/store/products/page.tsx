@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Plus, Pencil, Trash2, X, Package, TrendingUp, Upload, ImageIcon, Link2 } from 'lucide-react';
 import { useProducts } from '@/lib/product-context';
 import { storeCategories, formatStorePrice, type StoreProduct } from '@/lib/store-data';
-import { useRouter } from 'next/navigation';
 
 type ModalMode = 'add' | 'edit';
 
@@ -14,8 +13,7 @@ const defaultForm = {
 };
 
 export default function StoreProductsPage() {
-    const { products, totalProducts, totalValue } = useProducts();
-    const router = useRouter();
+    const { products, totalProducts, totalValue, addProduct, removeProduct, updatePrice } = useProducts();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<ModalMode>('add');
     const [editId, setEditId] = useState<string | null>(null);
@@ -83,9 +81,15 @@ export default function StoreProductsPage() {
                 });
 
                 if (res.ok) {
+                    // Reload yo'q — context orqali darhol yangilash
+                    addProduct({
+                        name: form.name,
+                        category: form.category,
+                        price: Number(form.price),
+                        image: form.image || '/no-image.svg',
+                        label: form.label || undefined,
+                    });
                     showSuccess(`"${form.name}" qo'shildi!`);
-                    // Sahifani yangilash — serverdan yangi ma'lumotlarni olish
-                    window.location.reload();
                 } else {
                     const data = await res.json();
                     alert(data.error || "Xatolik yuz berdi");
@@ -107,8 +111,9 @@ export default function StoreProductsPage() {
                 });
 
                 if (res.ok) {
+                    // Reload yo'q — narxni context da yangilash
+                    updatePrice(editId, Number(form.price));
                     showSuccess(`"${form.name}" yangilandi!`);
-                    window.location.reload();
                 } else {
                     alert("Tahrirlashda xatolik yuz berdi");
                 }
@@ -125,8 +130,9 @@ export default function StoreProductsPage() {
         try {
             const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
             if (res.ok) {
+                // Reload yo'q — context dan o'chirish
+                removeProduct(id);
                 showSuccess(`"${name}" o'chirildi!`);
-                window.location.reload();
             } else {
                 alert("O'chirishda xatolik");
             }
