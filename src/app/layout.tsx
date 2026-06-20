@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { ReactQueryProvider } from '@/lib/query-provider';
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -18,7 +19,9 @@ export default function RootLayout({
     return (
         <html lang="uz" suppressHydrationWarning>
             <body className={`${inter.variable} ${playfair.variable} bg-[#09090b] text-white antialiased`} style={{ fontFamily: 'var(--font-inter), sans-serif' }} suppressHydrationWarning>
-                {children}
+                <ReactQueryProvider>
+                    {children}
+                </ReactQueryProvider>
             </body>
         </html>
     );
