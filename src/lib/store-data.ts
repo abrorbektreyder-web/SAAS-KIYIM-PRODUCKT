@@ -37,5 +37,5 @@ export const storeProducts: StoreProduct[] = [
 ];
 
 export function formatStorePrice(amount: number): string {
-    return amount.toLocaleString('uz-UZ') + ' so\'m';
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm";
 }

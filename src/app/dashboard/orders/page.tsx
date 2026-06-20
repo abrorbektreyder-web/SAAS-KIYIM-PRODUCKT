@@ -1,13 +1,15 @@
 import { getOrders, getOrgProfile } from '@/lib/data';
 import OrdersClient from './orders-client';
 
-export default async function OrdersPage() {
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
     const profile = await getOrgProfile();
     if (!profile?.organization_id) {
         return <div className="p-8 text-neutral-400">Tashkilot topilmadi.</div>;
     }
 
-    const orders = await getOrders(profile.organization_id);
+    const resolvedParams = await searchParams;
+    const page = resolvedParams.page ? parseInt(resolvedParams.page) : 1;
+    const { orders, totalCount } = await getOrders(profile.organization_id, page, 50);
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -22,6 +24,8 @@ export default async function OrdersPage() {
                 orgId={profile.organization_id} 
                 orgName={profile.organizations?.name || 'HOYR Do\'koni'} 
                 initialOrders={orders}
+                totalCount={totalCount}
+                currentPage={page}
             />
         </div>
     );

@@ -28,14 +28,18 @@ export async function getOrganization(orgId: string) {
   return data;
 }
 
-export async function getStores(orgId: string) {
+export async function getStores(orgId: string, page: number = 1, pageSize: number = 20) {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, count } = await supabase
     .from('stores')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('organization_id', orgId)
-    .order('created_at', { ascending: false });
-  return data || [];
+    .order('created_at', { ascending: false })
+    .range(from, to);
+  return { stores: data || [], totalCount: count || 0 };
 }
 
 export async function getProducts(orgId: string, page: number = 1, pageSize: number = 20) {
@@ -53,45 +57,70 @@ export async function getProducts(orgId: string, page: number = 1, pageSize: num
   return { products: data || [], totalCount: count || 0 };
 }
 
-export async function getStoreProducts(orgId: string, storeId: string) {
+export async function getStoreProducts(orgId: string, storeId: string, page: number = 1, pageSize: number = 20) {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, count } = await supabase
     .from('products')
-    .select('*, categories(name), inventory(stock)')
+    .select('*, categories(name), inventory(stock)', { count: 'exact' })
     .eq('organization_id', orgId)
-    .eq('is_active', true);
+    .eq('is_active', true)
+    .range(from, to);
 
   // inventory dan faqat shu store_id ga tegishli qoldiqni olamiz
-  if (!data) return [];
+  if (!data) return { products: [], totalCount: 0 };
 
   // Har bir mahsulot uchun shu do'konning inventorysi bo'lsa ko'rsatamiz
-  // Inventoryda bor yoki yo'q — baribir ko'rsatamiz
-  return data.filter((p: any) => {
+  const filteredData = data.filter((p: any) => {
     // Agar inventory bor bo'lsa — shu do'konning inventorysini tekshiramiz
     if (p.inventory && p.inventory.length > 0) return true;
     // Inventorysiz ham ko'rsatamiz
     return true;
   });
+
+  return { products: filteredData, totalCount: count || 0 };
 }
 
-export async function getOrders(orgId: string) {
+export async function getOrders(orgId: string, page: number = 1, pageSize: number = 20) {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, count } = await supabase
     .from('orders')
-    .select('*, customers(full_name, phone)')
+    .select('*, customers(full_name, phone)', { count: 'exact' })
     .eq('organization_id', orgId)
-    .order('created_at', { ascending: false });
-  return data || [];
+    .order('created_at', { ascending: false })
+    .range(from, to);
+  return { orders: data || [], totalCount: count || 0 };
 }
 
-export async function getCustomers(orgId: string) {
+export async function getOrderKPIs(orgId: string) {
   const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
+    .rpc('get_order_kpis', { p_org_id: orgId });
+
+  if (error) {
+    console.error("RPC Error (getOrderKPIs):", error);
+    return { total_revenue: 0, total_orders: 0 };
+  }
+  return data as { total_revenue: number, total_orders: number };
+}
+
+export async function getCustomers(orgId: string, page: number = 1, pageSize: number = 20) {
+  const supabase = await createServerSupabaseClient();
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, count } = await supabase
     .from('customers')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('organization_id', orgId)
-    .order('created_at', { ascending: false });
-  return data || [];
+    .order('created_at', { ascending: false })
+    .range(from, to);
+  return { customers: data || [], totalCount: count || 0 };
 }
 
 export async function getCategories(orgId: string) {

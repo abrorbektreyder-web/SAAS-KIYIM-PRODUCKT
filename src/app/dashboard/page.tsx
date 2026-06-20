@@ -1,4 +1,4 @@
-import { getStores, getOrders, getProducts, getOrgProfile, formatPrice, formatDate } from '@/lib/data';
+import { getStores, getOrders, getProducts, getOrgProfile, formatPrice, formatDate, getOrderKPIs } from '@/lib/data';
 import { TrendingUp, ShoppingCart, Package, Store, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -28,24 +28,22 @@ export default async function DashboardPage() {
     }
 
     const orgId = profile.organization_id;
-    const [stores, orders, { totalCount: totalProducts }] = await Promise.all([
-        getStores(orgId),
-        getOrders(orgId),
-        getProducts(orgId, 1, 1) // We only need the count for the dashboard KPI
+    const [{ stores }, { orders: latestOrders }, { totalCount: totalProducts }, kpisData] = await Promise.all([
+        getStores(orgId, 1, 100), // Get up to 100 stores for the UI list
+        getOrders(orgId, 1, 5),   // Only get the 5 latest orders for the recent list
+        getProducts(orgId, 1, 1), // We only need the count for the dashboard KPI
+        getOrderKPIs(orgId)       // RPC call to aggregate total revenue and orders without loading all rows
     ]);
 
-    const totalRevenue = orders
-        .filter((o: any) => o.status !== 'cancelled')
-        .reduce((s: number, x: any) => s + Number(x.total || 0), 0);
+    const totalRevenue = kpisData.total_revenue || 0;
+    const totalOrdersCount = kpisData.total_orders || 0;
 
     const kpis = [
         { label: 'Jami daromad', value: formatPrice(totalRevenue) + ' so\'m', icon: TrendingUp, change: '+12.4%', up: true },
-        { label: 'Jami buyurtmalar', value: orders.length.toLocaleString(), icon: ShoppingCart, change: '+8.1%', up: true },
+        { label: 'Jami buyurtmalar', value: totalOrdersCount.toLocaleString(), icon: ShoppingCart, change: '+8.1%', up: true },
         { label: 'Mahsulotlar', value: totalProducts.toLocaleString(), icon: Package, change: '+5.3%', up: true },
         { label: 'Filiallar', value: stores.length.toString(), icon: Store, change: '0%', up: false },
     ];
-
-    const latestOrders = orders.slice(0, 5);
 
     return (
         <div className="space-y-6 animate-fade-in">

@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { Plus, X, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function CustomersClient({ customers, orgId }: { customers: any[], orgId: string }) {
+export default function CustomersClient({ customers, orgId, totalCount = 0, currentPage = 1 }: { customers: any[], orgId: string, totalCount?: number, currentPage?: number }) {
     const router = useRouter();
     const [isModalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -172,6 +172,33 @@ export default function CustomersClient({ customers, orgId }: { customers: any[]
                                 })}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            )}
+            
+            {totalCount > 50 && (
+                <div className="flex items-center justify-between bg-neutral-900 border border-neutral-800 p-4 rounded-xl shadow-sm">
+                    <p className="text-sm text-neutral-500">
+                        Jami: <span className="text-white font-medium">{totalCount}</span> ta mijoz
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <button
+                            disabled={currentPage <= 1}
+                            onClick={() => router.push(`?page=${currentPage - 1}`)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-neutral-800 rounded-lg hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+                        >
+                            Oldingi
+                        </button>
+                        <span className="text-sm text-neutral-400 font-medium px-2">
+                            {currentPage} / {Math.ceil(totalCount / 50)}
+                        </span>
+                        <button
+                            disabled={currentPage >= Math.ceil(totalCount / 50)}
+                            onClick={() => router.push(`?page=${currentPage + 1}`)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-neutral-800 rounded-lg hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+                        >
+                            Keyingi
+                        </button>
                     </div>
                 </div>
             )}

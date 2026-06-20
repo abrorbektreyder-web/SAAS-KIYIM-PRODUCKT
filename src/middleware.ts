@@ -68,13 +68,10 @@ export async function middleware(request: NextRequest) {
     }
 
     // ===== 4. ROL ASOSIDA KIRISHNI CHEKLASH (RBAC) =====
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-
-    const role = profile?.role || null;
+    // Middleware'ni o'ta tezlashtirish (Optimallashtirish):
+    // Rol JWT tokendan (user_metadata) o'qiladi. Bu DB ga so'rov yubormaydi va dastur tezligini saqlaydi!
+    // Asl xavfsizlik (API va RLS) backend qismida `getSessionOrg()` orqali amalga oshadi.
+    const role = user.user_metadata?.role || null;
 
     // Admin Dashboard (/dashboard) -> faqat store_admin yoki super_admin
     if (path.startsWith('/dashboard') && role !== 'store_admin' && role !== 'super_admin') {

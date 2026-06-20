@@ -8,8 +8,8 @@ export async function POST(req: Request) {
         const { orgId, role, error } = await getSessionOrg();
         if (error || !orgId) return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
         
-        // Faqat adminlar mahsulot qo'sha oladi
-        if (role !== 'store_admin' && role !== 'super_admin') {
+        // Faqat adminlar va kassirlar mahsulot qo'sha oladi
+        if (role !== 'store_admin' && role !== 'super_admin' && role !== 'cashier') {
             return NextResponse.json({ error: 'Ruxsat etilmagan' }, { status: 403 });
         }
 

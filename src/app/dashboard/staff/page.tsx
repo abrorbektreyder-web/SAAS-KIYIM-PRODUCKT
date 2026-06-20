@@ -12,7 +12,7 @@ export default async function StaffPage() {
     }
 
     // Server-side ma'lumot olish
-    const stores = await getStores(profile.organization_id);
+    const { stores } = await getStores(profile.organization_id, 1, 100);
 
     // Kassirlarni olish
     const { data: staff } = await supabaseAdmin

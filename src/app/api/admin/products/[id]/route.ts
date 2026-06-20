@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { getSessionOrg } from '@/lib/auth-utils';
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { orgId, role, error: authError } = await getSessionOrg();
+        if (authError || !orgId) return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
+        if (role !== 'store_admin' && role !== 'super_admin' && role !== 'cashier') {
+            return NextResponse.json({ error: 'Ruxsat etilmagan' }, { status: 403 });
+        }
+
         const { id } = await params;
         const body = await req.json();
 
@@ -108,6 +115,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { orgId, role, error: authError } = await getSessionOrg();
+        if (authError || !orgId) return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
+        // Kassirlar mahsulotni o'chira olmaydi, faqat adminlar o'chiradi
+        if (role !== 'store_admin' && role !== 'super_admin') {
+            return NextResponse.json({ error: 'Ruxsat etilmagan! Mahsulotni o\'chirish faqat adminlar uchun ruxsat etilgan.' }, { status: 403 });
+        }
+
         const { id } = await params;
 
         // Bog'liqliklarni o'chirish

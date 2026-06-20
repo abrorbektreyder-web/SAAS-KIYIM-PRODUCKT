@@ -217,9 +217,8 @@ export default function RegisterPage() {
                                 </div>
 
                                 <button
-                                    type="button"
-                                    disabled
-                                    className="flex w-full items-center justify-center rounded-lg bg-blue-600/50 p-3 font-medium text-white/50 cursor-not-allowed"
+                                    type="submit"
+                                    className="flex w-full items-center justify-center rounded-lg bg-blue-600 p-3 font-medium text-white transition-all hover:bg-blue-700 active:scale-[0.98]"
                                 >
                                     Keyingi qadam
                                     <ChevronRight className="ml-2 h-5 w-5" />

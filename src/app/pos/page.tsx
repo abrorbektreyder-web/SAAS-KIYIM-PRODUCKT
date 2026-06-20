@@ -26,6 +26,11 @@ export default function KassirLoginPage() {
                 finalEmail += '@hoyr.uz';
             }
 
+            // Avvalgi sessiyani tozalash (agar admin profili ochiq qolgan bo'lsa)
+            const { createClient } = await import('@/lib/supabase/client');
+            const supabase = createClient();
+            await supabase.auth.signOut();
+
             const { profile } = await signIn(finalEmail, password);
             if (profile?.role === 'cashier') {
                 router.refresh();

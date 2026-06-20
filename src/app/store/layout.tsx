@@ -51,8 +51,8 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         }
     }
 
-    // Kassir o'ziga biriktirilgan do'kon mahsulotlarini oladi
-    const rawProducts = await getStoreProducts(profile.organization_id, profile.store_id);
+    // Kassir o'ziga biriktirilgan do'kon mahsulotlarini oladi (avvaliga 1000 tagacha)
+    const { products: rawProducts } = await getStoreProducts(profile.organization_id, profile.store_id, 1, 1000);
 
     // Context uchun formatlashtirish
     const initialProducts = rawProducts.map((p: any) => {

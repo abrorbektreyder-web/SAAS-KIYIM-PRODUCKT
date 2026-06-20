@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { FileDown, Loader2, Calendar, ListFilter, Settings2, Trash2, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { SalesReportPDF } from '@/components/dashboard/reports/SalesReportPDF';
@@ -20,13 +21,17 @@ interface OrdersClientProps {
     orgId: string;
     orgName: string;
     initialOrders: any[];
+    totalCount?: number;
+    currentPage?: number;
 }
 
-export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersClientProps) {
+export default function OrdersClient({ orgId, orgName, initialOrders, totalCount = 0, currentPage = 1 }: OrdersClientProps) {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
     const [filteredOrders, setFilteredOrders] = useState<any[]>(initialOrders);
     const [ready, setReady] = useState(false);
+    const [isFiltered, setIsFiltered] = useState(false);
 
     const [filters, setFilters] = useState({
         startDate: '',
@@ -60,6 +65,7 @@ export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersCl
             if (res.ok) {
                 setFilteredOrders(data);
                 setReady(true);
+                setIsFiltered(true);
             } else {
                 alert(data.error || "Ma'lumot topilmadi");
             }
@@ -110,6 +116,7 @@ export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersCl
             if (res.ok) {
                 setFilteredOrders([]);
                 setReady(false);
+                setIsFiltered(false);
                 alert("Tanlangan oraliqdagi buyurtmalar muvaffaqiyatli o'chirildi.");
             } else {
                 const data = await res.json();
@@ -281,6 +288,33 @@ export default function OrdersClient({ orgId, orgName, initialOrders }: OrdersCl
                     </table>
                 </div>
             </div>
+            
+            {!isFiltered && totalCount > 50 && (
+                <div className="flex items-center justify-between bg-neutral-900 border border-neutral-800 p-4 rounded-xl shadow-sm">
+                    <p className="text-sm text-neutral-500">
+                        Jami: <span className="text-white font-medium">{totalCount}</span> ta buyurtma
+                    </p>
+                    <div className="flex items-center gap-2">
+                        <button
+                            disabled={currentPage <= 1}
+                            onClick={() => router.push(`?page=${currentPage - 1}`)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-neutral-800 rounded-lg hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+                        >
+                            Oldingi
+                        </button>
+                        <span className="text-sm text-neutral-400 font-medium px-2">
+                            {currentPage} / {Math.ceil(totalCount / 50)}
+                        </span>
+                        <button
+                            disabled={currentPage >= Math.ceil(totalCount / 50)}
+                            onClick={() => router.push(`?page=${currentPage + 1}`)}
+                            className="px-4 py-2 text-sm font-medium text-white bg-neutral-800 rounded-lg hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+                        >
+                            Keyingi
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
