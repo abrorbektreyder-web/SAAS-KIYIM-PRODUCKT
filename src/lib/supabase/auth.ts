@@ -12,6 +12,13 @@ export async function signIn(email: string, password: string) {
         .eq('id', data.user.id)
         .single()
 
+    // Middleware JWT tokendan rol o'qiydi — user_metadata ga ham yozamiz
+    if (profile?.role && data.user.user_metadata?.role !== profile.role) {
+        await supabase.auth.updateUser({
+            data: { role: profile.role }
+        })
+    }
+
     return { user: data.user, session: data.session, profile }
 }
 

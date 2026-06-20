@@ -23,8 +23,7 @@ export default function AdminLoginPage() {
         try {
             const { profile } = await signIn(email, password);
             if (profile?.role === 'store_admin' || profile?.role === 'super_admin') {
-                router.refresh();
-                window.location.href = '/dashboard';
+                router.push('/dashboard');
             } else {
                 setError("Sizda do'kon admini huquqi yo'q.");
                 setLoading(false);
