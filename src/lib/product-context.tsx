@@ -7,6 +7,7 @@ type ProductContextType = {
     products: StoreProduct[];
     addProduct: (product: Omit<StoreProduct, 'id'>) => void;
     removeProduct: (id: string) => void;
+    updateProduct: (id: string, updates: Partial<Omit<StoreProduct, 'id'>>) => void;
     updatePrice: (id: string, newPrice: number) => void;
     updateStock: (id: string, change: number) => void;
     totalProducts: number;
@@ -26,6 +27,13 @@ export function ProductProvider({ children, initialProducts = [] }: { children: 
         setProducts((prev) => prev.filter((p) => p.id !== id));
     }, []);
 
+    // To'liq yangilash — nom, kategoriya, narx, rasm hammasini o'zgartiradi
+    const updateProduct = useCallback((id: string, updates: Partial<Omit<StoreProduct, 'id'>>) => {
+        setProducts((prev) =>
+            prev.map((p) => (p.id === id ? { ...p, ...updates } : p))
+        );
+    }, []);
+
     const updatePrice = useCallback((id: string, newPrice: number) => {
         setProducts((prev) =>
             prev.map((p) => (p.id === id ? { ...p, price: newPrice } : p))
@@ -42,7 +50,7 @@ export function ProductProvider({ children, initialProducts = [] }: { children: 
     const totalValue = products.reduce((s, p) => s + p.price, 0);
 
     return (
-        <ProductContext.Provider value={{ products, addProduct, removeProduct, updatePrice, updateStock, totalProducts, totalValue }}>
+        <ProductContext.Provider value={{ products, addProduct, removeProduct, updateProduct, updatePrice, updateStock, totalProducts, totalValue }}>
             {children}
         </ProductContext.Provider>
     );

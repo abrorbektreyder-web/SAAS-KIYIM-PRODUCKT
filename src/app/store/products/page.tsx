@@ -13,7 +13,7 @@ const defaultForm = {
 };
 
 export default function StoreProductsPage() {
-    const { products, totalProducts, totalValue, addProduct, removeProduct, updatePrice } = useProducts();
+    const { products, totalProducts, totalValue, addProduct, removeProduct, updateProduct } = useProducts();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<ModalMode>('add');
     const [editId, setEditId] = useState<string | null>(null);
@@ -111,8 +111,14 @@ export default function StoreProductsPage() {
                 });
 
                 if (res.ok) {
-                    // Reload yo'q — narxni context da yangilash
-                    updatePrice(editId, Number(form.price));
+                    // Reload yo'q — barcha maydonlarni context da yangilash
+                    updateProduct(editId, {
+                        name: form.name,
+                        category: form.category,
+                        price: Number(form.price),
+                        image: form.image || '/no-image.svg',
+                        label: form.label || undefined,
+                    });
                     showSuccess(`"${form.name}" yangilandi!`);
                 } else {
                     alert("Tahrirlashda xatolik yuz berdi");
