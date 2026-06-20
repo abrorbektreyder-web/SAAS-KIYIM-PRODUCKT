@@ -23,7 +23,7 @@ function ProductCard({ product }: { product: StoreProduct }) {
         <div className="group relative overflow-hidden rounded-xl border border-neutral-800 bg-white transition-all duration-300 hover:border-neutral-600 hover:shadow-xl hover:shadow-black/20 card-hover">
             {/* Rasm */}
             <div className="relative aspect-square overflow-hidden bg-neutral-100">
-                <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 33vw" unoptimized />
+                <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 33vw" />
                 {product.label && (
                     <span className="absolute left-3 top-3 rounded-full bg-blue-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg">
                         {product.label}

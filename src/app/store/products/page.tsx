@@ -24,16 +24,35 @@ export default function StoreProductsPage() {
     const [imageTab, setImageTab] = useState<'url' | 'upload'>('upload');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            const base64 = ev.target?.result as string;
-            setForm({ ...form, image: base64 });
-            setImagePreview(base64);
-        };
-        reader.readAsDataURL(file);
+
+        // Fayl hajmini tekshirish
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Rasm hajmi 5MB dan oshmasligi kerak');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+
+            const res = await fetch('/api/upload-image', { method: 'POST', body: fd });
+            const data = await res.json();
+
+            if (res.ok && data.url) {
+                setForm(prev => ({ ...prev, image: data.url }));
+                setImagePreview(data.url);
+            } else {
+                alert(data.error || 'Yuklashda xatolik');
+            }
+        } catch {
+            alert('Tarmoq xatosi');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const openAdd = () => {
@@ -227,7 +246,7 @@ export default function StoreProductsPage() {
                 {filtered.map((p) => (
                     <div key={p.id} className="group overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 transition-all hover:border-neutral-700">
                         <div className="relative aspect-square overflow-hidden bg-neutral-100">
-                            <Image src={p.image} alt={p.name} fill className="object-cover" sizes="200px" unoptimized />
+                            <Image src={p.image} alt={p.name} fill className="object-cover" sizes="200px" />
                             {p.label && (
                                 <span className="absolute left-2 top-2 rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">{p.label}</span>
                             )}
